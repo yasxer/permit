@@ -17,11 +17,9 @@ import {
 import { Field, FieldDescription, FieldGroup, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { Spinner } from "@/components/ui/spinner";
-import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useCreateExam } from "@/hooks/use-exams";
 import { DAY_KEYS, formatDate } from "@/lib/format";
 import { nextDatesForDow, toISODate } from "@/lib/week";
-import type { LessonType } from "@/types";
 
 export function CreateExamDialog({
   open,
@@ -60,7 +58,6 @@ function ExamForm({
   onDone: () => void;
 }) {
   const t = useTranslations("ecole.exams");
-  const tPlanning = useTranslations("ecole.planning");
   const tc = useTranslations("common");
   const tDays = useTranslations("days");
   const tErrors = useTranslations("errors");
@@ -69,17 +66,16 @@ function ExamForm({
   const create = useCreateExam(schoolId);
   const suggestions = examDay === null ? [] : nextDatesForDow(examDay, 4);
 
-  const [type, setType] = useState<LessonType>("code");
   const [date, setDate] = useState(() => suggestions[0] ?? toISODate(new Date()));
 
   async function onSubmit() {
     if (!date) return;
     try {
-      await create.mutateAsync({ date, type });
+      await create.mutateAsync({ date });
       toast.success(t("created"));
       onDone();
     } catch (error) {
-      // 23505 is the (school, date, type) unique index.
+      // 23505: the school already holds a session that day.
       const code = (error as { code?: string })?.code;
       toast.error(code === "23505" ? t("duplicate") : tErrors("generic"));
     }
@@ -95,20 +91,6 @@ function ExamForm({
       </DialogHeader>
 
       <FieldGroup>
-        <Field>
-          <FieldLabel>{t("examType")}</FieldLabel>
-          <Tabs value={type} onValueChange={(value) => setType(value as LessonType)}>
-            <TabsList className="w-full">
-              <TabsTrigger value="code" className="flex-1">
-                {tPlanning("code")}
-              </TabsTrigger>
-              <TabsTrigger value="conduite" className="flex-1">
-                {tPlanning("conduite")}
-              </TabsTrigger>
-            </TabsList>
-          </Tabs>
-        </Field>
-
         <Field>
           <FieldLabel htmlFor="exam-date">{t("examDate")}</FieldLabel>
           <Input

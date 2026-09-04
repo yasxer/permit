@@ -7,7 +7,6 @@ import { useState } from "react";
 
 import { EmptyState } from "@/components/shared/empty-state";
 import { StatusBadge } from "@/components/shared/status-badge";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -24,7 +23,6 @@ export function ExamsList({
   examDay: number | null;
 }) {
   const t = useTranslations("ecole.exams");
-  const tPlanning = useTranslations("ecole.planning");
   const locale = useLocale();
 
   const { data = [], isPending } = useExams(schoolId);
@@ -77,9 +75,6 @@ export function ExamsList({
                       </div>
 
                       <div className="flex flex-wrap items-center gap-2">
-                        <Badge variant="secondary" className="font-medium">
-                          {tPlanning(exam.exam_type === "code" ? "code" : "conduite")}
-                        </Badge>
                         <span className="flex items-center gap-1.5 text-sm text-muted-foreground">
                           <Users className="size-4" aria-hidden />
                           {t("candidatesAssigned", { count })}

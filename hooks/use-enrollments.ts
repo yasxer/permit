@@ -81,21 +81,3 @@ export function useRejectEnrollment() {
     if (error) throw new Error(error.message);
   });
 }
-
-export type ProgressInput = {
-  id: string;
-  code_progress?: number;
-  creneau_unlocked?: boolean;
-  conduite_unlocked?: boolean;
-};
-
-export function useUpdateProgress() {
-  return useEnrollmentMutation(async ({ id, ...changes }: ProgressInput) => {
-    const supabase = createClient();
-    const { error } = await supabase
-      .from("enrollments")
-      .update(changes)
-      .eq("id", id);
-    if (error) throw new Error(error.message);
-  });
-}

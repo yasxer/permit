@@ -16,10 +16,8 @@ import {
 import Link from "next/link";
 import { useLocale, useTranslations } from "next-intl";
 import { useState, type ReactNode } from "react";
-import { toast } from "sonner";
 
 import { EmptyState } from "@/components/shared/empty-state";
-import { ProgressBar } from "@/components/shared/progress-bar";
 import { StatusBadge } from "@/components/shared/status-badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
@@ -31,11 +29,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Spinner } from "@/components/ui/spinner";
-import { Switch } from "@/components/ui/switch";
 import {
   Table,
   TableBody,
@@ -44,9 +38,10 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { useStudentFile, useUpdateProgress } from "@/hooks/use-enrollments";
+import { useStudentFile } from "@/hooks/use-enrollments";
 import { usePayments } from "@/hooks/use-payments";
 import { formatCurrency, formatDate } from "@/lib/format";
+import { STAGE_LABEL_KEYS, stageOf } from "@/lib/stages";
 
 import { AddPaymentDialog } from "./add-payment-dialog";
 import { CredentialsDialog } from "./credentials-dialog";
@@ -93,8 +88,6 @@ export function StudentDetail({ enrollmentId }: { enrollmentId: string }) {
   const [paymentOpen, setPaymentOpen] = useState(false);
   const [editOpen, setEditOpen] = useState(false);
   const [credentialsOpen, setCredentialsOpen] = useState(false);
-  const [draftProgress, setDraftProgress] = useState<number | null>(null);
-  const updateProgress = useUpdateProgress();
 
   if (isPending) {
     return (
@@ -107,19 +100,6 @@ export function StudentDetail({ enrollmentId }: { enrollmentId: string }) {
 
   if (isError || !file) {
     return <EmptyState title={tErrors("notFound")} />;
-  }
-
-  const codeProgress = draftProgress ?? file.code_progress;
-  const progressDirty = draftProgress !== null && draftProgress !== file.code_progress;
-
-  async function saveProgress(changes: Parameters<typeof updateProgress.mutateAsync>[0]) {
-    try {
-      await updateProgress.mutateAsync(changes);
-      toast.success(t("progressUpdated"));
-      setDraftProgress(null);
-    } catch {
-      toast.error(tErrors("generic"));
-    }
   }
 
   return (
@@ -150,10 +130,12 @@ export function StudentDetail({ enrollmentId }: { enrollmentId: string }) {
                 {file.candidate_name_fr}
               </p>
             )}
-            <div className="mt-1 flex items-center gap-2">
+            <div className="mt-1 flex flex-wrap items-center gap-2">
               <Badge variant="secondary" className="font-mono font-semibold">
                 {file.category_code}
               </Badge>
+              {/* Where the exam results have left them. */}
+              <Badge variant="outline">{t(STAGE_LABEL_KEYS[stageOf(file)])}</Badge>
               <StatusBadge status={file.status} />
             </div>
           </div>
@@ -200,85 +182,6 @@ export function StudentDetail({ enrollmentId }: { enrollmentId: string }) {
                   {formatDate(file.requested_at, locale)}
                 </Detail>
               </dl>
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-base">{t("progress")}</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-5">
-              <div className="space-y-2">
-                <div className="flex items-center justify-between gap-3">
-                  <Label htmlFor="code-progress">{t("codeProgress")}</Label>
-                  <div className="flex items-center gap-2">
-                    <Input
-                      id="code-progress"
-                      type="number"
-                      min={0}
-                      max={100}
-                      dir="ltr"
-                      inputMode="numeric"
-                      value={codeProgress}
-                      onChange={(event) =>
-                        setDraftProgress(
-                          Math.min(100, Math.max(0, Number(event.target.value))),
-                        )
-                      }
-                      className="w-20 tabular-nums"
-                    />
-                    <span className="text-sm text-muted-foreground">%</span>
-                  </div>
-                </div>
-                <ProgressBar
-                  value={codeProgress}
-                  label={t("codeProgress")}
-                  showValue={false}
-                />
-                {progressDirty && (
-                  <Button
-                    size="sm"
-                    disabled={updateProgress.isPending}
-                    onClick={() =>
-                      saveProgress({ id: file.id, code_progress: codeProgress })
-                    }
-                  >
-                    {updateProgress.isPending && <Spinner />}
-                    {t("updateProgress")}
-                  </Button>
-                )}
-              </div>
-
-              <div className="space-y-3 border-t pt-4">
-                <div className="flex items-center justify-between gap-3">
-                  <Label htmlFor="creneau">{t("creneauUnlocked")}</Label>
-                  <Switch
-                    id="creneau"
-                    checked={file.creneau_unlocked}
-                    disabled={updateProgress.isPending}
-                    onCheckedChange={(checked) =>
-                      saveProgress({
-                        id: file.id,
-                        creneau_unlocked: checked,
-                        // Conduite cannot stay open once créneau is closed —
-                        // the stages are a sequence, not independent flags.
-                        ...(checked ? {} : { conduite_unlocked: false }),
-                      })
-                    }
-                  />
-                </div>
-                <div className="flex items-center justify-between gap-3">
-                  <Label htmlFor="conduite">{t("conduiteUnlocked")}</Label>
-                  <Switch
-                    id="conduite"
-                    checked={file.conduite_unlocked}
-                    disabled={updateProgress.isPending || !file.creneau_unlocked}
-                    onCheckedChange={(checked) =>
-                      saveProgress({ id: file.id, conduite_unlocked: checked })
-                    }
-                  />
-                </div>
-              </div>
             </CardContent>
           </Card>
 

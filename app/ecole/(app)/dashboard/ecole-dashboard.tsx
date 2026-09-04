@@ -15,6 +15,7 @@ import { formatCurrency, formatDate, formatNumber } from "@/lib/format";
 export function EcoleDashboard({ schoolId }: { schoolId: string }) {
   const t = useTranslations("ecole.dashboard");
   const tStudents = useTranslations("ecole.students");
+  const tExams = useTranslations("ecole.exams");
   const tc = useTranslations("common");
   const locale = useLocale();
 
@@ -87,9 +88,11 @@ export function EcoleDashboard({ schoolId }: { schoolId: string }) {
           value={
             data.next_exam ? formatDate(data.next_exam.date, locale) : t("noExam")
           }
-          hint={data.next_exam ? tStudents(
-            data.next_exam.type === "code" ? "stageCode" : "stageConduite",
-          ) : undefined}
+          hint={
+            data.next_exam
+              ? tExams("candidatesAssigned", { count: data.next_exam.candidates })
+              : undefined
+          }
         />
       </div>
 

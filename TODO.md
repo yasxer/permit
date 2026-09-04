@@ -318,6 +318,75 @@ c'est l'école qui tient l'agenda.
 
 ---
 
+## ✅ Phase 11 — Trois examens, et l'étape qui suit le résultat
+
+L'examen de créneau manquait, et l'école cochait à la main une étape que le
+résultat d'examen disait déjà.
+
+- [x] `…000011_exam_stages.sql`
+  - contrainte `exams_type_is_a_stage` — un examen est un code, un créneau ou une
+        conduite ; `perfectionnement` ne s'examine pas
+  - `apply_exam_result` remplace `apply_conduite_result` : code réussi →
+        `creneau_unlocked` (+ `code_progress` à 100), créneau réussi →
+        `conduite_unlocked`, conduite réussie → dossier clos + permis
+  - `guard_enrollment_update` refuse désormais une écriture directe sur les deux
+        colonnes d'étape, comme `profiles.has_license`
+- [x] `lib/stages.ts` — `stageOf()` et les clés de libellé, partagés par le
+      planning, les examens et la fiche candidat
+- [x] `/ecole/exams` — trois types à la création, libellé du type sur la carte
+- [x] `/ecole/exams/[id]` — les candidats proposés sont ceux arrivés à l'étape de
+      l'examen (le filtre est fait en SQL, pas dans le navigateur)
+- [x] `/ecole/students/[id]` — les deux interrupteurs remplacés par l'étape en
+      lecture seule ; `useUpdateProgress` ne porte plus que `code_progress`
+
+### Conséquence assumée
+
+Rien ne redescend : corriger un `passed` en `failed` ne referme pas l'étape déjà
+ouverte — séances posées et examen suivant resteraient derrière une porte fermée.
+Le rattrapage est un geste d'administrateur.
+
+### Encore non vérifié
+
+- `000011` n'a pas été exécuté (toujours ni Postgres ni Docker sur la machine).
+
+---
+
+## ✅ Phase 12 — Une séance d'examen, remplie pas à pas
+
+L'examen n'a plus de type : c'est **la** séance du jour, et l'étape passe sur la
+ligne de liste, là où elle a toujours eu un sens (un résultat est le résultat
+*d'une étape*, pour un candidat).
+
+- [x] `…000012_exam_session.sql`
+  - `exam_candidates.stage` (repris de l'ancien `exams.exam_type`),
+        `exams.exam_type` supprimée, unicité `(school_id, exam_date)`
+  - deux séances typées le même jour sont fusionnées avant la contrainte
+  - `000011` et `000012` sont **rejouables** : l'éditeur SQL de Supabase
+        exécute statement par statement et s'arrête sur la première erreur,
+        et une table temporaire ne survit pas d'un statement au suivant
+  - `exam_roster` reconstruite sur la nouvelle colonne (+ `category_id`)
+  - `sync_exam_status` — la séance suit sa liste : `scheduled` tant qu'un
+        résultat manque, `completed` quand ils y sont tous
+  - `school_dashboard_stats` — `next_exam` annonce le nombre d'inscrits, plus
+        un type qui n'existe plus
+- [x] `/ecole/exams/[id]` en deux temps
+  - `roster-wizard.tsx` — un pas par catégorie **et** par étape (code, créneau,
+        conduite), les pas vides sautés, écriture limitée au pas validé
+  - `results-table.tsx` — le tableau de tous les inscrits, trois boutons devant
+        chacun (réussi / échoué / absent), enregistrés au clic
+- [x] Création d'examen : plus que la date
+- [x] `/ecole/students/[id]` — bloc « progression » retiré ; l'étape reste
+      visible en badge à côté de la catégorie
+- [x] Supprimés : `useEligibleCandidates`, `useAssignCandidates`,
+      `useSaveResults`, `useUpdateProgress`, 8 clés i18n devenues sans objet
+
+### Encore non vérifié
+
+- `000011` et `000012` n'ont pas été exécutés (toujours ni Postgres ni Docker).
+- Le tableau de résultats n'a pas été observé en RTL sur mobile.
+
+---
+
 ## Décisions (écarts assumés vs la spec)
 
 | Spec | Réalité | Pourquoi |
@@ -334,6 +403,7 @@ c'est l'école qui tient l'agenda.
 ### Invariants du schéma (ne jamais contourner)
 
 - `schools.profile_completed` et `profiles.has_license` sont **dérivés par trigger**, jamais écrits par le client.
+- `enrollments.creneau_unlocked` / `conduite_unlocked` le sont aussi : seul un résultat d'examen les ouvre.
 - `enrollments.total_price` est un **snapshot** du prix à l'acceptation : un changement de tarif ne réécrit pas les dossiers ouverts.
 - `payments` est **append-only** pour les écoles (insert seul) ; les corrections passent par un admin.
 - Le trigger `handle_new_user` n'accorde jamais `super_admin` — promotion manuelle en SQL uniquement.

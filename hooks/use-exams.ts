@@ -5,13 +5,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { queryKeys } from "@/hooks/queries/keys";
 import { createClient } from "@/lib/supabase/client";
 import { unwrap } from "@/lib/supabase/query";
-import type {
-  ExamResult,
-  ExamRosterRow,
-  ExamRow,
-  LessonType,
-  StudentFileRow,
-} from "@/types";
+import type { ExamResult, ExamRosterRow, ExamRow, ExamType } from "@/types";
 
 export type ExamWithCount = ExamRow & {
   exam_candidates: { count: number }[];
@@ -61,37 +55,6 @@ export function useExamRoster(examId: string) {
   });
 }
 
-/**
- * Who may sit this exam.
- *  - code exam: active students who have not unlocked conduite yet
- *  - conduite exam: active students whose theory is at 100%
- */
-export function useEligibleCandidates(
-  schoolId: string | undefined,
-  examType: LessonType,
-) {
-  return useQuery({
-    queryKey: ["exams", "eligible", schoolId ?? "", examType],
-    queryFn: async () => {
-      const supabase = createClient();
-      let query = supabase
-        .from("student_files")
-        .select("*")
-        .eq("school_id", schoolId!)
-        .eq("status", "active")
-        .order("candidate_name");
-
-      query =
-        examType === "code"
-          ? query.eq("conduite_unlocked", false)
-          : query.eq("code_progress", 100);
-
-      return unwrap(await query) as StudentFileRow[];
-    },
-    enabled: Boolean(schoolId),
-  });
-}
-
 function useExamMutation<TArgs>(run: (args: TArgs) => Promise<unknown>) {
   const queryClient = useQueryClient();
   return useMutation({
@@ -105,48 +68,60 @@ function useExamMutation<TArgs>(run: (args: TArgs) => Promise<unknown>) {
 }
 
 export function useCreateExam(schoolId: string | undefined) {
-  return useExamMutation(
-    async ({ date, type }: { date: string; type: LessonType }) => {
-      if (!schoolId) throw new Error("No school");
-      const supabase = createClient();
-      const { error } = await supabase
-        .from("exams")
-        .insert({ school_id: schoolId, exam_date: date, exam_type: type });
-      if (error) {
-        // 23505: the (school, date, type) unique index.
-        throw Object.assign(new Error(error.message), { code: error.code });
-      }
-    },
-  );
+  return useExamMutation(async ({ date }: { date: string }) => {
+    if (!schoolId) throw new Error("No school");
+    const supabase = createClient();
+    const { error } = await supabase
+      .from("exams")
+      .insert({ school_id: schoolId, exam_date: date });
+    if (error) {
+      // 23505: `exams_one_session_per_day` — the school already holds one.
+      throw Object.assign(new Error(error.message), { code: error.code });
+    }
+  });
 }
 
-/** Replaces the whole roster: assignment is a set, not an append. */
-export function useAssignCandidates() {
+/**
+ * Fills one step of the roster: the candidates of one category standing on one
+ * stage. The write is scoped to that step — everyone outside it is left alone,
+ * so the school can walk back through the steps and change its mind.
+ */
+export function useAssignStage() {
   return useExamMutation(
     async ({
       examId,
-      enrollmentIds,
+      stage,
+      stepIds,
+      selectedIds,
     }: {
       examId: string;
-      enrollmentIds: string[];
+      stage: ExamType;
+      /** Every candidate this step offers. */
+      stepIds: string[];
+      selectedIds: string[];
     }) => {
       const supabase = createClient();
+      const dropped = stepIds.filter((id) => !selectedIds.includes(id));
 
-      const { error: clearError } = await supabase
-        .from("exam_candidates")
-        .delete()
-        .eq("exam_id", examId)
-        // Never drop a candidate whose result is already recorded.
-        .is("result", null);
-      if (clearError) throw new Error(clearError.message);
+      if (dropped.length > 0) {
+        const { error } = await supabase
+          .from("exam_candidates")
+          .delete()
+          .eq("exam_id", examId)
+          .in("enrollment_id", dropped)
+          // Never drop a candidate whose result is already recorded.
+          .is("result", null);
+        if (error) throw new Error(error.message);
+      }
 
-      if (enrollmentIds.length > 0) {
+      if (selectedIds.length > 0) {
         const { error } = await supabase.from("exam_candidates").upsert(
-          enrollmentIds.map((enrollment_id) => ({
+          selectedIds.map((enrollment_id) => ({
             exam_id: examId,
             enrollment_id,
+            stage,
           })),
-          { onConflict: "exam_id,enrollment_id", ignoreDuplicates: true },
+          { onConflict: "exam_id,enrollment_id" },
         );
         if (error) throw new Error(error.message);
       }
@@ -154,31 +129,28 @@ export function useAssignCandidates() {
   );
 }
 
-export function useSaveResults() {
+/**
+ * One candidate, one verdict. The session's own status follows from the roster
+ * in the database, and a passed result fires the trigger that moves the
+ * candidate on — so there is nothing to save afterwards.
+ */
+export function useSetResult() {
   return useExamMutation(
     async ({
       examId,
-      results,
+      enrollmentId,
+      result,
     }: {
       examId: string;
-      results: Record<string, ExamResult | null>;
+      enrollmentId: string;
+      result: ExamResult;
     }) => {
       const supabase = createClient();
-      // One statement per candidate: a passed conduite result fires the
-      // trigger that closes the file, so these are not interchangeable rows.
-      for (const [enrollmentId, result] of Object.entries(results)) {
-        const { error } = await supabase
-          .from("exam_candidates")
-          .update({ result })
-          .eq("exam_id", examId)
-          .eq("enrollment_id", enrollmentId);
-        if (error) throw new Error(error.message);
-      }
-
       const { error } = await supabase
-        .from("exams")
-        .update({ status: "completed" })
-        .eq("id", examId);
+        .from("exam_candidates")
+        .update({ result })
+        .eq("exam_id", examId)
+        .eq("enrollment_id", enrollmentId);
       if (error) throw new Error(error.message);
     },
   );

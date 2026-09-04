@@ -17,6 +17,11 @@ export type EnrollmentStatus =
  * classroom; the other three share the same vehicle.
  */
 export type LessonType = "code" | "creneau" | "conduite" | "perfectionnement";
+/**
+ * The three stages a candidate is examined on, in order. Perfectionnement is
+ * paid hours, not a step: nobody sits an exam on it.
+ */
+export type ExamType = Exclude<LessonType, "perfectionnement">;
 export type BloodGroup =
   | "A+"
   | "A-"
@@ -140,17 +145,18 @@ export type SlotRow = Timestamps & {
   price: number | null;
 };
 
+/** One session, one date. What each candidate sits is on their roster line. */
 export type ExamRow = Timestamps & {
   id: string;
   school_id: string;
   exam_date: string;
-  exam_type: LessonType;
   status: ExamStatus;
 };
 
 export type ExamCandidateRow = Timestamps & {
   exam_id: string;
   enrollment_id: string;
+  stage: ExamType;
   result: ExamResult | null;
   notified_at: string | null;
 };
@@ -227,14 +233,15 @@ export type StudentFileRow = {
 export type ExamRosterRow = {
   exam_id: string;
   enrollment_id: string;
+  stage: ExamType;
   result: ExamResult | null;
   notified_at: string | null;
   created_at: string;
   school_id: string;
   exam_date: string;
-  exam_type: LessonType;
   candidate_name: string | null;
   candidate_phone: string | null;
+  category_id: string;
   category_code: string;
   code_progress: number;
   creneau_unlocked: boolean;
@@ -266,7 +273,7 @@ export type SchoolDashboardStats = {
   requests_pending: number;
   students_completed: number;
   revenue_total: number;
-  next_exam: { date: string; type: LessonType } | null;
+  next_exam: { date: string; candidates: number } | null;
   payments_by_month: { month: string; value: number }[];
   stage_breakdown: { code: number; creneau: number; conduite: number };
 };

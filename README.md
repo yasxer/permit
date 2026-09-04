@@ -77,6 +77,8 @@ npx supabase db push
 | `…000008_lesson_types.sql` | `creneau` et `perfectionnement` ajoutés à `lesson_type` — **seul dans sa transaction** |
 | `…000009_candidate_file_and_sessions.sql` | Dossier candidat complet, séances de conduite créées à la volée |
 | `…000010_direct_planning.sql` | Le modèle hebdomadaire disparaît : les deux grilles se remplissent à la main |
+| `…000011_exam_stages.sql` | Trois examens (code, créneau, conduite) ; l'étape du candidat suit le résultat |
+| `…000012_exam_session.sql` | Une séance par date : l'étape passe sur la ligne de liste (`exam_candidates.stage`) |
 
 > ⚠️ `000008` doit être exécuté **seul**, avant `000009`. Postgres refuse
 > d'utiliser une valeur d'enum ajoutée dans la même transaction : les deux
@@ -175,8 +177,8 @@ npm run dev
 | `/ecole/students/[id]` | Dossier complet (nom ar + latin, naissance, nationalité, groupe sanguin), identifiants de l'app, progression, versements |
 | `/ecole/completed` | Candidats ayant obtenu le permis, en lecture seule |
 | `/ecole/planning` | Deux grilles identiques, **Conduite** et **Code** : clic sur une case vide → séance créée et attribuée, ou demi-heure fermée. Navigation semaine par semaine |
-| `/ecole/exams` | Sessions d'examen, création avec dates suggérées |
-| `/ecole/exams/[id]` | Candidats éligibles, assignation, saisie des résultats |
+| `/ecole/exams` | Séances d'examen (une par date), création avec dates suggérées |
+| `/ecole/exams/[id]` | Liste remplie catégorie par catégorie et étape par étape, puis saisie des résultats |
 
 ---
 
@@ -249,6 +251,46 @@ où la règle de chevauchement est écrite — par ressource, donc la salle et l
 voiture ne se gênent pas mutuellement, et une demi-heure fermée bloque comme une
 séance.
 
+### Une séance d'examen, trois étapes dedans
+
+Une auto-école ne tient pas un « examen de code » et un « examen de conduite »
+des jours différents : elle tient **la** séance, un matin, et chaque candidat
+qu'elle y envoie passe l'étape à laquelle il est arrivé. Le type est donc porté
+par la ligne de liste — `exam_candidates.stage` — et non par la séance
+(`exams` n'a plus qu'une date, unique par école).
+
+La page d'une séance a deux moments :
+
+1. **Remplir la liste.** Un pas par catégorie **et** par étape : toute la
+   catégorie A — code, puis créneau, puis conduite — et seulement ensuite la
+   catégorie B. Chaque pas ne propose que les candidats arrivés à cette étape,
+   on coche, on valide, on passe au suivant. Un pas sans personne n'est pas
+   affiché.
+2. **Saisir les résultats.** Une fois la liste terminée, la même page devient le
+   tableau de tous ceux qui passent, avec trois boutons devant chacun : réussi,
+   échoué, absent. Chaque clic est enregistré seul — il n'y a rien à sauvegarder
+   à la fin, et le statut de la séance suit sa liste (`sync_exam_status`) :
+   `scheduled` tant qu'un résultat manque, `completed` quand ils sont tous là.
+
+Et le résultat **est** le passage à l'étape suivante. Le trigger
+`apply_exam_result` lit l'étape de la ligne et, sur un `passed` :
+
+| Étape réussie | Effet sur le dossier |
+|---|---|
+| Code | `creneau_unlocked`, et `code_progress` passe à 100 % |
+| Créneau | `conduite_unlocked` |
+| Conduite | dossier `completed`, `license_obtained_at`, `profiles.has_license` |
+
+L'école ne débloque donc rien à la main : la fiche candidat n'a plus de bloc
+« progression », juste l'étape affichée à côté de la catégorie, et
+`guard_enrollment_update` refuse une écriture directe sur les deux colonnes. La
+même règle sert au planning (`lib/stages.ts`), qui ne propose une séance de
+conduite qu'à ceux qui y sont arrivés.
+
+Rien ne redescend : corriger un `passed` en `failed` ne referme pas l'étape. Les
+séances déjà posées et l'examen suivant déjà passé resteraient derrière une porte
+fermée ; c'est un administrateur qui rattrape ce cas.
+
 ### Le navigateur parle directement à Postgres
 
 Il n'y a pas d'API REST intermédiaire. `supabase-js` interroge la base depuis le
@@ -271,6 +313,8 @@ client — le contraire ouvrirait un contournement par simple requête directe :
 - `profiles.has_license` — sinon un candidat s'accorde son propre permis
 - `profiles.email` — miroir de `auth.users`
 - `schools.status` / `approved_at` — seul un administrateur approuve
+- `enrollments.creneau_unlocked` / `conduite_unlocked` — l'étape vient du
+  résultat d'examen, pas d'un interrupteur (voir ci-dessous)
 
 ### Ce qui vit en base plutôt que dans le client
 

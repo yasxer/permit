@@ -37,6 +37,7 @@ import {
 } from "@/hooks/use-planning";
 import { useMySchool } from "@/hooks/use-school-profile";
 import { formatCurrency, formatDate, formatTime } from "@/lib/format";
+import { stageOf } from "@/lib/stages";
 import { cn } from "@/lib/utils";
 import type { LessonType, StudentFileRow } from "@/types";
 
@@ -48,10 +49,8 @@ import type { LessonType, StudentFileRow } from "@/types";
  * hours, open to anyone with an open file.
  */
 function eligibleFor(type: LessonType, file: StudentFileRow): boolean {
-  if (type === "code") return !file.creneau_unlocked;
-  if (type === "creneau") return file.creneau_unlocked && !file.conduite_unlocked;
-  if (type === "conduite") return file.conduite_unlocked;
-  return true;
+  if (type === "perfectionnement") return true;
+  return stageOf(file) === type;
 }
 
 const ELIGIBLE_HINT: Record<LessonType, string> = {
