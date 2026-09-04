@@ -1,0 +1,349 @@
+"use client";
+
+import {
+  ArrowLeft,
+  Banknote,
+  CalendarDays,
+  MapPin,
+  Phone,
+  Plus,
+  Wallet,
+} from "lucide-react";
+import Link from "next/link";
+import { useLocale, useTranslations } from "next-intl";
+import { useState, type ReactNode } from "react";
+import { toast } from "sonner";
+
+import { EmptyState } from "@/components/shared/empty-state";
+import { ProgressBar } from "@/components/shared/progress-bar";
+import { StatusBadge } from "@/components/shared/status-badge";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Skeleton } from "@/components/ui/skeleton";
+import { Spinner } from "@/components/ui/spinner";
+import { Switch } from "@/components/ui/switch";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { useStudentFile, useUpdateProgress } from "@/hooks/use-enrollments";
+import { usePayments } from "@/hooks/use-payments";
+import { formatCurrency, formatDate } from "@/lib/format";
+
+import { AddPaymentDialog } from "./add-payment-dialog";
+
+function Detail({
+  icon: Icon,
+  label,
+  children,
+}: {
+  icon: typeof Phone;
+  label: string;
+  children: ReactNode;
+}) {
+  return (
+    <div className="flex items-start gap-3 py-2.5">
+      <Icon className="mt-0.5 size-4 shrink-0 text-muted-foreground" aria-hidden />
+      <div className="min-w-0 flex-1">
+        <dt className="text-xs text-muted-foreground">{label}</dt>
+        <dd className="truncate text-sm font-medium">{children}</dd>
+      </div>
+    </div>
+  );
+}
+
+function initials(name: string | null): string {
+  const parts = (name ?? "?").trim().split(/\s+/);
+  return (parts[0]?.[0] ?? "?").concat(parts[1]?.[0] ?? "").toUpperCase();
+}
+
+export function StudentDetail({ enrollmentId }: { enrollmentId: string }) {
+  const t = useTranslations("ecole.students");
+  const tc = useTranslations("common");
+  const tErrors = useTranslations("errors");
+  const locale = useLocale();
+
+  const { data: file, isPending, isError } = useStudentFile(enrollmentId);
+  const [showPayments, setShowPayments] = useState(false);
+  const { data: payments = [], isPending: paymentsPending } = usePayments(
+    enrollmentId,
+    showPayments,
+  );
+
+  const [paymentOpen, setPaymentOpen] = useState(false);
+  const [draftProgress, setDraftProgress] = useState<number | null>(null);
+  const updateProgress = useUpdateProgress();
+
+  if (isPending) {
+    return (
+      <div className="grid gap-5 lg:grid-cols-3">
+        <Skeleton className="h-72 lg:col-span-2" />
+        <Skeleton className="h-72" />
+      </div>
+    );
+  }
+
+  if (isError || !file) {
+    return <EmptyState title={tErrors("notFound")} />;
+  }
+
+  const codeProgress = draftProgress ?? file.code_progress;
+  const progressDirty = draftProgress !== null && draftProgress !== file.code_progress;
+
+  async function saveProgress(changes: Parameters<typeof updateProgress.mutateAsync>[0]) {
+    try {
+      await updateProgress.mutateAsync(changes);
+      toast.success(t("progressUpdated"));
+      setDraftProgress(null);
+    } catch {
+      toast.error(tErrors("generic"));
+    }
+  }
+
+  return (
+    <>
+      <div className="mb-6 space-y-2">
+        <Button asChild variant="ghost" size="sm" className="-ms-2">
+          <Link href="/ecole/students">
+            <ArrowLeft className="size-4 rtl-flip" />
+            {tc("back")}
+          </Link>
+        </Button>
+
+        <div className="flex flex-wrap items-center gap-3">
+          <Avatar className="size-12">
+            {file.candidate_photo_url && (
+              <AvatarImage src={file.candidate_photo_url} alt="" />
+            )}
+            <AvatarFallback className="bg-primary/10 font-medium text-primary">
+              {initials(file.candidate_name)}
+            </AvatarFallback>
+          </Avatar>
+          <div className="min-w-0">
+            <h1 className="truncate text-2xl font-semibold tracking-tight">
+              {file.candidate_name ?? "—"}
+            </h1>
+            <div className="mt-1 flex items-center gap-2">
+              <Badge variant="secondary" className="font-mono font-semibold">
+                {file.category_code}
+              </Badge>
+              <StatusBadge status={file.status} />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className="grid gap-5 lg:grid-cols-3">
+        <div className="space-y-5 lg:col-span-2">
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-base">{t("personalInfo")}</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <dl className="grid gap-x-8 sm:grid-cols-2">
+                <Detail icon={Phone} label={t("phone")}>
+                  <span dir="ltr">{file.candidate_phone ?? "—"}</span>
+                </Detail>
+                <Detail icon={CalendarDays} label={t("birthdate")}>
+                  {formatDate(file.candidate_birthdate, locale)}
+                </Detail>
+                <Detail icon={MapPin} label={t("address")}>
+                  {file.candidate_address ?? "—"}
+                </Detail>
+                <Detail icon={CalendarDays} label={tc("createdAt")}>
+                  {formatDate(file.requested_at, locale)}
+                </Detail>
+              </dl>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-base">{t("progress")}</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-5">
+              <div className="space-y-2">
+                <div className="flex items-center justify-between gap-3">
+                  <Label htmlFor="code-progress">{t("codeProgress")}</Label>
+                  <div className="flex items-center gap-2">
+                    <Input
+                      id="code-progress"
+                      type="number"
+                      min={0}
+                      max={100}
+                      dir="ltr"
+                      inputMode="numeric"
+                      value={codeProgress}
+                      onChange={(event) =>
+                        setDraftProgress(
+                          Math.min(100, Math.max(0, Number(event.target.value))),
+                        )
+                      }
+                      className="w-20 tabular-nums"
+                    />
+                    <span className="text-sm text-muted-foreground">%</span>
+                  </div>
+                </div>
+                <ProgressBar
+                  value={codeProgress}
+                  label={t("codeProgress")}
+                  showValue={false}
+                />
+                {progressDirty && (
+                  <Button
+                    size="sm"
+                    disabled={updateProgress.isPending}
+                    onClick={() =>
+                      saveProgress({ id: file.id, code_progress: codeProgress })
+                    }
+                  >
+                    {updateProgress.isPending && <Spinner />}
+                    {t("updateProgress")}
+                  </Button>
+                )}
+              </div>
+
+              <div className="space-y-3 border-t pt-4">
+                <div className="flex items-center justify-between gap-3">
+                  <Label htmlFor="creneau">{t("creneauUnlocked")}</Label>
+                  <Switch
+                    id="creneau"
+                    checked={file.creneau_unlocked}
+                    disabled={updateProgress.isPending}
+                    onCheckedChange={(checked) =>
+                      saveProgress({
+                        id: file.id,
+                        creneau_unlocked: checked,
+                        // Conduite cannot stay open once créneau is closed —
+                        // the stages are a sequence, not independent flags.
+                        ...(checked ? {} : { conduite_unlocked: false }),
+                      })
+                    }
+                  />
+                </div>
+                <div className="flex items-center justify-between gap-3">
+                  <Label htmlFor="conduite">{t("conduiteUnlocked")}</Label>
+                  <Switch
+                    id="conduite"
+                    checked={file.conduite_unlocked}
+                    disabled={updateProgress.isPending || !file.creneau_unlocked}
+                    onCheckedChange={(checked) =>
+                      saveProgress({ id: file.id, conduite_unlocked: checked })
+                    }
+                  />
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          {showPayments && (
+            <Card>
+              <CardHeader>
+                <CardTitle className="text-base">{t("paymentHistory")}</CardTitle>
+              </CardHeader>
+              <CardContent className="px-0">
+                {paymentsPending ? (
+                  <div className="space-y-2 px-6">
+                    {Array.from({ length: 3 }, (_, index) => (
+                      <Skeleton key={index} className="h-9" />
+                    ))}
+                  </div>
+                ) : payments.length === 0 ? (
+                  <EmptyState icon={Banknote} title={t("noPayments")} />
+                ) : (
+                  <Table>
+                    <TableHeader>
+                      <TableRow className="hover:bg-transparent">
+                        <TableHead className="ps-6">{t("amount")}</TableHead>
+                        <TableHead>{t("note")}</TableHead>
+                        <TableHead className="pe-6 text-end">{tc("date")}</TableHead>
+                      </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                      {payments.map((payment) => (
+                        <TableRow key={payment.id}>
+                          <TableCell className="ps-6 font-medium tabular-nums">
+                            {formatCurrency(payment.amount, locale)}
+                          </TableCell>
+                          <TableCell className="text-muted-foreground">
+                            {payment.note ?? "—"}
+                          </TableCell>
+                          <TableCell className="pe-6 text-end text-muted-foreground">
+                            {formatDate(payment.paid_at, locale)}
+                          </TableCell>
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+                )}
+              </CardContent>
+            </Card>
+          )}
+        </div>
+
+        <Card className="h-fit">
+          <CardHeader>
+            <CardTitle className="text-base">{t("enrollmentInfo")}</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <dl className="space-y-3 text-sm">
+              <div className="flex items-baseline justify-between gap-3">
+                <dt className="text-muted-foreground">{t("totalPrice")}</dt>
+                <dd className="font-medium tabular-nums">
+                  {formatCurrency(file.total_price, locale)}
+                </dd>
+              </div>
+              <div className="flex items-baseline justify-between gap-3">
+                <dt className="text-muted-foreground">{t("amountPaid")}</dt>
+                <dd className="font-medium tabular-nums text-success">
+                  {formatCurrency(file.amount_paid, locale)}
+                </dd>
+              </div>
+              <div className="flex items-baseline justify-between gap-3 border-t pt-3">
+                <dt className="text-muted-foreground">{t("amountRemaining")}</dt>
+                <dd className="text-lg font-semibold tabular-nums">
+                  {file.amount_remaining === 0 ? (
+                    <span className="text-base text-success">{t("paidInFull")}</span>
+                  ) : (
+                    formatCurrency(file.amount_remaining, locale)
+                  )}
+                </dd>
+              </div>
+            </dl>
+
+            <div className="space-y-2 pt-1">
+              <Button className="w-full" onClick={() => setPaymentOpen(true)}>
+                <Plus className="size-4" />
+                {t("addPayment")}
+              </Button>
+              <Button
+                variant="outline"
+                className="w-full"
+                onClick={() => setShowPayments((value) => !value)}
+                aria-expanded={showPayments}
+              >
+                <Wallet className="size-4" />
+                {showPayments ? t("hidePayments") : t("viewPayments")}
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+
+      <AddPaymentDialog
+        open={paymentOpen}
+        onOpenChange={setPaymentOpen}
+        enrollmentId={file.id}
+        remaining={file.amount_remaining}
+      />
+    </>
+  );
+}
