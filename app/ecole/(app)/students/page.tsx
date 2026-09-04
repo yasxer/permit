@@ -4,6 +4,7 @@ import { getTranslations } from "next-intl/server";
 import { PageHeader } from "@/components/shared/page-header";
 import { requireApprovedSchool } from "@/lib/auth";
 
+import { AddCandidateButton } from "./add-candidate-button";
 import { StudentsTable } from "./students-table";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -17,7 +18,11 @@ export default async function EcoleStudentsPage() {
 
   return (
     <>
-      <PageHeader title={t("title")} description={t("subtitle")} />
+      <PageHeader
+        title={t("title")}
+        description={t("subtitle")}
+        actions={<AddCandidateButton schoolId={school.id} />}
+      />
       <StudentsTable
         schoolId={school.id}
         status="active"

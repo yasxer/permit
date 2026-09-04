@@ -409,6 +409,26 @@ export type Database = {
         Args: { p_months?: number };
         Returns: SchoolDashboardStats;
       };
+      enroll_candidate: {
+        Args: { p_candidate_id: string; p_category_id: string };
+        Returns: EnrollmentRow;
+      };
+      school_update_candidate: {
+        Args: {
+          p_candidate_id: string;
+          p_full_name: string;
+          p_phone?: string | null;
+          p_address?: string | null;
+          p_birthdate?: string | null;
+          p_photo_url?: string | null;
+        };
+        Returns: ProfileRow;
+      };
+      book_slot: {
+        Args: { p_slot_id: string; p_enrollment_id: string };
+        Returns: SlotRow;
+      };
+      release_slot: { Args: { p_slot_id: string }; Returns: SlotRow };
       upsert_question: {
         Args: {
           p_type: QuestionType;

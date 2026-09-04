@@ -22,6 +22,7 @@ next-intl (AR/FR/EN) · React Query · Zustand · RHF + Zod · Cloudinary · son
 | 5 | Panel Auto-école (profil, dashboard, candidats) | ✅ terminé |
 | 6 | Planning + Examens | ✅ terminé |
 | 7 | Finition (skeletons, a11y, README, QA) | ✅ terminé |
+| 8 | Web-first : l'auto-école saisit tout à la main | ✅ terminé |
 
 ---
 
@@ -203,6 +204,44 @@ sont apparus à ce moment-là et sont corrigés dans les fichiers :
 
 Voir [README.md](README.md) pour l'installation détaillée et la documentation
 des pages.
+
+---
+
+## ✅ Phase 8 — Web-first (l'auto-école fait tout)
+
+L'APK candidat n'existe pas encore : plus rien n'attend un geste du candidat.
+L'école saisit le dossier et place elle-même les créneaux. Les deux chemins
+cohabitent — rien n'est à défaire le jour où l'application sort.
+
+- [x] `…000007_manual_operations.sql`
+  - `enroll_candidate` — inscription directe en `active`, même snapshot de prix
+        que `accept_enrollment` ; refuse une catégorie que l'école ne tarife pas
+  - `school_update_candidate` — l'école corrige les coordonnées de ses propres
+        candidats (`role`, `email`, `has_license` restent hors d'atteinte)
+  - `book_slot` — écrite pour **les deux appelants** dès maintenant : branche
+        école aujourd'hui, branche candidat prête pour l'APK
+  - `release_slot` — libère une réservation ou rouvre un créneau annulé
+  - Trigger `guard_slot_booking` — la policy `slots` ne vérifiait que le
+        créneau, pas à qui appartient le dossier qu'on y accroche
+  - Index `slots_one_booking_per_candidate_time` — un candidat ne peut pas être
+        sur deux créneaux à la même heure
+- [x] `app/api/ecole/candidates` — création du compte candidat (clé `service_role`
+      obligatoire), puis inscription **avec la session de l'école** pour que la
+      base revérifie le droit. Sans e-mail, l'identifiant est dérivé du téléphone ;
+      le mot de passe est généré et affiché une seule fois
+- [x] `/ecole/students` — bouton « Ajouter un candidat » + écran d'identifiants
+- [x] `/ecole/students/[id]` — modification des coordonnées du candidat
+- [x] `/ecole/planning` — clic sur un créneau : réserver un candidat, libérer,
+      annuler, rouvrir
+- [x] `hooks/use-candidates.ts`, `useBookSlot` / `useReleaseSlot`
+- [x] 31 clés i18n de plus (398 × 3, catalogues alignés)
+
+### Encore non vérifié
+
+- La migration `000007` n'a **pas** été exécutée (ni Postgres ni Docker sur la
+  machine) — à valider au prochain `db push`, comme les six précédentes.
+- Le parcours « ajouter un candidat → le placer sur un créneau » n'a pas été
+  joué contre un vrai projet Supabase.
 
 ---
 

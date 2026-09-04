@@ -73,6 +73,7 @@ npx supabase db push
 | `…000004_operations.sql` | Transitions métier (approbation, inscription, créneaux, questions) |
 | `…000005_stats.sql` | Agrégats des tableaux de bord |
 | `…000006_views.sql` | Vues `student_files` et `exam_roster` |
+| `…000007_manual_operations.sql` | Inscription et réservation faites par l'auto-école |
 
 ### 4. Premier super-administrateur
 
@@ -163,16 +164,46 @@ npm run dev
 | `/ecole/complete-profile` | Formulaire obligatoire : coordonnées, jour d'examen, photo, tarifs par catégorie |
 | `/ecole/dashboard` | 4 indicateurs, paiements par mois, répartition des candidats par étape |
 | `/ecole/requests` | Cartes de demandes, accepter / refuser, filtre par statut |
-| `/ecole/students` | Table des candidats actifs : progression, payé, restant |
-| `/ecole/students/[id]` | Fiche complète, progression modifiable, historique et ajout de versements |
+| `/ecole/students` | Table des candidats actifs : progression, payé, restant. **Ajouter un candidat** crée son compte et son dossier |
+| `/ecole/students/[id]` | Fiche complète, coordonnées modifiables, progression, historique et ajout de versements |
 | `/ecole/completed` | Candidats ayant obtenu le permis, en lecture seule |
-| `/ecole/planning` | Modèle hebdomadaire (08:00→18:00 par 30 min, Sam→Jeu) et créneaux générés |
+| `/ecole/planning` | Modèle hebdomadaire (08:00→18:00 par 30 min, Sam→Jeu), créneaux générés, réservation d'un candidat sur un créneau |
 | `/ecole/exams` | Sessions d'examen, création avec dates suggérées |
 | `/ecole/exams/[id]` | Candidats éligibles, assignation, saisie des résultats |
 
 ---
 
 ## Architecture
+
+### Tout se fait depuis le web
+
+L'application mobile du candidat n'existe pas encore, donc **personne ne s'inscrit
+tout seul** : l'auto-école saisit le dossier, choisit la catégorie et place le
+candidat sur ses créneaux. Le candidat n'a aucun écran à ouvrir.
+
+Le compte est quand même créé — c'est celui avec lequel le candidat se connectera
+à l'APK le jour venu. Les deux chemins convergent donc sur la même ligne plutôt
+que de produire deux sortes de candidats :
+
+| Geste | Chemin candidat (APK, plus tard) | Chemin auto-école (web, aujourd'hui) |
+|---|---|---|
+| Ouvrir un dossier | `enrollments` en `pending`, puis `accept_enrollment` par l'école | `enroll_candidate` — accepté d'emblée, même snapshot de prix |
+| Prendre un créneau | `book_slot`, branche candidat — déjà écrite | `book_slot`, branche école |
+| Corriger ses coordonnées | policy `profiles update own` | `school_update_candidate`, limité à ses propres candidats |
+
+Rien de ce qui précède n'est à défaire quand l'APK sortira : les policies du
+candidat sont déjà en place, la colonne de plus n'existe pas. Les deux entrées
+mèneront aux mêmes tables.
+
+Une seule opération ne passe pas par Postgres directement : créer le compte du
+candidat demande la clé `service_role`, donc elle vit dans le route handler
+`app/api/ecole/candidates`. L'inscription elle-même y est faite **avec la session
+de l'école**, pas avec la clé de service — c'est la base qui revérifie le droit,
+pas le handler.
+
+Sans e-mail — le cas courant au comptoir — l'identifiant est dérivé du numéro de
+téléphone (`0555…@candidat.permix.dz`) et le mot de passe est généré puis affiché
+**une seule fois** : il n'est stocké nulle part en clair.
 
 ### Le navigateur parle directement à Postgres
 
@@ -204,6 +235,8 @@ client — le contraire ouvrirait un contournement par simple requête directe :
 | `accept_enrollment` | Fige le tarif au moment de l'acceptation : un changement de prix ne doit pas réécrire les dossiers ouverts |
 | `upsert_question` | Question et réponses forment une unité ; deux requêtes laisseraient des options orphelines |
 | `generate_week_slots` | Génère la semaine depuis le modèle, sans écraser les créneaux déjà réservés |
+| `enroll_candidate` | Même règle de snapshot que `accept_enrollment`, en une étape : l'école qui inscrit n'a rien à décider ensuite |
+| `book_slot` | Vérifie que le créneau est libre et que le dossier appartient bien à l'école ; la policy `slots`, elle, ne regarde que le créneau |
 | `admin_dashboard_stats` | Les sommes et group-by restent en base : un seul aller-retour, aucune ligne superflue transmise |
 | Vue `student_files` | Le solde par dossier demande une somme ; la calculer côté client signifierait télécharger tous les paiements |
 
@@ -251,7 +284,7 @@ app/
     pending/       écran d'attente d'approbation
     complete-profile/
     (app)/         layout gardé par requireApprovedSchool()
-  api/             cloudinary/sign · auth/signout
+  api/             cloudinary/sign · auth/signout · ecole/candidates
   auth/callback/
 components/
   ui/              shadcn/ui

@@ -5,7 +5,6 @@ import { useLocale, useTranslations } from "next-intl";
 import { useState } from "react";
 import { toast } from "sonner";
 
-import { ConfirmModal } from "@/components/shared/confirm-modal";
 import { EmptyState } from "@/components/shared/empty-state";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -15,7 +14,6 @@ import { Spinner } from "@/components/ui/spinner";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   SLOT_TIMES,
-  useCancelSlot,
   useGenerateSlots,
   useSlots,
   type SlotWithStudent,
@@ -25,6 +23,8 @@ import { cn } from "@/lib/utils";
 import { fromISODate, startOfWeek, toISODate, workWeekDates } from "@/lib/week";
 import type { LessonType } from "@/types";
 
+import { SlotActionsDialog } from "./slot-actions-dialog";
+
 const SLOT_STYLE: Record<string, string> = {
   available: "bg-success/20 text-success hover:bg-success/30",
   booked: "bg-primary/15 text-primary hover:bg-primary/25",
@@ -33,19 +33,16 @@ const SLOT_STYLE: Record<string, string> = {
 
 export function SlotsGrid({ schoolId }: { schoolId: string }) {
   const t = useTranslations("ecole.planning");
-  const tc = useTranslations("common");
   const tStatus = useTranslations("status");
   const tDays = useTranslations("days");
-  const tErrors = useTranslations("errors");
   const locale = useLocale();
 
   const [weekStart, setWeekStart] = useState(() => toISODate(startOfWeek(new Date())));
   const [lessonType, setLessonType] = useState<LessonType>("code");
-  const [cancelling, setCancelling] = useState<SlotWithStudent | null>(null);
+  const [openSlot, setOpenSlot] = useState<SlotWithStudent | null>(null);
 
   const { data: slots = [], isPending } = useSlots(schoolId, weekStart);
   const generate = useGenerateSlots();
-  const cancel = useCancelSlot();
 
   const days = workWeekDates(weekStart);
   const visible = slots.filter((slot) => slot.lesson_type === lessonType);
@@ -61,17 +58,6 @@ export function SlotsGrid({ schoolId }: { schoolId: string }) {
       toast.success(t("slotsGenerated", { count }));
     } catch {
       toast.error(t("noTemplate"));
-    }
-  }
-
-  async function onCancel() {
-    if (!cancelling) return;
-    try {
-      await cancel.mutateAsync({ id: cancelling.id });
-      toast.success(t("slotCancelled"));
-      setCancelling(null);
-    } catch {
-      toast.error(tErrors("generic"));
     }
   }
 
@@ -112,6 +98,8 @@ export function SlotsGrid({ schoolId }: { schoolId: string }) {
           {generate.isPending ? t("generating") : t("generateSlots")}
         </Button>
       </div>
+
+      <p className="text-sm text-muted-foreground">{t("manualHint")}</p>
 
       {isPending ? (
         <Skeleton className="h-[32rem]" />
@@ -177,15 +165,14 @@ export function SlotsGrid({ schoolId }: { schoolId: string }) {
                       <td key={date} className="p-0.5">
                         <button
                           type="button"
-                          disabled={slot.status === "cancelled"}
-                          onClick={() => setCancelling(slot)}
+                          onClick={() => setOpenSlot(slot)}
                           title={
                             studentName
                               ? `${t("bookedBy")}: ${studentName}`
                               : tStatus(slot.status)
                           }
                           className={cn(
-                            "h-9 w-full min-w-24 truncate rounded-md px-1.5 text-[0.65rem] font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:cursor-default",
+                            "h-9 w-full min-w-24 truncate rounded-md px-1.5 text-[0.65rem] font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
                             SLOT_STYLE[slot.status],
                           )}
                         >
@@ -201,19 +188,10 @@ export function SlotsGrid({ schoolId }: { schoolId: string }) {
         </div>
       )}
 
-      <ConfirmModal
-        open={cancelling !== null}
-        onOpenChange={(open) => !open && setCancelling(null)}
-        title={t("markCancelled")}
-        message={
-          cancelling?.enrollment?.candidate?.full_name
-            ? `${t("bookedBy")}: ${cancelling.enrollment.candidate.full_name}`
-            : tc("confirm")
-        }
-        confirmLabel={t("markCancelled")}
-        destructive
-        pending={cancel.isPending}
-        onConfirm={onCancel}
+      <SlotActionsDialog
+        slot={openSlot}
+        schoolId={schoolId}
+        onOpenChange={(open) => !open && setOpenSlot(null)}
       />
     </div>
   );

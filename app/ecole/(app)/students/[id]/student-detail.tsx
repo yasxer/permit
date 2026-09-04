@@ -5,6 +5,7 @@ import {
   Banknote,
   CalendarDays,
   MapPin,
+  Pencil,
   Phone,
   Plus,
   Wallet,
@@ -20,7 +21,13 @@ import { StatusBadge } from "@/components/shared/status-badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardAction,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -39,6 +46,7 @@ import { usePayments } from "@/hooks/use-payments";
 import { formatCurrency, formatDate } from "@/lib/format";
 
 import { AddPaymentDialog } from "./add-payment-dialog";
+import { EditCandidateDialog } from "./edit-candidate-dialog";
 
 function Detail({
   icon: Icon,
@@ -79,6 +87,7 @@ export function StudentDetail({ enrollmentId }: { enrollmentId: string }) {
   );
 
   const [paymentOpen, setPaymentOpen] = useState(false);
+  const [editOpen, setEditOpen] = useState(false);
   const [draftProgress, setDraftProgress] = useState<number | null>(null);
   const updateProgress = useUpdateProgress();
 
@@ -146,6 +155,14 @@ export function StudentDetail({ enrollmentId }: { enrollmentId: string }) {
           <Card>
             <CardHeader>
               <CardTitle className="text-base">{t("personalInfo")}</CardTitle>
+              {/* The candidate has no app to correct these from — the school
+                  is the only one who can keep them right. */}
+              <CardAction>
+                <Button variant="outline" size="sm" onClick={() => setEditOpen(true)}>
+                  <Pencil className="size-4" />
+                  {tc("edit")}
+                </Button>
+              </CardAction>
             </CardHeader>
             <CardContent>
               <dl className="grid gap-x-8 sm:grid-cols-2">
@@ -343,6 +360,12 @@ export function StudentDetail({ enrollmentId }: { enrollmentId: string }) {
         onOpenChange={setPaymentOpen}
         enrollmentId={file.id}
         remaining={file.amount_remaining}
+      />
+
+      <EditCandidateDialog
+        open={editOpen}
+        onOpenChange={setEditOpen}
+        file={file}
       />
     </>
   );

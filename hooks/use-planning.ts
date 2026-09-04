@@ -137,6 +137,51 @@ export function useGenerateSlots() {
   });
 }
 
+/**
+ * Books one of the school's active candidates onto a free slot.
+ *
+ * The candidate app would have the candidate pick their own slot; until it
+ * ships the school does it here. Both call the same RPC, which is what keeps
+ * the two paths from drifting apart.
+ */
+export function useBookSlot() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async ({
+      slotId,
+      enrollmentId,
+    }: {
+      slotId: string;
+      enrollmentId: string;
+    }) => {
+      const supabase = createClient();
+      const { error } = await supabase.rpc("book_slot", {
+        p_slot_id: slotId,
+        p_enrollment_id: enrollmentId,
+      });
+      if (error) throw Object.assign(new Error(error.message), { code: error.code });
+    },
+    onSuccess: () => {
+      void queryClient.invalidateQueries({ queryKey: ["planning"] });
+    },
+  });
+}
+
+/** Frees a slot: undoes a booking, or reopens a cancelled one. */
+export function useReleaseSlot() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async ({ id }: { id: string }) => {
+      const supabase = createClient();
+      const { error } = await supabase.rpc("release_slot", { p_slot_id: id });
+      if (error) throw new Error(error.message);
+    },
+    onSuccess: () => {
+      void queryClient.invalidateQueries({ queryKey: ["planning"] });
+    },
+  });
+}
+
 export function useCancelSlot() {
   const queryClient = useQueryClient();
   return useMutation({
