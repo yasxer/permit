@@ -23,6 +23,8 @@ next-intl (AR/FR/EN) · React Query · Zustand · RHF + Zod · Cloudinary · son
 | 6 | Planning + Examens | ✅ terminé |
 | 7 | Finition (skeletons, a11y, README, QA) | ✅ terminé |
 | 8 | Web-first : l'auto-école saisit tout à la main | ✅ terminé |
+| 9 | Dossier candidat complet + séances de conduite à la volée | ✅ terminé |
+| 10 | Planning entièrement manuel : code comme conduite | ✅ terminé |
 
 ---
 
@@ -242,6 +244,77 @@ cohabitent — rien n'est à défaire le jour où l'application sort.
   machine) — à valider au prochain `db push`, comme les six précédentes.
 - Le parcours « ajouter un candidat → le placer sur un créneau » n'a pas été
   joué contre un vrai projet Supabase.
+
+---
+
+## ✅ Phase 9 — Dossier candidat complet, planning de conduite à la volée
+
+- [x] `…000008_lesson_types.sql` — `creneau` et `perfectionnement` ajoutés à
+      `lesson_type`. **Seul dans son fichier** : Postgres refuse d'utiliser une
+      valeur d'enum ajoutée dans la même transaction.
+- [x] `…000009_candidate_file_and_sessions.sql`
+  - `profiles` : `full_name_fr`, `birth_place`, `nationality`, `blood_group`
+        (enum des 8 groupes). `full_name` porte le nom arabe — celui de la pièce
+        d'identité, toujours rempli ; le latin est facultatif
+  - `slots.price` — le tarif figé sur une séance de perfectionnement
+  - `create_and_book_slot` — durée (30 min / 1 h) et tarif déduits du type,
+        contrôle de chevauchement par ressource (salle ≠ voiture) et par
+        candidat, création + réservation dans la même transaction
+  - `generate_week_slots` ne génère plus que le code ; les lignes de modèle
+        « conduite » devenues sans objet sont supprimées
+  - `student_files` reconstruite : `perf_total`, `perf_session_count`,
+        `amount_due` = forfait + heures de perfectionnement réservées
+  - `school_update_candidate` étendue aux nouveaux champs
+- [x] `app/api/ecole/candidates/[id]/credentials` — l'école pose ou change
+      l'e-mail et le mot de passe après coup (le reset par e-mail ne sert à rien
+      quand l'identifiant est dérivé du téléphone)
+- [x] `/ecole/planning` — onglet **Conduite** (grille à la volée, 3 types,
+      l'heure de perfectionnement occupe deux demi-heures) et onglet **Code**
+      (modèle + créneaux générés, inchangé)
+- [x] Formulaires candidat (création et modification) alignés sur le dossier papier
+- [x] `/ecole/students/[id]` — nouveaux champs, identifiants, total dû
+
+### Encore non vérifié
+
+- `000008` et `000009` n'ont pas été exécutés (toujours ni Postgres ni Docker).
+- Le rendu de la grille de conduite n'a pas été observé dans un navigateur,
+  notamment le `rowSpan` d'une heure de perfectionnement en RTL.
+
+---
+
+## ✅ Phase 10 — Le planning se dessine à la main
+
+Le code se remplit désormais comme la conduite : plus de modèle hebdomadaire,
+plus de génération. Une case vide est libre ; on clique, on place, c'est tout.
+
+- [x] `…000010_direct_planning.sql`
+  - `create_and_book_slot` accepte le code ; le contrôle de chevauchement compte
+        aussi les demi-heures fermées — c'est à ça qu'elles servent
+  - `block_slot` — ferme une demi-heure (travaux, pause, jour off)
+  - `resource_busy()` — la règle de chevauchement, écrite une seule fois
+  - **supprimés** : `generate_week_slots`, `book_slot`, `release_slot` et la table
+        `planning_templates`. Ils servaient une disponibilité que plus rien ne
+        produit ; les laisser, c'était garder trois `security definer` qui gardent
+        un état inatteignable
+- [x] `session-grid.tsx` — une grille, un paramètre `resource` (`code` | `driving`)
+- [x] Navigation par flèches ◀ ▶ + « Cette semaine » + saut par date : réserver
+      un mois à l'avance, c'est quatre pages
+- [x] Demi-heure fermée : créée depuis la case vide, rouverte en la supprimant
+- [x] Supprimés : `template-grid.tsx`, `slots-grid.tsx`, `slot-actions-dialog.tsx`,
+      `usePlanningTemplate`, `useSaveTemplate`, `useGenerateSlots`, `useBookSlot`,
+      `useReleaseSlot`, `useCancelSlot`, 22 clés i18n devenues sans objet
+
+### Conséquence assumée
+
+Le candidat ne pourra pas réserver depuis l'APK : il n'y a plus de créneau
+« disponible » à prendre. L'application lira le planning, elle ne l'écrira pas —
+c'est l'école qui tient l'agenda.
+
+### Encore non vérifié
+
+- `000008`, `000009` et `000010` n'ont pas été exécutés (toujours ni Postgres ni
+  Docker sur la machine).
+- Le `rowSpan` d'une heure de perfectionnement n'a pas été observé en RTL.
 
 ---
 

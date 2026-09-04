@@ -43,7 +43,18 @@ import { useCategories } from "@/hooks/use-categories";
 import { useMySchoolPrices } from "@/hooks/use-school-profile";
 import type { Locale } from "@/i18n/config";
 import { formatCurrency } from "@/lib/format";
-import type { CategoryRow } from "@/types";
+import type { BloodGroup, CategoryRow } from "@/types";
+
+const BLOOD_GROUPS: readonly [BloodGroup, ...BloodGroup[]] = [
+  "A+",
+  "A-",
+  "B+",
+  "B-",
+  "AB+",
+  "AB-",
+  "O+",
+  "O-",
+];
 
 /** Algerian numbers: 0X XX XX XX XX, optionally with a +213 prefix. */
 const PHONE_RE = /^(?:\+213|0)\s?[1-9](?:[\s.-]?\d){8}$/;
@@ -62,15 +73,23 @@ function schema(t: (key: string, values?: Record<string, number>) => string) {
     full_name: z.string().trim().min(3, { message: t("min", { count: 3 }) }),
     phone: z.string().trim().regex(PHONE_RE, { message: t("phone") }),
     category_id: z.string().min(1, { message: t("selectOne") }),
-    // Optional throughout: a walk-in candidate rarely has an e-mail address,
-    // and the school picks a password only when it wants a specific one.
+    birthdate: z.string().min(1, { message: t("required") }),
+    birth_place: z.string().trim().min(2, { message: t("min", { count: 2 }) }),
+    nationality: z.string().trim().min(2, { message: t("min", { count: 2 }) }),
+    blood_group: z.enum(BLOOD_GROUPS, { message: t("selectOne") }),
+    address: z
+      .string()
+      .trim()
+      .min(2, { message: t("min", { count: 2 }) })
+      .max(200, { message: t("max", { count: 200 }) }),
+    // The four the counter can do without: the Latin spelling is for printed
+    // forms, and a walk-in candidate rarely has an e-mail address of their own.
+    full_name_fr: z.string().trim().max(120, { message: t("max", { count: 120 }) }),
     email: z.union([z.email({ message: t("email") }), z.literal("")]),
     password: z.union([
       z.string().min(6, { message: t("passwordMin") }),
       z.literal(""),
     ]),
-    birthdate: z.string(),
-    address: z.string().trim().max(200, { message: t("max", { count: 200 }) }),
   });
 }
 
@@ -147,17 +166,22 @@ function CandidateForm({
   // `useWatch` subscribes through `control`; the `watch()` closure returned by
   // `useForm` cannot be memoized, and the React Compiler refuses the component.
   const categoryId = useWatch({ control, name: "category_id" });
+  const bloodGroup = useWatch({ control, name: "blood_group" });
 
   async function onSubmit(values: Values) {
     try {
       const created = await create.mutateAsync({
         full_name: values.full_name,
+        full_name_fr: values.full_name_fr || undefined,
         phone: values.phone,
         category_id: values.category_id,
+        birthdate: values.birthdate,
+        birth_place: values.birth_place,
+        nationality: values.nationality,
+        blood_group: values.blood_group,
+        address: values.address,
         email: values.email || undefined,
         password: values.password || undefined,
-        address: values.address || undefined,
-        birthdate: values.birthdate || undefined,
         photo_url: photoUrl,
       });
       toast.success(t("candidateAdded"));
@@ -203,17 +227,37 @@ function CandidateForm({
 
       <form onSubmit={handleSubmit(onSubmit)} noValidate>
         <FieldGroup>
-          <Field data-invalid={!!errors.full_name}>
-            <FieldLabel htmlFor="full_name">{t("fullName")}</FieldLabel>
-            <Input
-              id="full_name"
-              autoFocus
-              autoComplete="off"
-              aria-invalid={!!errors.full_name}
-              {...register("full_name")}
-            />
-            <FieldError errors={errors.full_name ? [errors.full_name] : undefined} />
-          </Field>
+          <div className="grid gap-4 sm:grid-cols-2">
+            <Field data-invalid={!!errors.full_name}>
+              <FieldLabel htmlFor="full_name">{t("fullName")}</FieldLabel>
+              <Input
+                id="full_name"
+                autoFocus
+                dir="rtl"
+                autoComplete="off"
+                aria-invalid={!!errors.full_name}
+                {...register("full_name")}
+              />
+              <FieldError
+                errors={errors.full_name ? [errors.full_name] : undefined}
+              />
+            </Field>
+
+            <Field data-invalid={!!errors.full_name_fr}>
+              <FieldLabel htmlFor="full_name_fr">{t("fullNameFr")}</FieldLabel>
+              <Input
+                id="full_name_fr"
+                dir="ltr"
+                autoComplete="off"
+                aria-invalid={!!errors.full_name_fr}
+                {...register("full_name_fr")}
+              />
+              <FieldDescription>{tc("optional")}</FieldDescription>
+              <FieldError
+                errors={errors.full_name_fr ? [errors.full_name_fr] : undefined}
+              />
+            </Field>
+          </div>
 
           <div className="grid gap-4 sm:grid-cols-2">
             <Field data-invalid={!!errors.phone}>
@@ -232,8 +276,68 @@ function CandidateForm({
 
             <Field data-invalid={!!errors.birthdate}>
               <FieldLabel htmlFor="birthdate">{t("birthdate")}</FieldLabel>
-              <Input id="birthdate" type="date" dir="ltr" {...register("birthdate")} />
-              <FieldDescription>{tc("optional")}</FieldDescription>
+              <Input
+                id="birthdate"
+                type="date"
+                dir="ltr"
+                aria-invalid={!!errors.birthdate}
+                {...register("birthdate")}
+              />
+              <FieldError
+                errors={errors.birthdate ? [errors.birthdate] : undefined}
+              />
+            </Field>
+
+            <Field data-invalid={!!errors.birth_place}>
+              <FieldLabel htmlFor="birth_place">{t("birthPlace")}</FieldLabel>
+              <Input
+                id="birth_place"
+                aria-invalid={!!errors.birth_place}
+                {...register("birth_place")}
+              />
+              <FieldError
+                errors={errors.birth_place ? [errors.birth_place] : undefined}
+              />
+            </Field>
+
+            <Field data-invalid={!!errors.nationality}>
+              <FieldLabel htmlFor="nationality">{t("nationality")}</FieldLabel>
+              <Input
+                id="nationality"
+                aria-invalid={!!errors.nationality}
+                {...register("nationality")}
+              />
+              <FieldError
+                errors={errors.nationality ? [errors.nationality] : undefined}
+              />
+            </Field>
+
+            <Field data-invalid={!!errors.blood_group}>
+              <FieldLabel htmlFor="blood_group">{t("bloodGroup")}</FieldLabel>
+              <Select
+                value={bloodGroup ?? ""}
+                onValueChange={(value) =>
+                  setValue("blood_group", value as BloodGroup, {
+                    shouldValidate: true,
+                  })
+                }
+              >
+                <SelectTrigger id="blood_group" aria-invalid={!!errors.blood_group}>
+                  <SelectValue placeholder={tc("select")} />
+                </SelectTrigger>
+                <SelectContent>
+                  {BLOOD_GROUPS.map((group) => (
+                    <SelectItem key={group} value={group}>
+                      <span dir="ltr" className="font-mono font-semibold">
+                        {group}
+                      </span>
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              <FieldError
+                errors={errors.blood_group ? [errors.blood_group] : undefined}
+              />
             </Field>
           </div>
 
@@ -271,7 +375,6 @@ function CandidateForm({
           <Field data-invalid={!!errors.address}>
             <FieldLabel htmlFor="address">{t("address")}</FieldLabel>
             <Input id="address" aria-invalid={!!errors.address} {...register("address")} />
-            <FieldDescription>{tc("optional")}</FieldDescription>
             <FieldError errors={errors.address ? [errors.address] : undefined} />
           </Field>
 

@@ -4,24 +4,25 @@ import { useTranslations } from "next-intl";
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
-import { SlotsGrid } from "./slots-grid";
-import { TemplateGrid } from "./template-grid";
+import { SessionGrid } from "./session-grid";
 
 export function PlanningTabs({ schoolId }: { schoolId: string }) {
   const t = useTranslations("ecole.planning");
 
+  // One grid per resource — the car and the classroom are booked the same way,
+  // they just cannot be booked against each other.
   return (
-    <Tabs defaultValue="template" className="gap-5">
+    <Tabs defaultValue="driving" className="gap-5">
       <TabsList className="self-start">
-        <TabsTrigger value="template">{t("tabTemplate")}</TabsTrigger>
-        <TabsTrigger value="slots">{t("tabSlots")}</TabsTrigger>
+        <TabsTrigger value="driving">{t("conduite")}</TabsTrigger>
+        <TabsTrigger value="code">{t("code")}</TabsTrigger>
       </TabsList>
 
-      <TabsContent value="template">
-        <TemplateGrid schoolId={schoolId} />
+      <TabsContent value="driving">
+        <SessionGrid schoolId={schoolId} resource="driving" />
       </TabsContent>
-      <TabsContent value="slots">
-        <SlotsGrid schoolId={schoolId} />
+      <TabsContent value="code">
+        <SessionGrid schoolId={schoolId} resource="code" />
       </TabsContent>
     </Tabs>
   );

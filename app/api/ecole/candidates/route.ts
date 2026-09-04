@@ -20,14 +20,31 @@ import { createClient } from "@/lib/supabase/server";
  * trusting this handler.
  */
 
+const BLOOD_GROUPS = [
+  "A+",
+  "A-",
+  "B+",
+  "B-",
+  "AB+",
+  "AB-",
+  "O+",
+  "O-",
+] as const;
+
 const bodySchema = z.object({
   full_name: z.string().trim().min(3).max(120),
   phone: z.string().trim().min(6).max(20),
   category_id: z.uuid(),
+  birthdate: z.iso.date(),
+  birth_place: z.string().trim().min(2).max(120),
+  nationality: z.string().trim().min(2).max(80),
+  blood_group: z.enum(BLOOD_GROUPS),
+  address: z.string().trim().min(2).max(200),
+  // The Latin spelling, the photo and the account details are the four things
+  // the counter can do without.
+  full_name_fr: z.union([z.string().trim().max(120), z.literal("")]).optional(),
   email: z.union([z.email(), z.literal("")]).optional(),
   password: z.union([z.string().min(6).max(72), z.literal("")]).optional(),
-  address: z.string().trim().max(200).optional(),
-  birthdate: z.iso.date().optional().or(z.literal("")),
   photo_url: z.union([z.url(), z.literal("")]).optional(),
 });
 
@@ -148,9 +165,13 @@ export async function POST(request: Request) {
     .from("profiles")
     .update({
       full_name: input.full_name,
+      full_name_fr: input.full_name_fr?.trim() || null,
       phone: input.phone,
-      address: input.address?.trim() || null,
-      birthdate: input.birthdate || null,
+      address: input.address,
+      birthdate: input.birthdate,
+      birth_place: input.birth_place,
+      nationality: input.nationality,
+      blood_group: input.blood_group,
       photo_url: input.photo_url || null,
     })
     .eq("id", candidateId);

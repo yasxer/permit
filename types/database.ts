@@ -12,7 +12,20 @@ export type EnrollmentStatus =
   | "active"
   | "completed"
   | "cancelled";
-export type LessonType = "code" | "conduite";
+/**
+ * Both exam subjects, plus what a car is actually booked for. `code` is the
+ * classroom; the other three share the same vehicle.
+ */
+export type LessonType = "code" | "creneau" | "conduite" | "perfectionnement";
+export type BloodGroup =
+  | "A+"
+  | "A-"
+  | "B+"
+  | "B-"
+  | "AB+"
+  | "AB-"
+  | "O+"
+  | "O-";
 export type SlotStatus = "available" | "booked" | "cancelled";
 export type ExamStatus = "scheduled" | "completed" | "cancelled";
 export type ExamResult = "passed" | "failed" | "absent";
@@ -37,10 +50,16 @@ export type ProfileRow = Timestamps & {
   role: UserRole;
   /** Mirrored from auth.users by trigger; never written from the client. */
   email: string | null;
+  /** The Arabic name — the one on the ID card, always filled in. */
   full_name: string | null;
+  /** Latin spelling, for printed forms. Optional. */
+  full_name_fr: string | null;
   phone: string | null;
   address: string | null;
   birthdate: string | null;
+  birth_place: string | null;
+  nationality: string | null;
+  blood_group: BloodGroup | null;
   photo_url: string | null;
   has_license: boolean;
 };
@@ -108,15 +127,6 @@ export type PaymentRow = {
   created_at: string;
 };
 
-export type PlanningTemplateRow = {
-  school_id: string;
-  day_of_week: number;
-  start_time: string;
-  lesson_type: LessonType;
-  is_available: boolean;
-  updated_at: string;
-};
-
 export type SlotRow = Timestamps & {
   id: string;
   school_id: string;
@@ -126,6 +136,8 @@ export type SlotRow = Timestamps & {
   lesson_type: LessonType;
   status: SlotStatus;
   enrollment_id: string | null;
+  /** Snapshot of the hourly rate, on perfectionnement sessions only. */
+  price: number | null;
 };
 
 export type ExamRow = Timestamps & {
@@ -188,9 +200,13 @@ export type StudentFileRow = {
   created_at: string;
   updated_at: string;
   candidate_name: string | null;
+  candidate_name_fr: string | null;
   candidate_phone: string | null;
   candidate_address: string | null;
   candidate_birthdate: string | null;
+  candidate_birth_place: string | null;
+  candidate_nationality: string | null;
+  candidate_blood_group: BloodGroup | null;
   candidate_photo_url: string | null;
   candidate_email: string | null;
   candidate_has_license: boolean;
@@ -199,6 +215,10 @@ export type StudentFileRow = {
   category_label_fr: string;
   category_label_en: string;
   amount_paid: number;
+  perf_total: number;
+  perf_session_count: number;
+  /** The package plus every perfectionnement hour booked. */
+  amount_due: number;
   amount_remaining: number;
   payment_count: number;
 };
@@ -281,9 +301,13 @@ export type Database = {
           | "role"
           | "email"
           | "full_name"
+          | "full_name_fr"
           | "phone"
           | "address"
           | "birthdate"
+          | "birth_place"
+          | "nationality"
+          | "blood_group"
           | "photo_url"
           | "has_license"
         >,
@@ -327,15 +351,9 @@ export type Database = {
           Partial<Pick<PaymentRow, "id" | "created_at" | "paid_at">>,
         Partial<PaymentRow>
       >;
-      planning_templates: TableDef<
-        PlanningTemplateRow,
-        Omit<PlanningTemplateRow, "updated_at" | "is_available"> &
-          Partial<Pick<PlanningTemplateRow, "updated_at" | "is_available">>,
-        Partial<PlanningTemplateRow>
-      >;
       slots: TableDef<
         SlotRow,
-        InsertOf<SlotRow, "id" | "status" | "enrollment_id">,
+        InsertOf<SlotRow, "id" | "status" | "enrollment_id" | "price">,
         Partial<SlotRow>
       >;
       exams: TableDef<
@@ -397,10 +415,6 @@ export type Database = {
         Args: { p_enrollment_id: string };
         Returns: EnrollmentRow;
       };
-      generate_week_slots: {
-        Args: { p_week_start: string; p_duration_minutes?: number };
-        Returns: number;
-      };
       admin_dashboard_stats: {
         Args: { p_months?: number };
         Returns: AdminDashboardStats;
@@ -417,18 +431,34 @@ export type Database = {
         Args: {
           p_candidate_id: string;
           p_full_name: string;
+          p_full_name_fr?: string | null;
           p_phone?: string | null;
           p_address?: string | null;
           p_birthdate?: string | null;
+          p_birth_place?: string | null;
+          p_nationality?: string | null;
+          p_blood_group?: BloodGroup | null;
           p_photo_url?: string | null;
         };
         Returns: ProfileRow;
       };
-      book_slot: {
-        Args: { p_slot_id: string; p_enrollment_id: string };
+      create_and_book_slot: {
+        Args: {
+          p_slot_date: string;
+          p_start_time: string;
+          p_lesson_type: LessonType;
+          p_enrollment_id: string;
+        };
         Returns: SlotRow;
       };
-      release_slot: { Args: { p_slot_id: string }; Returns: SlotRow };
+      block_slot: {
+        Args: {
+          p_slot_date: string;
+          p_start_time: string;
+          p_lesson_type: LessonType;
+        };
+        Returns: SlotRow;
+      };
       upsert_question: {
         Args: {
           p_type: QuestionType;
@@ -446,6 +476,7 @@ export type Database = {
       school_status: SchoolStatus;
       enrollment_status: EnrollmentStatus;
       lesson_type: LessonType;
+      blood_group: BloodGroup;
       slot_status: SlotStatus;
       exam_status: ExamStatus;
       exam_result: ExamResult;

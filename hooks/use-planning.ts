@@ -5,7 +5,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { queryKeys } from "@/hooks/queries/keys";
 import { createClient } from "@/lib/supabase/client";
 import { unwrap } from "@/lib/supabase/query";
-import type { LessonType, PlanningTemplateRow, SlotStatus } from "@/types";
+import type { LessonType, SlotStatus } from "@/types";
 
 /** 08:00 → 18:00 in 30-minute steps, as Postgres `time` literals. */
 export const SLOT_TIMES = Array.from({ length: 20 }, (_, index) => {
@@ -15,73 +15,30 @@ export const SLOT_TIMES = Array.from({ length: 20 }, (_, index) => {
   return `${hh}:${mm}:00`;
 });
 
-export const SLOT_DURATION_MINUTES = 30;
+/**
+ * The two resources a school books, and what each one can be booked for. They
+ * do not compete: a code lesson and a driving lesson at nine o'clock is an
+ * ordinary morning, two driving lessons is not.
+ */
+export const SESSION_TYPES = {
+  code: ["code"],
+  driving: ["creneau", "conduite", "perfectionnement"],
+} as const satisfies Record<string, readonly LessonType[]>;
 
-export function usePlanningTemplate(schoolId: string | undefined) {
-  return useQuery({
-    queryKey: queryKeys.planning.template(schoolId ?? ""),
-    queryFn: async () => {
-      const supabase = createClient();
-      const result = await supabase
-        .from("planning_templates")
-        .select("*")
-        .eq("school_id", schoolId!);
-      return unwrap(result) as PlanningTemplateRow[];
-    },
-    enabled: Boolean(schoolId),
-  });
+export type Resource = keyof typeof SESSION_TYPES;
+
+export function resourceOf(type: LessonType): Resource {
+  return type === "code" ? "code" : "driving";
 }
 
-export type TemplateCell = {
-  day_of_week: number;
-  start_time: string;
-  lesson_type: LessonType;
-  /** null removes the row: the cell goes back to "not set". */
-  is_available: boolean | null;
-};
+/** Perfectionnement is sold by the hour; everything else is a half hour. */
+export function sessionMinutes(type: LessonType): number {
+  return type === "perfectionnement" ? 60 : 30;
+}
 
-export function useSaveTemplate(schoolId: string | undefined) {
-  const queryClient = useQueryClient();
-
-  return useMutation({
-    mutationFn: async (cells: TemplateCell[]) => {
-      if (!schoolId) throw new Error("No school");
-      const supabase = createClient();
-
-      const cleared = cells.filter((cell) => cell.is_available === null);
-      const set = cells.filter((cell) => cell.is_available !== null);
-
-      // Deleting one composite key at a time: PostgREST has no tuple-IN, and
-      // a template edit touches a handful of cells, not hundreds.
-      for (const cell of cleared) {
-        const { error } = await supabase
-          .from("planning_templates")
-          .delete()
-          .eq("school_id", schoolId)
-          .eq("day_of_week", cell.day_of_week)
-          .eq("start_time", cell.start_time)
-          .eq("lesson_type", cell.lesson_type);
-        if (error) throw new Error(error.message);
-      }
-
-      if (set.length > 0) {
-        const { error } = await supabase.from("planning_templates").upsert(
-          set.map((cell) => ({
-            school_id: schoolId,
-            day_of_week: cell.day_of_week,
-            start_time: cell.start_time,
-            lesson_type: cell.lesson_type,
-            is_available: cell.is_available as boolean,
-          })),
-          { onConflict: "school_id,day_of_week,start_time,lesson_type" },
-        );
-        if (error) throw new Error(error.message);
-      }
-    },
-    onSuccess: () => {
-      void queryClient.invalidateQueries({ queryKey: ["planning"] });
-    },
-  });
+/** How many grid rows a session covers, at one row per half hour. */
+export function slotRowSpan(type: LessonType): number {
+  return sessionMinutes(type) / 30;
 }
 
 export type SlotWithStudent = {
@@ -93,6 +50,8 @@ export type SlotWithStudent = {
   lesson_type: LessonType;
   status: SlotStatus;
   enrollment_id: string | null;
+  /** Set on perfectionnement sessions only: the hourly rate at booking time. */
+  price: number | null;
   enrollment: { id: string; candidate: { full_name: string | null } | null } | null;
 };
 
@@ -119,83 +78,80 @@ export function useSlots(schoolId: string | undefined, weekStart: string) {
   });
 }
 
-export function useGenerateSlots() {
+function usePlanningMutation<TArgs>(run: (args: TArgs) => Promise<unknown>) {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: async ({ weekStart }: { weekStart: string }) => {
-      const supabase = createClient();
-      const { data, error } = await supabase.rpc("generate_week_slots", {
-        p_week_start: weekStart,
-        p_duration_minutes: SLOT_DURATION_MINUTES,
-      });
-      if (error) throw new Error(error.message);
-      return data as number;
-    },
+    mutationFn: run,
     onSuccess: () => {
       void queryClient.invalidateQueries({ queryKey: ["planning"] });
+      // A perfectionnement hour changes what its candidate owes.
+      void queryClient.invalidateQueries({ queryKey: queryKeys.enrollments.all });
     },
   });
 }
 
 /**
- * Books one of the school's active candidates onto a free slot.
- *
- * The candidate app would have the candidate pick their own slot; until it
- * ships the school does it here. Both call the same RPC, which is what keeps
- * the two paths from drifting apart.
+ * Creates a session and books it in one call — nothing is declared available
+ * beforehand. Duration and price come from the type, decided in the database
+ * rather than sent by the browser.
  */
-export function useBookSlot() {
-  const queryClient = useQueryClient();
-  return useMutation({
-    mutationFn: async ({
-      slotId,
+export function useCreateSession() {
+  return usePlanningMutation(
+    async ({
+      date,
+      time,
+      type,
       enrollmentId,
     }: {
-      slotId: string;
+      date: string;
+      time: string;
+      type: LessonType;
       enrollmentId: string;
     }) => {
       const supabase = createClient();
-      const { error } = await supabase.rpc("book_slot", {
-        p_slot_id: slotId,
+      const { error } = await supabase.rpc("create_and_book_slot", {
+        p_slot_date: date,
+        p_start_time: time,
+        p_lesson_type: type,
         p_enrollment_id: enrollmentId,
       });
       if (error) throw Object.assign(new Error(error.message), { code: error.code });
     },
-    onSuccess: () => {
-      void queryClient.invalidateQueries({ queryKey: ["planning"] });
-    },
-  });
+  );
 }
 
-/** Frees a slot: undoes a booking, or reopens a cancelled one. */
-export function useReleaseSlot() {
-  const queryClient = useQueryClient();
-  return useMutation({
-    mutationFn: async ({ id }: { id: string }) => {
+/** Closes a half hour so nothing can be booked in it. */
+export function useBlockSlot() {
+  return usePlanningMutation(
+    async ({
+      date,
+      time,
+      type,
+    }: {
+      date: string;
+      time: string;
+      type: LessonType;
+    }) => {
       const supabase = createClient();
-      const { error } = await supabase.rpc("release_slot", { p_slot_id: id });
-      if (error) throw new Error(error.message);
+      const { error } = await supabase.rpc("block_slot", {
+        p_slot_date: date,
+        p_start_time: time,
+        p_lesson_type: type,
+      });
+      if (error) throw Object.assign(new Error(error.message), { code: error.code });
     },
-    onSuccess: () => {
-      void queryClient.invalidateQueries({ queryKey: ["planning"] });
-    },
-  });
+  );
 }
 
-export function useCancelSlot() {
-  const queryClient = useQueryClient();
-  return useMutation({
-    mutationFn: async ({ id }: { id: string }) => {
-      const supabase = createClient();
-      // The CHECK constraint requires a cancelled slot to hold no booking.
-      const { error } = await supabase
-        .from("slots")
-        .update({ status: "cancelled", enrollment_id: null })
-        .eq("id", id);
-      if (error) throw new Error(error.message);
-    },
-    onSuccess: () => {
-      void queryClient.invalidateQueries({ queryKey: ["planning"] });
-    },
+/**
+ * Removes a row outright — a session that is not happening, or a closed half
+ * hour that reopens. There is no third state to fall back to: a slot exists
+ * because the school put something there.
+ */
+export function useDeleteSlot() {
+  return usePlanningMutation(async ({ id }: { id: string }) => {
+    const supabase = createClient();
+    const { error } = await supabase.from("slots").delete().eq("id", id);
+    if (error) throw new Error(error.message);
   });
 }

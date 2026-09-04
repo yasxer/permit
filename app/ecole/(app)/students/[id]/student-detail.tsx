@@ -4,6 +4,9 @@ import {
   ArrowLeft,
   Banknote,
   CalendarDays,
+  Droplet,
+  Flag,
+  KeyRound,
   MapPin,
   Pencil,
   Phone,
@@ -46,6 +49,7 @@ import { usePayments } from "@/hooks/use-payments";
 import { formatCurrency, formatDate } from "@/lib/format";
 
 import { AddPaymentDialog } from "./add-payment-dialog";
+import { CredentialsDialog } from "./credentials-dialog";
 import { EditCandidateDialog } from "./edit-candidate-dialog";
 
 function Detail({
@@ -88,6 +92,7 @@ export function StudentDetail({ enrollmentId }: { enrollmentId: string }) {
 
   const [paymentOpen, setPaymentOpen] = useState(false);
   const [editOpen, setEditOpen] = useState(false);
+  const [credentialsOpen, setCredentialsOpen] = useState(false);
   const [draftProgress, setDraftProgress] = useState<number | null>(null);
   const updateProgress = useUpdateProgress();
 
@@ -140,6 +145,11 @@ export function StudentDetail({ enrollmentId }: { enrollmentId: string }) {
             <h1 className="truncate text-2xl font-semibold tracking-tight">
               {file.candidate_name ?? "—"}
             </h1>
+            {file.candidate_name_fr && (
+              <p dir="ltr" className="truncate text-sm text-muted-foreground">
+                {file.candidate_name_fr}
+              </p>
+            )}
             <div className="mt-1 flex items-center gap-2">
               <Badge variant="secondary" className="font-mono font-semibold">
                 {file.category_code}
@@ -171,6 +181,17 @@ export function StudentDetail({ enrollmentId }: { enrollmentId: string }) {
                 </Detail>
                 <Detail icon={CalendarDays} label={t("birthdate")}>
                   {formatDate(file.candidate_birthdate, locale)}
+                </Detail>
+                <Detail icon={MapPin} label={t("birthPlace")}>
+                  {file.candidate_birth_place ?? "—"}
+                </Detail>
+                <Detail icon={Flag} label={t("nationality")}>
+                  {file.candidate_nationality ?? "—"}
+                </Detail>
+                <Detail icon={Droplet} label={t("bloodGroup")}>
+                  <span dir="ltr" className="font-mono">
+                    {file.candidate_blood_group ?? "—"}
+                  </span>
                 </Detail>
                 <Detail icon={MapPin} label={t("address")}>
                   {file.candidate_address ?? "—"}
@@ -318,6 +339,26 @@ export function StudentDetail({ enrollmentId }: { enrollmentId: string }) {
                   {formatCurrency(file.total_price, locale)}
                 </dd>
               </div>
+              {file.perf_session_count > 0 && (
+                <>
+                  <div className="flex items-baseline justify-between gap-3">
+                    <dt className="text-muted-foreground">
+                      {t("perfSessions")}
+                      {" · "}
+                      {t("perfSessionsCount", { count: file.perf_session_count })}
+                    </dt>
+                    <dd className="font-medium tabular-nums">
+                      {formatCurrency(file.perf_total, locale)}
+                    </dd>
+                  </div>
+                  <div className="flex items-baseline justify-between gap-3 border-t pt-3">
+                    <dt className="text-muted-foreground">{t("amountDue")}</dt>
+                    <dd className="font-medium tabular-nums">
+                      {formatCurrency(file.amount_due, locale)}
+                    </dd>
+                  </div>
+                </>
+              )}
               <div className="flex items-baseline justify-between gap-3">
                 <dt className="text-muted-foreground">{t("amountPaid")}</dt>
                 <dd className="font-medium tabular-nums text-success">
@@ -335,6 +376,22 @@ export function StudentDetail({ enrollmentId }: { enrollmentId: string }) {
                 </dd>
               </div>
             </dl>
+
+            <div className="space-y-1.5 border-t pt-4">
+              <p className="text-xs text-muted-foreground">{t("credentials")}</p>
+              <p dir="ltr" className="truncate font-mono text-sm">
+                {file.candidate_email ?? "—"}
+              </p>
+              <Button
+                variant="outline"
+                size="sm"
+                className="w-full"
+                onClick={() => setCredentialsOpen(true)}
+              >
+                <KeyRound className="size-4" />
+                {t("editCredentials")}
+              </Button>
+            </div>
 
             <div className="space-y-2 pt-1">
               <Button className="w-full" onClick={() => setPaymentOpen(true)}>
@@ -366,6 +423,13 @@ export function StudentDetail({ enrollmentId }: { enrollmentId: string }) {
         open={editOpen}
         onOpenChange={setEditOpen}
         file={file}
+      />
+
+      <CredentialsDialog
+        open={credentialsOpen}
+        onOpenChange={setCredentialsOpen}
+        candidateId={file.candidate_id}
+        currentLogin={file.candidate_email}
       />
     </>
   );

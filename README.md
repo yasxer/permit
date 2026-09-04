@@ -74,6 +74,13 @@ npx supabase db push
 | `…000005_stats.sql` | Agrégats des tableaux de bord |
 | `…000006_views.sql` | Vues `student_files` et `exam_roster` |
 | `…000007_manual_operations.sql` | Inscription et réservation faites par l'auto-école |
+| `…000008_lesson_types.sql` | `creneau` et `perfectionnement` ajoutés à `lesson_type` — **seul dans sa transaction** |
+| `…000009_candidate_file_and_sessions.sql` | Dossier candidat complet, séances de conduite créées à la volée |
+| `…000010_direct_planning.sql` | Le modèle hebdomadaire disparaît : les deux grilles se remplissent à la main |
+
+> ⚠️ `000008` doit être exécuté **seul**, avant `000009`. Postgres refuse
+> d'utiliser une valeur d'enum ajoutée dans la même transaction : les deux
+> fichiers collés dans un même onglet du SQL editor échouent.
 
 ### 4. Premier super-administrateur
 
@@ -165,9 +172,9 @@ npm run dev
 | `/ecole/dashboard` | 4 indicateurs, paiements par mois, répartition des candidats par étape |
 | `/ecole/requests` | Cartes de demandes, accepter / refuser, filtre par statut |
 | `/ecole/students` | Table des candidats actifs : progression, payé, restant. **Ajouter un candidat** crée son compte et son dossier |
-| `/ecole/students/[id]` | Fiche complète, coordonnées modifiables, progression, historique et ajout de versements |
+| `/ecole/students/[id]` | Dossier complet (nom ar + latin, naissance, nationalité, groupe sanguin), identifiants de l'app, progression, versements |
 | `/ecole/completed` | Candidats ayant obtenu le permis, en lecture seule |
-| `/ecole/planning` | Modèle hebdomadaire (08:00→18:00 par 30 min, Sam→Jeu), créneaux générés, réservation d'un candidat sur un créneau |
+| `/ecole/planning` | Deux grilles identiques, **Conduite** et **Code** : clic sur une case vide → séance créée et attribuée, ou demi-heure fermée. Navigation semaine par semaine |
 | `/ecole/exams` | Sessions d'examen, création avec dates suggérées |
 | `/ecole/exams/[id]` | Candidats éligibles, assignation, saisie des résultats |
 
@@ -188,7 +195,7 @@ que de produire deux sortes de candidats :
 | Geste | Chemin candidat (APK, plus tard) | Chemin auto-école (web, aujourd'hui) |
 |---|---|---|
 | Ouvrir un dossier | `enrollments` en `pending`, puis `accept_enrollment` par l'école | `enroll_candidate` — accepté d'emblée, même snapshot de prix |
-| Prendre un créneau | `book_slot`, branche candidat — déjà écrite | `book_slot`, branche école |
+| Prendre un créneau | consultation seule : le planning est écrit par l'école | `create_and_book_slot` |
 | Corriger ses coordonnées | policy `profiles update own` | `school_update_candidate`, limité à ses propres candidats |
 
 Rien de ce qui précède n'est à défaire quand l'APK sortira : les policies du
@@ -203,7 +210,44 @@ pas le handler.
 
 Sans e-mail — le cas courant au comptoir — l'identifiant est dérivé du numéro de
 téléphone (`0555…@candidat.permix.dz`) et le mot de passe est généré puis affiché
-**une seule fois** : il n'est stocké nulle part en clair.
+**une seule fois** : il n'est stocké nulle part en clair. Le candidat qui revient
+avec une vraie adresse, ou qui a perdu le papier, passe par
+`/api/ecole/candidates/[id]/credentials` — la réinitialisation par e-mail ne sert
+à rien quand l'identifiant est un numéro inventé par l'école.
+
+### Le planning : une salle, une voiture
+
+Deux ressources, une seule façon de les remplir. L'école clique sur une demi-heure
+vide, choisit le type, désigne le candidat, et la séance est créée et attribuée en
+un appel (`create_and_book_slot`). Rien n'est déclaré disponible à l'avance : une
+case vide est libre, un point c'est tout.
+
+Le modèle hebdomadaire a été retiré (`…000010`). Il décrivait une disponibilité
+que personne ne consommait : l'école ne publie pas ses heures libres pour que les
+candidats s'y inscrivent, elle écrit la semaine elle-même. `slots` ne contient donc
+plus que deux sortes de lignes — une séance réservée, ou une demi-heure **fermée**
+(travaux, pause, jour off) sur laquelle plus rien ne peut être posé.
+
+Les flèches font défiler les semaines sans limite : réserver un mois à l'avance,
+c'est quatre pages.
+
+| | Durée | Candidats proposés | Facturation |
+|---|---|---|---|
+| Code | 30 min | ceux qui n'ont pas encore débloqué le créneau | comprise dans le forfait |
+| Créneau | 30 min | `creneau_unlocked` sans `conduite_unlocked` | comprise dans le forfait |
+| Conduite | 30 min | `conduite_unlocked` | comprise dans le forfait |
+| Perfectionnement | **1 h** | tout dossier actif | `perf_price_per_hour`, figé sur la séance |
+
+Le perfectionnement se paie à l'heure en plus du forfait, donc la séance porte
+son prix (`slots.price`) et `student_files.amount_due` additionne le forfait et
+les heures réellement réservées. Une séance supprimée disparaît du calcul d'elle-même.
+
+Une heure de perfectionnement occupe la demi-heure suivante, et un créneau peut
+tomber sur une conduite : l'index unique `(school_id, slot_date, start_time,
+lesson_type)` n'aurait vu ni l'un ni l'autre. D'où `resource_busy()`, seul endroit
+où la règle de chevauchement est écrite — par ressource, donc la salle et la
+voiture ne se gênent pas mutuellement, et une demi-heure fermée bloque comme une
+séance.
 
 ### Le navigateur parle directement à Postgres
 
@@ -234,9 +278,9 @@ client — le contraire ouvrirait un contournement par simple requête directe :
 |---|---|
 | `accept_enrollment` | Fige le tarif au moment de l'acceptation : un changement de prix ne doit pas réécrire les dossiers ouverts |
 | `upsert_question` | Question et réponses forment une unité ; deux requêtes laisseraient des options orphelines |
-| `generate_week_slots` | Génère la semaine depuis le modèle, sans écraser les créneaux déjà réservés |
 | `enroll_candidate` | Même règle de snapshot que `accept_enrollment`, en une étape : l'école qui inscrit n'a rien à décider ensuite |
-| `book_slot` | Vérifie que le créneau est libre et que le dossier appartient bien à l'école ; la policy `slots`, elle, ne regarde que le créneau |
+| `create_and_book_slot` | Durée et tarif déduits du type, chevauchements vérifiés, création et réservation dans la même transaction ; la policy `slots`, elle, ne regarde que l'école |
+| `block_slot` | Ferme une demi-heure — même contrôle de chevauchement, sans candidat |
 | `admin_dashboard_stats` | Les sommes et group-by restent en base : un seul aller-retour, aucune ligne superflue transmise |
 | Vue `student_files` | Le solde par dossier demande une somme ; la calculer côté client signifierait télécharger tous les paiements |
 
@@ -284,7 +328,7 @@ app/
     pending/       écran d'attente d'approbation
     complete-profile/
     (app)/         layout gardé par requireApprovedSchool()
-  api/             cloudinary/sign · auth/signout · ecole/candidates
+  api/             cloudinary/sign · auth/signout · ecole/candidates[/id/credentials]
   auth/callback/
 components/
   ui/              shadcn/ui

@@ -41,7 +41,6 @@ export const queryKeys = {
   },
 
   planning: {
-    template: (schoolId: string) => ["planning", "template", schoolId] as const,
     slots: (schoolId: string, weekStart: string) =>
       ["planning", "slots", schoolId, weekStart] as const,
   },
