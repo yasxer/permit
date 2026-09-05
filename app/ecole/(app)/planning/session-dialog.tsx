@@ -221,7 +221,7 @@ function NewSession({
                   >
                     <Check
                       className={cn(
-                        "size-4 shrink-0 text-primary",
+                        "size-4 shrink-0 text-brand-ink",
                         student.id === selected ? "opacity-100" : "opacity-0",
                       )}
                       aria-hidden

@@ -434,6 +434,12 @@ export type Database = {
         Args: { p_candidate_id: string; p_category_id: string };
         Returns: EnrollmentRow;
       };
+      school_delete_exam: { Args: { p_exam_id: string }; Returns: null };
+      /** Returns the candidate whose file was removed. */
+      school_delete_enrollment: {
+        Args: { p_enrollment_id: string };
+        Returns: string;
+      };
       school_update_candidate: {
         Args: {
           p_candidate_id: string;

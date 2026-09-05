@@ -11,12 +11,16 @@ import {
   Pencil,
   Phone,
   Plus,
+  Trash2,
   Wallet,
 } from "lucide-react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useLocale, useTranslations } from "next-intl";
 import { useState, type ReactNode } from "react";
+import { toast } from "sonner";
 
+import { ConfirmModal } from "@/components/shared/confirm-modal";
 import { EmptyState } from "@/components/shared/empty-state";
 import { StatusBadge } from "@/components/shared/status-badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -38,7 +42,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { useStudentFile } from "@/hooks/use-enrollments";
+import { useDeleteEnrollment, useStudentFile } from "@/hooks/use-enrollments";
 import { usePayments } from "@/hooks/use-payments";
 import { formatCurrency, formatDate } from "@/lib/format";
 import { STAGE_LABEL_KEYS, stageOf } from "@/lib/stages";
@@ -77,6 +81,7 @@ export function StudentDetail({ enrollmentId }: { enrollmentId: string }) {
   const tc = useTranslations("common");
   const tErrors = useTranslations("errors");
   const locale = useLocale();
+  const router = useRouter();
 
   const { data: file, isPending, isError } = useStudentFile(enrollmentId);
   const [showPayments, setShowPayments] = useState(false);
@@ -88,6 +93,24 @@ export function StudentDetail({ enrollmentId }: { enrollmentId: string }) {
   const [paymentOpen, setPaymentOpen] = useState(false);
   const [editOpen, setEditOpen] = useState(false);
   const [credentialsOpen, setCredentialsOpen] = useState(false);
+  const [deleteOpen, setDeleteOpen] = useState(false);
+  const deleteEnrollment = useDeleteEnrollment();
+
+  async function confirmDelete() {
+    try {
+      await deleteEnrollment.mutateAsync({ id: enrollmentId });
+      toast.success(t("candidateDeleted"));
+      router.push("/ecole/students");
+    } catch (error) {
+      console.error("delete candidate failed", error);
+      const reason = (error as Error).message;
+      toast.error(
+        reason === "not_your_candidate"
+          ? tErrors("forbidden")
+          : tErrors("generic"),
+      );
+    }
+  }
 
   if (isPending) {
     return (
@@ -99,18 +122,35 @@ export function StudentDetail({ enrollmentId }: { enrollmentId: string }) {
   }
 
   if (isError || !file) {
-    return <EmptyState title={tErrors("notFound")} />;
+    // The file we just deleted is gone from under its own page — that is the
+    // redirect arriving, not a file that was never there.
+    return deleteEnrollment.isSuccess ? (
+      <Skeleton className="h-72" />
+    ) : (
+      <EmptyState title={tErrors("notFound")} />
+    );
   }
 
   return (
     <>
       <div className="mb-6 space-y-2">
-        <Button asChild variant="ghost" size="sm" className="-ms-2">
-          <Link href="/ecole/students">
-            <ArrowLeft className="size-4 rtl-flip" />
-            {tc("back")}
-          </Link>
-        </Button>
+        <div className="flex items-center justify-between gap-3">
+          <Button asChild variant="ghost" size="sm" className="-ms-2">
+            <Link href="/ecole/students">
+              <ArrowLeft className="size-4 rtl-flip" />
+              {tc("back")}
+            </Link>
+          </Button>
+
+          <Button
+            variant="destructive"
+            size="sm"
+            onClick={() => setDeleteOpen(true)}
+          >
+            <Trash2 className="size-4" />
+            {t("deleteCandidate")}
+          </Button>
+        </div>
 
         <div className="flex flex-wrap items-center gap-3">
           <Avatar className="size-12">
@@ -122,7 +162,7 @@ export function StudentDetail({ enrollmentId }: { enrollmentId: string }) {
             </AvatarFallback>
           </Avatar>
           <div className="min-w-0">
-            <h1 className="truncate text-2xl font-semibold tracking-tight">
+            <h1 className="truncate font-heading text-2xl font-semibold tracking-tight">
               {file.candidate_name ?? "—"}
             </h1>
             {file.candidate_name_fr && (
@@ -333,6 +373,19 @@ export function StudentDetail({ enrollmentId }: { enrollmentId: string }) {
         onOpenChange={setCredentialsOpen}
         candidateId={file.candidate_id}
         currentLogin={file.candidate_email}
+      />
+
+      <ConfirmModal
+        open={deleteOpen}
+        onOpenChange={setDeleteOpen}
+        title={t("deleteCandidateTitle")}
+        message={t("deleteCandidateMessage", {
+          name: file.candidate_name ?? "—",
+        })}
+        confirmLabel={tc("delete")}
+        destructive
+        pending={deleteEnrollment.isPending}
+        onConfirm={confirmDelete}
       />
     </>
   );

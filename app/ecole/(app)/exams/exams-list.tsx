@@ -1,6 +1,12 @@
 "use client";
 
-import { CalendarDays, ClipboardCheck, Plus, Users } from "lucide-react";
+import {
+  CalendarDays,
+  ChevronRight,
+  ClipboardCheck,
+  Plus,
+  Users,
+} from "lucide-react";
 import Link from "next/link";
 import { useLocale, useTranslations } from "next-intl";
 import { useState } from "react";
@@ -55,30 +61,40 @@ export function ExamsList({
               <li key={exam.id}>
                 <Link
                   href={`/ecole/exams/${exam.id}`}
-                  className="block rounded-xl outline-offset-4"
+                  className="group block rounded-xl outline-offset-4"
                 >
-                  <Card className="h-full transition-colors hover:border-primary/40">
-                    <CardContent className="space-y-3">
+                  <Card className="h-full transition-shadow group-hover:ring-primary/30">
+                    <CardContent className="space-y-4">
                       <div className="flex items-start justify-between gap-3">
+                        {/* Le jour d'abord, en gros : sur une grille de
+                            séances, c'est la date qu'on cherche. */}
                         <div className="min-w-0">
-                          <p className="flex items-center gap-2 text-base font-semibold">
-                            <CalendarDays
-                              className="size-4 shrink-0 text-muted-foreground"
-                              aria-hidden
-                            />
+                          <p className="tag-caps flex items-center gap-1.5 text-[0.6rem] font-bold text-muted-foreground">
+                            <CalendarDays className="size-3" aria-hidden />
                             {formatDate(exam.exam_date, locale, {
-                              dateStyle: "full",
+                              month: "long",
+                              year: "numeric",
+                            })}
+                          </p>
+                          <p className="mt-1.5 font-heading text-lg font-bold tracking-tight">
+                            {formatDate(exam.exam_date, locale, {
+                              weekday: "long",
+                              day: "numeric",
                             })}
                           </p>
                         </div>
                         <StatusBadge status={exam.status} />
                       </div>
 
-                      <div className="flex flex-wrap items-center gap-2">
+                      <div className="flex items-center justify-between gap-2 border-t pt-3">
                         <span className="flex items-center gap-1.5 text-sm text-muted-foreground">
                           <Users className="size-4" aria-hidden />
                           {t("candidatesAssigned", { count })}
                         </span>
+                        <ChevronRight
+                          className="size-4 rtl-flip text-muted-foreground transition-transform group-hover:translate-x-0.5"
+                          aria-hidden
+                        />
                       </div>
                     </CardContent>
                   </Card>

@@ -9,13 +9,14 @@
   --color-foreground: var(--foreground);
   --font-sans: var(--font-app-sans);
   --font-mono: var(--font-app-mono);
-  --font-heading: var(--font-app-sans);
+  --font-heading: var(--font-app-heading);
   --color-sidebar-ring: var(--sidebar-ring);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
   --color-sidebar-accent: var(--sidebar-accent);
   --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
   --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-muted: var(--sidebar-muted);
   --color-sidebar-foreground: var(--sidebar-foreground);
   --color-sidebar: var(--sidebar);
   --color-chart-5: var(--chart-5);
@@ -34,6 +35,11 @@
   --color-success-foreground: var(--success-foreground);
   --color-warning: var(--warning);
   --color-warning-foreground: var(--warning-foreground);
+  --color-brand: var(--brand);
+  --color-brand-foreground: var(--brand-foreground);
+  --color-brand-hover: var(--brand-hover);
+  --color-brand-ink: var(--brand-ink);
+  --color-brand-surface: var(--brand-surface);
   --color-accent-foreground: var(--accent-foreground);
   --color-accent: var(--accent);
   --color-muted-foreground: var(--muted-foreground);
@@ -55,109 +61,149 @@
   --radius-4xl: calc(var(--radius) * 2.6);
 }
 
-/* Neutral base: slate. Single accent: indigo. */
+/* =============================================================================
+   PERMIX — identité de marque
+
+   Trois couleurs font tout le travail, dans la proportion 60 / 30 / 10 :
+   du blanc cassé pour la surface, le bleu nuit #1C2333 pour l'encre et les
+   barres de navigation, l'ambre #F5A623 pour ce sur quoi on clique — et rien
+   d'autre. L'ambre ne couvre jamais une grande surface : il tient dans un
+   bouton, un onglet actif, un anneau de focus.
+
+   D'où deux familles de jetons plutôt qu'une :
+     --primary  l'encre. Texte, titres, icônes, aplats sourds.
+     --brand    l'accent. Fond de CTA, état actif, focus.
+   `--brand-ink` est la variante lisible de l'ambre quand il sert de *texte*
+   sur fond clair (#F5A623 ne passe pas 3:1 sur blanc, #C97F0A oui).
+   ============================================================================= */
 :root {
-  --radius: 0.625rem;
+  --radius: 0.75rem;
 
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.208 0.042 265.755);
+  /* La page est #F9FAFB, les cartes sont blanches : la hiérarchie vient du
+     décalage entre les deux, pas d'une ombre portée. */
+  --background: oklch(0.985 0.002 247.8);
+  --foreground: oklch(0.257 0.032 266);
   --card: oklch(1 0 0);
-  --card-foreground: oklch(0.208 0.042 265.755);
+  --card-foreground: oklch(0.257 0.032 266);
   --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.208 0.042 265.755);
+  --popover-foreground: oklch(0.257 0.032 266);
 
-  --primary: oklch(0.511 0.262 276.966);
-  --primary-foreground: oklch(0.984 0.003 247.858);
+  /* #1C2333 */
+  --primary: oklch(0.257 0.032 266);
+  --primary-foreground: oklch(1 0 0);
 
-  --secondary: oklch(0.968 0.007 247.896);
-  --secondary-foreground: oklch(0.279 0.041 260.031);
-  --muted: oklch(0.968 0.007 247.896);
-  --muted-foreground: oklch(0.554 0.046 257.417);
-  --accent: oklch(0.968 0.007 247.896);
-  --accent-foreground: oklch(0.279 0.041 260.031);
+  /* #F5A623 sur #1C2333 : 7.75:1. Le CTA de la charte, tel quel. */
+  --brand: oklch(0.784 0.159 73);
+  --brand-foreground: oklch(0.257 0.032 266);
+  --brand-hover: oklch(0.822 0.142 77.9);
+  --brand-ink: oklch(0.659 0.142 68.7);
+  --brand-surface: oklch(0.975 0.022 83.3);
 
-  --destructive: oklch(0.577 0.245 27.325);
-  --success: oklch(0.596 0.145 163.225);
-  --success-foreground: oklch(0.984 0.003 247.858);
-  --warning: oklch(0.666 0.179 58.318);
-  --warning-foreground: oklch(0.208 0.042 265.755);
+  --secondary: oklch(0.97 0.003 264.5);
+  --secondary-foreground: oklch(0.257 0.032 266);
+  --muted: oklch(0.97 0.003 264.5);
+  --muted-foreground: oklch(0.454 0.036 268.6);
+  --accent: oklch(0.97 0.003 264.5);
+  --accent-foreground: oklch(0.257 0.032 266);
 
-  --border: oklch(0.929 0.013 255.508);
-  --input: oklch(0.929 0.013 255.508);
-  --ring: oklch(0.511 0.262 276.966);
+  --destructive: oklch(0.637 0.208 25.3);
+  /* La charte laisse le vert « à définir » : #16A34A plutôt que #22C55E, qui
+     ne tient pas 3:1 en texte sur blanc. Le clair sert au mode sombre. */
+  --success: oklch(0.627 0.17 149.2);
+  --success-foreground: oklch(1 0 0);
+  /* L'ambre profond : l'avertissement doit se distinguer du CTA, pas le
+     répéter. */
+  --warning: oklch(0.659 0.142 68.7);
+  --warning-foreground: oklch(1 0 0);
 
-  /* Mark hue for single-series charts. #4f46e5 — passes lightness band,
-     chroma floor and 3:1 contrast on the light surface. */
-  --chart-1: oklch(0.511 0.262 276.966);
-  --chart-2: oklch(0.6 0.118 184.704);
-  --chart-3: oklch(0.646 0.222 41.116);
-  --chart-4: oklch(0.627 0.265 303.9);
-  --chart-5: oklch(0.596 0.145 163.225);
-  /* Ordinal ramp for ordered stages (code → créneau → conduite): one hue,
-     monotone light→dark. The light end sits at 2.9:1, so those bars always
-     carry a visible value label. */
-  --chart-ordinal-1: oklch(0.673 0.182 276.935);
-  --chart-ordinal-2: oklch(0.511 0.262 276.966);
-  --chart-ordinal-3: oklch(0.398 0.195 277.366);
+  --border: oklch(0.931 0.006 264.5);
+  --input: oklch(0.931 0.006 264.5);
+  --ring: oklch(0.784 0.159 73);
 
-  --sidebar: oklch(0.984 0.003 247.858);
-  --sidebar-foreground: oklch(0.208 0.042 265.755);
-  --sidebar-primary: oklch(0.511 0.262 276.966);
-  --sidebar-primary-foreground: oklch(0.984 0.003 247.858);
-  --sidebar-accent: oklch(0.968 0.007 247.896);
-  --sidebar-accent-foreground: oklch(0.279 0.041 260.031);
-  --sidebar-border: oklch(0.929 0.013 255.508);
-  --sidebar-ring: oklch(0.511 0.262 276.966);
+  /* Série unique : l'ambre lisible, 3.2:1 sur blanc. */
+  --chart-1: oklch(0.659 0.142 68.7);
+  --chart-2: oklch(0.515 0.05 266.4);
+  --chart-3: oklch(0.627 0.17 149.2);
+  --chart-4: oklch(0.5 0.107 68.8);
+  --chart-5: oklch(0.376 0.031 267.4);
+  /* Rampe ordonnée pour les étapes (code → créneau → conduite) : une seule
+     teinte, du clair vers le foncé — la route qui s'assombrit à mesure qu'on
+     avance. Toutes au-dessus de 5:1 sur blanc. */
+  --chart-ordinal-1: oklch(0.555 0.03 266.4);
+  --chart-ordinal-2: oklch(0.376 0.031 267.4);
+  --chart-ordinal-3: oklch(0.257 0.032 266);
+
+  /* La barre de navigation reste bleu nuit même en thème clair : c'est elle
+     qui porte l'identité « route de nuit » sur chaque écran. */
+  --sidebar: oklch(0.257 0.032 266);
+  --sidebar-foreground: oklch(1 0 0);
+  --sidebar-muted: oklch(0.77 0.021 267.2);
+  --sidebar-primary: oklch(0.784 0.159 73);
+  --sidebar-primary-foreground: oklch(0.257 0.032 266);
+  --sidebar-accent: oklch(0.299 0.036 266.6);
+  --sidebar-accent-foreground: oklch(1 0 0);
+  --sidebar-border: oklch(1 0 0 / 12%);
+  --sidebar-ring: oklch(0.784 0.159 73);
 }
 
 .dark {
-  --background: oklch(0.129 0.042 264.695);
-  --foreground: oklch(0.984 0.003 247.858);
-  --card: oklch(0.208 0.042 265.755);
-  --card-foreground: oklch(0.984 0.003 247.858);
-  --popover: oklch(0.208 0.042 265.755);
-  --popover-foreground: oklch(0.984 0.003 247.858);
+  /* Fond #0F1420, cartes #151B29 : le même décalage d'un cran qu'en clair. */
+  --background: oklch(0.192 0.026 266.6);
+  --foreground: oklch(0.979 0.003 264.5);
+  --card: oklch(0.223 0.029 266.2);
+  --card-foreground: oklch(0.979 0.003 264.5);
+  --popover: oklch(0.223 0.029 266.2);
+  --popover-foreground: oklch(0.979 0.003 264.5);
 
-  --primary: oklch(0.673 0.182 276.935);
-  --primary-foreground: oklch(0.208 0.042 265.755);
+  /* L'encre s'inverse : ce qui était bleu nuit sur blanc devient clair. */
+  --primary: oklch(0.93 0.008 266);
+  --primary-foreground: oklch(0.257 0.032 266);
 
-  --secondary: oklch(0.279 0.041 260.031);
-  --secondary-foreground: oklch(0.984 0.003 247.858);
-  --muted: oklch(0.279 0.041 260.031);
-  --muted-foreground: oklch(0.704 0.04 256.788);
-  --accent: oklch(0.279 0.041 260.031);
-  --accent-foreground: oklch(0.984 0.003 247.858);
+  /* L'accent, lui, ne bouge pas — c'est le point fixe de la marque. */
+  --brand: oklch(0.784 0.159 73);
+  --brand-foreground: oklch(0.257 0.032 266);
+  --brand-hover: oklch(0.822 0.142 77.9);
+  --brand-ink: oklch(0.822 0.142 77.9);
+  --brand-surface: oklch(0.3 0.055 70);
+
+  --secondary: oklch(0.299 0.036 266.6);
+  --secondary-foreground: oklch(0.979 0.003 264.5);
+  --muted: oklch(0.299 0.036 266.6);
+  --muted-foreground: oklch(0.77 0.021 267.2);
+  --accent: oklch(0.299 0.036 266.6);
+  --accent-foreground: oklch(0.979 0.003 264.5);
 
   --destructive: oklch(0.704 0.191 22.216);
-  --success: oklch(0.696 0.17 162.48);
-  --success-foreground: oklch(0.129 0.042 264.695);
-  --warning: oklch(0.769 0.188 70.08);
-  --warning-foreground: oklch(0.129 0.042 264.695);
+  --success: oklch(0.723 0.192 149.6);
+  --success-foreground: oklch(0.192 0.026 266.6);
+  --warning: oklch(0.784 0.159 73);
+  --warning-foreground: oklch(0.257 0.032 266);
 
   --border: oklch(1 0 0 / 10%);
-  --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.585 0.233 277.117);
+  --input: oklch(1 0 0 / 14%);
+  --ring: oklch(0.784 0.159 73);
 
-  /* #6366f1 — indigo-400 reads 0.68 L, just outside the dark band, so the
-     mark hue steps down one notch here rather than flipping automatically. */
-  --chart-1: oklch(0.585 0.233 277.117);
-  --chart-2: oklch(0.696 0.17 162.48);
-  --chart-3: oklch(0.769 0.188 70.08);
-  --chart-4: oklch(0.627 0.265 303.9);
-  --chart-5: oklch(0.645 0.246 16.439);
-  /* Anchor flipped for dark: more is lighter. */
-  --chart-ordinal-1: oklch(0.585 0.233 277.117);
-  --chart-ordinal-2: oklch(0.673 0.182 276.935);
-  --chart-ordinal-3: oklch(0.785 0.115 274.713);
+  --chart-1: oklch(0.784 0.159 73);
+  --chart-2: oklch(0.77 0.021 267.2);
+  --chart-3: oklch(0.723 0.192 149.6);
+  --chart-4: oklch(0.822 0.142 77.9);
+  --chart-5: oklch(0.663 0.028 266.5);
+  /* Sens inversé sur fond sombre : plus loin sur la route, plus clair. */
+  --chart-ordinal-1: oklch(0.555 0.03 266.4);
+  --chart-ordinal-2: oklch(0.663 0.028 266.5);
+  --chart-ordinal-3: oklch(0.77 0.021 267.2);
 
-  --sidebar: oklch(0.208 0.042 265.755);
-  --sidebar-foreground: oklch(0.984 0.003 247.858);
-  --sidebar-primary: oklch(0.673 0.182 276.935);
-  --sidebar-primary-foreground: oklch(0.208 0.042 265.755);
-  --sidebar-accent: oklch(0.279 0.041 260.031);
-  --sidebar-accent-foreground: oklch(0.984 0.003 247.858);
+  /* Identique au thème clair : la barre est bleu nuit partout, c'est le point
+     fixe de l'identité. Elle se pose ici un cran au-dessus des cartes. */
+  --sidebar: oklch(0.257 0.032 266);
+  --sidebar-foreground: oklch(0.979 0.003 264.5);
+  --sidebar-muted: oklch(0.77 0.021 267.2);
+  --sidebar-primary: oklch(0.784 0.159 73);
+  --sidebar-primary-foreground: oklch(0.257 0.032 266);
+  --sidebar-accent: oklch(0.299 0.036 266.6);
+  --sidebar-accent-foreground: oklch(0.979 0.003 264.5);
   --sidebar-border: oklch(1 0 0 / 10%);
-  --sidebar-ring: oklch(0.585 0.233 277.117);
+  --sidebar-ring: oklch(0.784 0.159 73);
 }
 
 @layer base {
@@ -170,9 +216,17 @@
   html {
     @apply font-sans;
   }
-  /* Arabic gets Noto Sans Arabic; latin keeps Inter. */
+  /* Titres en Poppins, corps en Inter : deux familles, jamais trois. */
+  h1,
+  h2,
+  h3 {
+    @apply font-heading tracking-tight;
+  }
+  /* Arabic gets Noto Sans Arabic; latin keeps Inter. Poppins has no Arabic
+     glyphs, so the heading family follows the body one here. */
   html[lang="ar"] {
     font-family: var(--font-app-arabic), var(--font-app-sans), sans-serif;
+    --font-app-heading: var(--font-app-arabic), var(--font-app-sans), sans-serif;
   }
 }
 
@@ -181,4 +235,28 @@
   [dir="rtl"] .rtl-flip {
     transform: scaleX(-1);
   }
+
+  /* « La route de l'élève » : le dégradé bleu nuit → ambre de la charte, pour
+     tout ce qui représente une progression. */
+  .road-gradient {
+    background-image: linear-gradient(
+      to right,
+      var(--primary) 0%,
+      var(--brand) 100%
+    );
+  }
+  [dir="rtl"] .road-gradient {
+    background-image: linear-gradient(
+      to left,
+      var(--primary) 0%,
+      var(--brand) 100%
+    );
+  }
+
+  /* Les étiquettes courtes en capitales de la charte (« AUTO ÉCOLE »). */
+  .tag-caps {
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+  }
 }
+

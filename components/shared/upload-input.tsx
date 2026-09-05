@@ -161,7 +161,7 @@ export function UploadInput({
         className={cn(
           "flex aspect-video w-full cursor-pointer flex-col items-center justify-center gap-2 rounded-xl border border-dashed bg-muted/30 px-4 text-center transition-colors",
           dragging
-            ? "border-primary bg-primary/5"
+            ? "border-brand bg-brand/10"
             : "hover:border-muted-foreground/40 hover:bg-muted/50",
           (disabled || uploading) && "pointer-events-none opacity-60",
         )}

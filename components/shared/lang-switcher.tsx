@@ -52,7 +52,7 @@ export function LangSwitcher() {
             className="justify-between gap-3"
           >
             <span lang={locale}>{localeLabels[locale]}</span>
-            {locale === current && <Check className="size-4 text-primary" />}
+            {locale === current && <Check className="size-4 text-brand-ink" />}
           </DropdownMenuItem>
         ))}
       </DropdownMenuContent>

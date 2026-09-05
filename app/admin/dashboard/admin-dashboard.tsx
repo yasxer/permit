@@ -4,7 +4,7 @@ import { BadgeCheck, Building2, GraduationCap, Wallet } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 
 import { CategoryBarChart } from "@/components/charts/category-bar-chart";
-import { MonthlyLineChart } from "@/components/charts/monthly-line-chart";
+import { MonthlyAreaChart } from "@/components/charts/monthly-area-chart";
 import { EmptyState } from "@/components/shared/empty-state";
 import { StatsCard } from "@/components/shared/stats-card";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -96,7 +96,7 @@ export function AdminDashboard() {
             <CardTitle className="text-base">{t("enrollmentsPerMonth")}</CardTitle>
           </CardHeader>
           <CardContent>
-            <MonthlyLineChart
+            <MonthlyAreaChart
               data={data.enrollments_by_month}
               label={t("enrollmentsPerMonth")}
             />

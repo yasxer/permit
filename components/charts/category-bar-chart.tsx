@@ -1,15 +1,7 @@
 "use client";
 
 import { useLocale } from "next-intl";
-import {
-  Bar,
-  BarChart,
-  CartesianGrid,
-  Cell,
-  LabelList,
-  XAxis,
-  YAxis,
-} from "recharts";
+import { Bar, BarChart, Cell, LabelList, XAxis, YAxis } from "recharts";
 
 import {
   ChartContainer,
@@ -28,19 +20,27 @@ export type BarDatum = {
 };
 
 /**
- * Horizontal bars for magnitude comparison. Nominal data keeps one hue for
- * every bar — colouring by value would spend the identity channel restating
- * what bar length already shows. Ordered stages pass an explicit ramp colour.
+ * Des barres horizontales pour comparer des grandeurs.
+ *
+ * Chaque barre court sur un rail sourd de la largeur du graphe : on lit alors
+ * une part autant qu'une longueur, sans avoir à suivre une grille jusqu'à un
+ * axe. La grille et l'axe des valeurs sautent d'ailleurs — le rail donne
+ * l'échelle et l'étiquette donne le chiffre exact, un axe de plus ne dirait
+ * rien de neuf.
+ *
+ * Les données nominales gardent une seule teinte : colorer par valeur
+ * dépenserait le canal identité à répéter ce que la longueur montre déjà. Les
+ * étapes ordonnées, elles, passent une couleur de rampe explicite.
  */
 export function CategoryBarChart({
   data,
   label,
-  showValues = false,
+  showValues = true,
   height = "h-64",
 }: {
   data: BarDatum[];
   label: string;
-  /** Required when the bars use the light end of the ordinal ramp. */
+  /** Off only when the number beside each bar would be noise. */
   showValues?: boolean;
   height?: string;
 }) {
@@ -55,27 +55,21 @@ export function CategoryBarChart({
       <BarChart
         data={data}
         layout="vertical"
-        margin={{ top: 4, right: showValues ? 40 : 12, bottom: 0, left: 4 }}
-        barCategoryGap={8}
+        margin={{ top: 4, right: showValues ? 44 : 12, bottom: 0, left: 4 }}
+        barCategoryGap={14}
       >
-        <CartesianGrid horizontal={false} stroke="var(--border)" />
-        <XAxis
-          type="number"
-          tickLine={false}
-          axisLine={false}
-          allowDecimals={false}
-          tickFormatter={(value: number) => formatNumber(value, locale)}
-        />
+        <XAxis type="number" hide />
         <YAxis
           type="category"
           dataKey="label"
           tickLine={false}
           axisLine={false}
           width={110}
-          tickMargin={8}
+          tickMargin={10}
+          className="text-xs"
         />
         <ChartTooltip
-          cursor={{ fill: "var(--muted)" }}
+          cursor={false}
           content={
             <ChartTooltipContent
               formatter={(value) => [formatNumber(Number(value), locale), label]}
@@ -84,15 +78,16 @@ export function CategoryBarChart({
         />
         <Bar
           dataKey="value"
-          // Rounded data-end, square at the baseline.
-          radius={[0, 4, 4, 0]}
-          maxBarSize={24}
+          radius={6}
+          maxBarSize={28}
+          background={{ fill: "var(--muted)", radius: 6 }}
         >
           {showValues && (
             <LabelList
               dataKey="value"
               position="right"
-              className="fill-muted-foreground text-xs tabular-nums"
+              offset={10}
+              className="fill-foreground text-xs font-semibold tabular-nums"
               formatter={(value) => formatNumber(Number(value ?? 0), locale)}
             />
           )}

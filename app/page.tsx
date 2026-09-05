@@ -3,11 +3,14 @@ import { redirect } from "next/navigation";
 import { getSessionUser, homePathFor } from "@/lib/auth";
 
 /**
- * The root is only ever a signpost: the proxy has already bounced anonymous
- * visitors to /login, so anyone here has a role to route by.
+ * La racine n'affiche rien : elle aiguille.
+ *
+ * Permix n'a pas de vitrine — on y arrive parce qu'on y a un espace. Un
+ * visiteur sans session est déjà renvoyé sur `/login` par le proxy ; ce qui
+ * reste ici, c'est le signé-en-session qui clique sur le logo ou revient d'une
+ * page d'authentification, et qui doit retomber sur *son* tableau de bord.
  */
 export default async function RootPage() {
   const session = await getSessionUser();
-  if (!session) redirect("/login");
-  redirect(homePathFor(session.profile.role));
+  redirect(session ? homePathFor(session.profile.role) : "/login");
 }

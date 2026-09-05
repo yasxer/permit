@@ -88,7 +88,7 @@ export function LoginForm({ next }: { next?: string }) {
                 <FieldLabel htmlFor="password">{t("password")}</FieldLabel>
                 <Link
                   href="/forgot-password"
-                  className="text-xs text-muted-foreground underline-offset-4 hover:text-primary hover:underline"
+                  className="text-xs text-muted-foreground underline-offset-4 hover:text-brand-ink hover:underline"
                 >
                   {t("forgotPassword")}
                 </Link>
@@ -126,7 +126,7 @@ export function LoginForm({ next }: { next?: string }) {
           {t("noAccount")}{" "}
           <Link
             href="/register"
-            className="font-medium text-primary underline-offset-4 hover:underline"
+            className="font-medium text-brand-ink underline-offset-4 hover:underline"
           >
             {t("signUp")}
           </Link>

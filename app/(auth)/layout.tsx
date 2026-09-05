@@ -10,11 +10,11 @@ export default function AuthLayout({ children }: { children: ReactNode }) {
       {/* A single soft wash of the accent — enough to feel designed, not heavy. */}
       <div
         aria-hidden
-        className="pointer-events-none absolute inset-x-0 top-0 h-72 bg-gradient-to-b from-primary/8 to-transparent"
+        className="pointer-events-none absolute inset-x-0 top-0 h-72 bg-gradient-to-b from-brand/12 to-transparent"
       />
 
       <header className="relative flex items-center justify-between px-5 py-4 sm:px-8">
-        <Logo />
+        <Logo showTagline />
         <div className="flex items-center gap-0.5">
           <LangSwitcher />
           <ThemeToggle />

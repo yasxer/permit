@@ -48,7 +48,7 @@ export function ThemeToggle() {
             key={value}
             onSelect={() => setTheme(value)}
             data-active={mounted && theme === value}
-            className="gap-2 data-[active=true]:font-medium data-[active=true]:text-primary"
+            className="gap-2 data-[active=true]:font-medium data-[active=true]:text-brand-ink"
           >
             <Icon className="size-4" />
             {t(labelKey)}

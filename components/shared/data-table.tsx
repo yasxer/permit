@@ -107,7 +107,7 @@ export function DataTable<T>({
         </div>
       )}
 
-      <div className="overflow-x-auto rounded-xl border">
+      <div className="overflow-x-auto rounded-xl border bg-card">
         <Table>
           {caption && <caption className="sr-only">{caption}</caption>}
           <TableHeader>

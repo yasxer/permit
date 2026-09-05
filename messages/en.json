@@ -269,7 +269,12 @@
       "nextExam": "Next exam",
       "noExam": "No exam scheduled",
       "paymentsPerMonth": "Payments per month",
-      "progressOverview": "Students by stage"
+      "progressOverview": "Students by stage",
+      "noExamHint": "Schedule a session from the Exams page.",
+      "openExams": "Open the session",
+      "completedHint": "{count, plural, =0 {No graduates} one {# graduate} other {# graduates}}",
+      "lastMonths": "Last 12 months",
+      "progressHint": "Active candidates by stage"
     },
     "requests": {
       "title": "Enrollment requests",
@@ -354,7 +359,11 @@
       "credentialsEditHint": "Leave a field empty to keep it as it is.",
       "newPassword": "New password",
       "credentialsUpdated": "Sign-in details updated",
-      "nothingToChange": "Fill in at least one field."
+      "nothingToChange": "Fill in at least one field.",
+      "deleteCandidate": "Delete candidate",
+      "deleteCandidateTitle": "Delete this file?",
+      "deleteCandidateMessage": "{name}'s file, their payments and their exam history will be permanently deleted. This cannot be undone.",
+      "candidateDeleted": "Candidate deleted"
     },
     "completed": {
       "title": "Graduates",
@@ -429,7 +438,11 @@
       "stepOf": "Step {current} of {total}",
       "submitStep": "Save and continue",
       "finishRoster": "Finish the list",
-      "editRoster": "Change the students"
+      "editRoster": "Change the students",
+      "deleteExam": "Delete exam",
+      "deleteExamTitle": "Delete this exam?",
+      "deleteExamMessage": "The session on {date} and the list of candidates assigned to it will be removed. Results already recorded stay with the candidates. This cannot be undone.",
+      "examDeleted": "Exam deleted"
     }
   },
   "days": {

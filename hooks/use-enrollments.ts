@@ -72,6 +72,41 @@ export function useAcceptEnrollment() {
   });
 }
 
+/**
+ * Removes a file the school opened by mistake, along with its payments and its
+ * exam history. Rejecting keeps the trace of a request that was turned down;
+ * this is for the row that should never have existed at all.
+ *
+ * Through a route handler rather than straight to Postgres: the delete itself
+ * is RLS-scoped, but the candidate's account may be left with nothing pointing
+ * at it, and only the service role can clear that up.
+ */
+export function useDeleteEnrollment() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async ({ id }: { id: string }) => {
+      const response = await fetch(`/api/ecole/enrollments/${id}`, {
+        method: "DELETE",
+      });
+      if (!response.ok) {
+        const payload = (await response.json().catch(() => ({}))) as {
+          error?: string;
+        };
+        throw new Error(payload.error ?? "generic");
+      }
+    },
+    onSuccess: () => {
+      void queryClient.invalidateQueries({ queryKey: queryKeys.enrollments.all });
+      // The file was on exam rosters and on planning slots; both just changed
+      // underneath the caches that hold them.
+      void queryClient.invalidateQueries({ queryKey: queryKeys.exams.all });
+      void queryClient.invalidateQueries({ queryKey: ["planning"] });
+      void queryClient.invalidateQueries({ queryKey: ["stats"] });
+    },
+  });
+}
+
 export function useRejectEnrollment() {
   return useEnrollmentMutation(async ({ id }: { id: string }) => {
     const supabase = createClient();

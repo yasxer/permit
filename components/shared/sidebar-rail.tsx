@@ -20,6 +20,9 @@ import { useUiStore } from "@/store/ui-store";
  * Mobile navigation: a permanent icon rail on the inline-start edge that
  * expands over the content when the hamburger is pressed. Hidden from lg up,
  * where `Navbar` takes over.
+ *
+ * Bleu nuit dans les deux thèmes, comme la barre du haut — voir `Navbar` pour
+ * ce que le `dark` posé sur l'élément fait exactement.
  */
 export function SidebarRail({ user }: { user: NavUser }) {
   const t = useTranslations("nav");
@@ -56,7 +59,7 @@ export function SidebarRail({ user }: { user: NavUser }) {
       <aside
         data-expanded={expanded}
         className={cn(
-          "fixed inset-y-0 start-0 z-40 flex flex-col border-e bg-sidebar text-sidebar-foreground transition-[width] duration-200 lg:hidden",
+          "dark fixed inset-y-0 start-0 z-40 flex flex-col border-e border-sidebar-border bg-sidebar text-sidebar-foreground transition-[width] duration-200 lg:hidden",
           expanded ? "w-60" : "w-14",
         )}
       >
@@ -67,7 +70,7 @@ export function SidebarRail({ user }: { user: NavUser }) {
             onClick={toggle}
             aria-label={expanded ? t("closeMenu") : t("openMenu")}
             aria-expanded={expanded}
-            className="shrink-0 text-muted-foreground hover:text-foreground"
+            className="shrink-0 text-sidebar-muted hover:text-sidebar-foreground"
           >
             {expanded ? <X className="size-5" /> : <Menu className="size-5" />}
           </Button>
@@ -92,8 +95,8 @@ export function SidebarRail({ user }: { user: NavUser }) {
                       "flex h-10 items-center gap-3 rounded-lg text-sm font-medium transition-colors",
                       expanded ? "px-3" : "justify-center px-0",
                       active
-                        ? "bg-primary/10 text-primary"
-                        : "text-muted-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground",
+                        ? "bg-brand/15 text-brand"
+                        : "text-sidebar-muted hover:bg-sidebar-accent hover:text-sidebar-accent-foreground",
                     )}
                   >
                     <Icon className="size-[1.15rem] shrink-0" aria-hidden />
@@ -109,7 +112,7 @@ export function SidebarRail({ user }: { user: NavUser }) {
 
         <div
           className={cn(
-            "flex items-center gap-0.5 border-t p-2",
+            "flex items-center gap-0.5 border-t border-sidebar-border p-2",
             expanded ? "justify-between" : "flex-col gap-1",
           )}
         >

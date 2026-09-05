@@ -115,7 +115,7 @@ export function ForgotPasswordForm() {
         <p className="mt-6 text-center">
           <Link
             href="/login"
-            className="text-sm text-muted-foreground underline-offset-4 hover:text-primary hover:underline"
+            className="text-sm text-muted-foreground underline-offset-4 hover:text-brand-ink hover:underline"
           >
             {t("backToLogin")}
           </Link>

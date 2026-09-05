@@ -269,7 +269,12 @@
       "nextExam": "الامتحان القادم",
       "noExam": "لا يوجد امتحان مبرمج",
       "paymentsPerMonth": "الدفعات حسب الشهر",
-      "progressOverview": "التوزيع حسب المرحلة"
+      "progressOverview": "التوزيع حسب المرحلة",
+      "noExamHint": "برمج حصة من صفحة الامتحانات.",
+      "openExams": "فتح الحصة",
+      "completedHint": "{count, plural, =0 {لا يوجد متخرجون} one {متخرج واحد} two {متخرجان} few {# متخرجين} many {# متخرجًا} other {# متخرج}}",
+      "lastMonths": "آخر 12 شهرًا",
+      "progressHint": "المترشحون النشطون حسب المرحلة"
     },
     "requests": {
       "title": "طلبات التسجيل",
@@ -354,7 +359,11 @@
       "credentialsEditHint": "اترك الخانة فارغة لتبقى كما هي.",
       "newPassword": "كلمة مرور جديدة",
       "credentialsUpdated": "تم تحديث بيانات الدخول",
-      "nothingToChange": "املأ خانة واحدة على الأقل."
+      "nothingToChange": "املأ خانة واحدة على الأقل.",
+      "deleteCandidate": "حذف المترشح",
+      "deleteCandidateTitle": "حذف هذا الملف؟",
+      "deleteCandidateMessage": "سيتم حذف ملف {name} ودفعاته وسجل امتحاناته نهائيًا. لا يمكن التراجع عن هذا الإجراء.",
+      "candidateDeleted": "تم حذف المترشح"
     },
     "completed": {
       "title": "المترشحون الناجحون",
@@ -429,7 +438,11 @@
       "stepOf": "المرحلة {current} من {total}",
       "submitStep": "تأكيد ومتابعة",
       "finishRoster": "إنهاء اللائحة",
-      "editRoster": "تعديل المترشحين"
+      "editRoster": "تعديل المترشحين",
+      "deleteExam": "حذف الامتحان",
+      "deleteExamTitle": "حذف هذا الامتحان؟",
+      "deleteExamMessage": "سيتم حذف حصة {date} وقائمة المترشحين المسجلين فيها. النتائج المسجلة من قبل تبقى مكتسبة للمترشحين. لا يمكن التراجع عن هذا الإجراء.",
+      "examDeleted": "تم حذف الامتحان"
     }
   },
   "days": {

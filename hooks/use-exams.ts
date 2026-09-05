@@ -82,6 +82,30 @@ export function useCreateExam(schoolId: string | undefined) {
 }
 
 /**
+ * Drops a session the school should never have opened — the wrong date, or one
+ * nobody turned up for. The roster lines go with it (`on delete cascade`).
+ *
+ * What it does *not* undo is a result already entered: a candidate the trigger
+ * moved on to the next stage stays there. Deleting the session is a correction
+ * to the calendar, not a way to take a licence back, and the confirmation says
+ * so before the school commits to it.
+ */
+export function useDeleteExam() {
+  return useExamMutation(async ({ id }: { id: string }) => {
+    const supabase = createClient();
+    // Through the RPC, not a bare `delete`: a policy that refuses a delete
+    // matches nothing rather than failing, so the browser cannot tell "you may
+    // not" apart from "already gone". The function raises, with a code.
+    const { error } = await supabase.rpc("school_delete_exam", {
+      p_exam_id: id,
+    });
+    if (error) {
+      throw Object.assign(new Error(error.message), { code: error.code });
+    }
+  });
+}
+
+/**
  * Fills one step of the roster: the candidates of one category standing on one
  * stage. The write is scoped to that step — everyone outside it is left alone,
  * so the school can walk back through the steps and change its mind.

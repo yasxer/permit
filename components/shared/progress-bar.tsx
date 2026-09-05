@@ -1,14 +1,16 @@
 import { cn } from "@/lib/utils";
 
 /**
- * Colour tracks how far along the candidate is: red early, amber in the
- * middle, green once the stage is effectively cleared.
+ * « La route de l'élève » de la charte : le dégradé bleu nuit → ambre, qui
+ * s'éclaircit à mesure que le candidat avance, et bascule au vert une fois
+ * l'étape acquise.
+ *
+ * Le pourcentage est écrit à côté, alors la couleur n'a pas à porter le chiffre
+ * une seconde fois — d'où un seul dégradé plutôt qu'une échelle rouge-orange-
+ * vert qui traiterait de « mauvais » un dossier simplement récent.
  */
 function toneFor(value: number): string {
-  if (value >= 100) return "bg-success";
-  if (value >= 60) return "bg-primary";
-  if (value >= 30) return "bg-warning";
-  return "bg-destructive";
+  return value >= 100 ? "bg-success" : "road-gradient";
 }
 
 export function ProgressBar({
@@ -32,7 +34,7 @@ export function ProgressBar({
         aria-valuemin={0}
         aria-valuemax={100}
         aria-label={label}
-        className="h-2 min-w-16 flex-1 overflow-hidden rounded-full bg-muted"
+        className="h-2.5 min-w-16 flex-1 overflow-hidden rounded-full bg-muted ring-1 ring-inset ring-foreground/5"
       >
         <div
           className={cn("h-full rounded-full transition-[width]", toneFor(clamped))}

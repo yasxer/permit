@@ -2,7 +2,11 @@ import { NextResponse, type NextRequest } from "next/server";
 
 import { createProxyClient } from "@/lib/supabase/proxy";
 
-/** Routes reachable without a session. */
+/**
+ * Routes reachable without a session. `/` is not one of them: it holds no
+ * content of its own, only a redirect towards the signed-in user's dashboard,
+ * so an anonymous visitor is better sent straight to the sign-in page.
+ */
 const PUBLIC_PATHS = [
   "/login",
   "/register",
