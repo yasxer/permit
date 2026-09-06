@@ -106,7 +106,7 @@ export function AddCandidateDialog({
 }) {
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-h-[90dvh] overflow-y-auto sm:max-w-lg">
+      <DialogContent className="max-h-[90dvh] overflow-y-auto sm:max-w-[47.5rem]">
         {/* Radix unmounts the content on close, so the form re-initialises on
             every open — no effect needed to reset it. */}
         <CandidateForm schoolId={schoolId} onDone={() => onOpenChange(false)} />
@@ -469,38 +469,50 @@ function Credentials({
 
   return (
     <>
-      <DialogHeader>
+      <DialogHeader className="items-start gap-3">
+        {/* Le rond vert dit d'abord que c'est fait ; le texte dit ensuite quoi
+            en faire. Un dossier créé ne se relit pas deux fois. */}
+        <span className="grid size-11 place-items-center rounded-full bg-success/13 text-success">
+          <KeyRound className="size-5" aria-hidden />
+        </span>
         <DialogTitle>{t("candidateAdded")}</DialogTitle>
         <DialogDescription>
-          {result.created ? t("credentialsHint") : t("accountReused")}
+          {/* La consigne complète est dans le bandeau ambre plus bas : la
+              répéter ici la ferait lire deux fois, donc zéro. */}
+          {result.created ? t("credentialsTitle") : t("accountReused")}
         </DialogDescription>
       </DialogHeader>
 
-      <div className="space-y-3 rounded-xl border bg-muted/40 p-4">
-        <div className="flex items-center gap-2 text-sm font-medium">
-          <KeyRound className="size-4 text-muted-foreground" aria-hidden />
-          {t("credentialsTitle")}
-        </div>
-        <dl className="space-y-2 text-sm">
-          <div className="flex items-baseline justify-between gap-3">
-            <dt className="text-muted-foreground">{t("login")}</dt>
-            <dd dir="ltr" className="truncate font-mono">
+      <div className="space-y-3">
+        <div className="divide-y divide-separator rounded-xl border border-border">
+          <div className="flex items-baseline justify-between gap-3 px-3.5 py-3">
+            <span className="text-[0.8125rem] text-muted-foreground">{t("login")}</span>
+            <span dir="ltr" className="truncate font-mono text-sm">
               {result.login}
-            </dd>
+            </span>
           </div>
           {result.password && (
-            <div className="flex items-baseline justify-between gap-3">
-              <dt className="text-muted-foreground">{t("password")}</dt>
-              <dd dir="ltr" className="font-mono font-semibold">
+            <div className="flex items-baseline justify-between gap-3 px-3.5 py-3">
+              <span className="text-[0.8125rem] text-muted-foreground">
+                {t("password")}
+              </span>
+              <span dir="ltr" className="font-mono text-sm font-semibold">
                 {result.password}
-              </dd>
+              </span>
             </div>
           )}
-        </dl>
-        <Button variant="outline" size="sm" className="w-full" onClick={copy}>
+        </div>
+
+        <Button variant="outline" className="w-full" onClick={copy}>
           {copied ? <Check className="size-4" /> : <Copy className="size-4" />}
           {copied ? t("copied") : t("copy")}
         </Button>
+
+        {result.password && (
+          <p className="rounded-xl border border-brand/40 bg-brand/12 px-3.5 py-3 text-[0.8125rem] text-warning">
+            {t("credentialsHint")}
+          </p>
+        )}
       </div>
 
       <DialogFooter className="mt-6">

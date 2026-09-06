@@ -36,7 +36,7 @@ export function AdminDashboard() {
   if (isPending) {
     return (
       <div className="space-y-6">
-        <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+        <div className="grid grid-cols-2 gap-3 sm:gap-5 xl:grid-cols-4">
           {Array.from({ length: 4 }, (_, index) => (
             <Skeleton key={index} className="h-24" />
           ))}
@@ -63,7 +63,7 @@ export function AdminDashboard() {
 
   return (
     <div className="space-y-6">
-      <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+      <div className="grid grid-cols-2 gap-3 sm:gap-5 xl:grid-cols-4">
         <StatsCard
           icon={Building2}
           label={t("totalSchools")}
@@ -87,13 +87,14 @@ export function AdminDashboard() {
           icon={Wallet}
           label={t("revenue")}
           value={formatCurrency(data.revenue_total, locale)}
+          compact
         />
       </div>
 
       <div className="grid gap-5 lg:grid-cols-2">
         <Card>
           <CardHeader>
-            <CardTitle className="text-base">{t("enrollmentsPerMonth")}</CardTitle>
+            <CardTitle>{t("enrollmentsPerMonth")}</CardTitle>
           </CardHeader>
           <CardContent>
             <MonthlyAreaChart
@@ -105,7 +106,7 @@ export function AdminDashboard() {
 
         <Card>
           <CardHeader>
-            <CardTitle className="text-base">{t("schoolsByWilaya")}</CardTitle>
+            <CardTitle>{t("schoolsByWilaya")}</CardTitle>
           </CardHeader>
           <CardContent>
             {wilayaBars.length === 0 ? (

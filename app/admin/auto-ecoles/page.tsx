@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
 
-import { PageHeader } from "@/components/shared/page-header";
+import { PageShell } from "@/components/shared/page-shell";
 
 import { SchoolsTable } from "./schools-table";
 
@@ -14,9 +14,8 @@ export default async function AdminSchoolsPage() {
   const t = await getTranslations("admin.schools");
 
   return (
-    <>
-      <PageHeader title={t("title")} description={t("subtitle")} />
+    <PageShell title={t("title")} description={t("subtitle")}>
       <SchoolsTable />
-    </>
+    </PageShell>
   );
 }

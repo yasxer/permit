@@ -2,7 +2,7 @@
 
 import { useId } from "react";
 import { useLocale } from "next-intl";
-import { Area, AreaChart, CartesianGrid, XAxis, YAxis } from "recharts";
+import { Area, AreaChart, CartesianGrid, ReferenceLine, XAxis, YAxis } from "recharts";
 
 import {
   ChartContainer,
@@ -50,23 +50,43 @@ export function MonthlyAreaChart({
       <AreaChart data={data} margin={{ top: 8, right: 12, bottom: 0, left: 4 }}>
         <defs>
           <linearGradient id={fillId} x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stopColor="var(--color-value)" stopOpacity={0.28} />
+            <stop offset="0%" stopColor="var(--color-value)" stopOpacity={0.2} />
             <stop offset="100%" stopColor="var(--color-value)" stopOpacity={0} />
           </linearGradient>
         </defs>
 
-        <CartesianGrid
-          vertical={false}
-          strokeDasharray="4 4"
-          stroke="var(--border)"
-        />
+        {/* Grille horizontale seule, en trait plein : la lecture se fait par
+            niveaux, jamais par colonnes. */}
+        <CartesianGrid vertical={false} stroke="var(--separator)" />
         <XAxis
           dataKey="month"
           tickLine={false}
-          axisLine={false}
+          axisLine={{ stroke: "var(--border)" }}
           tickMargin={12}
           minTickGap={24}
-          tickFormatter={(month: string) => formatMonthLabel(month, locale)}
+          tick={(props) => {
+            const { x, y, textAnchor, payload } = props as unknown as {
+              x: number;
+              y: number;
+              textAnchor: "start" | "middle" | "end";
+              payload: { value: string; index: number };
+            };
+            const current = payload.index === data.length - 1;
+            return (
+              <text
+                x={x}
+                y={y + 12}
+                textAnchor={textAnchor}
+                className={
+                  current
+                    ? "fill-foreground text-[11px] font-semibold"
+                    : "fill-muted-foreground/80 text-[11px]"
+                }
+              >
+                {formatMonthLabel(payload.value, locale)}
+              </text>
+            );
+          }}
         />
         <YAxis
           tickLine={false}
@@ -94,15 +114,47 @@ export function MonthlyAreaChart({
             />
           }
         />
+        {/* Le repère du mois courant : c'est la valeur qu'on vient lire. */}
+        {data.length > 0 && (
+          <ReferenceLine
+            x={data[data.length - 1].month}
+            stroke="var(--color-value)"
+            strokeDasharray="3 4"
+            strokeOpacity={0.45}
+          />
+        )}
         <Area
           dataKey="value"
           type="monotone"
           stroke="var(--color-value)"
-          strokeWidth={2.5}
+          strokeWidth={2.2}
           strokeLinecap="round"
           strokeLinejoin="round"
           fill={`url(#${fillId})`}
-          dot={false}
+          // Une seule pastille : celle du mois courant, blanche cerclée
+          // d'ambre. Douze points sur douze mois feraient du bruit.
+          dot={(props) => {
+            const { cx, cy, index, key } = props as unknown as {
+              cx?: number;
+              cy?: number;
+              index?: number;
+              key?: string;
+            };
+            if (index !== data.length - 1 || cx === undefined || cy === undefined) {
+              return <g key={key} />;
+            }
+            return (
+              <circle
+                key={key}
+                cx={cx}
+                cy={cy}
+                r={5}
+                fill="var(--card)"
+                stroke="var(--color-value)"
+                strokeWidth={2.4}
+              />
+            );
+          }}
           // Une pastille cerclée de la couleur de la carte reste lisible là où
           // la courbe passe dessous, et élargit la cible de survol.
           activeDot={{

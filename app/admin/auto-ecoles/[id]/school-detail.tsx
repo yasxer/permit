@@ -22,6 +22,7 @@ import { toast } from "sonner";
 
 import { ConfirmModal } from "@/components/shared/confirm-modal";
 import { EmptyState } from "@/components/shared/empty-state";
+import { PageShell } from "@/components/shared/page-shell";
 import { StatusBadge } from "@/components/shared/status-badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -71,6 +72,7 @@ export function SchoolDetail({ schoolId }: { schoolId: string }) {
   const t = useTranslations("admin.schools");
   const tp = useTranslations("ecole.profile");
   const tc = useTranslations("common");
+  const tNav = useTranslations("nav");
   const tUsers = useTranslations("admin.users");
   const tDays = useTranslations("days");
   const tErrors = useTranslations("errors");
@@ -85,15 +87,21 @@ export function SchoolDetail({ schoolId }: { schoolId: string }) {
 
   if (isPending) {
     return (
-      <div className="grid gap-5 lg:grid-cols-3">
-        <Skeleton className="h-64 lg:col-span-2" />
-        <Skeleton className="h-64" />
-      </div>
+      <PageShell kicker={tNav("autoEcoles")} title={<span className="block h-8 w-64 max-w-full animate-pulse rounded-md bg-white/12" />}>
+        <div className="grid gap-5 lg:grid-cols-3">
+          <Skeleton className="h-64 lg:col-span-2" />
+          <Skeleton className="h-64" />
+        </div>
+      </PageShell>
     );
   }
 
   if (isError || !school) {
-    return <EmptyState icon={Building2} title={tErrors("notFound")} />;
+    return (
+      <PageShell kicker={tNav("autoEcoles")} title={tNav("autoEcoles")}>
+        <EmptyState icon={Building2} title={tErrors("notFound")} />
+      </PageShell>
+    );
   }
 
   const totalExams = school.success_passed + school.success_failed;
@@ -118,24 +126,18 @@ export function SchoolDetail({ schoolId }: { schoolId: string }) {
   }
 
   return (
-    <>
-      <div className="mb-6 flex flex-wrap items-start justify-between gap-4">
-        <div className="min-w-0 space-y-2">
-          <Button asChild variant="ghost" size="sm" className="-ms-2">
+    <PageShell
+      kicker={tNav("autoEcoles")}
+      title={school.name ?? t("detailsTitle")}
+      description={<StatusBadge status={school.status} />}
+      actions={
+        <>
+          <Button asChild variant="outline" className="border-sidebar-border text-sidebar-foreground hover:bg-white/8">
             <Link href="/admin/auto-ecoles">
               <ArrowLeft className="size-4 rtl-flip" />
               {tc("back")}
             </Link>
           </Button>
-          <div className="flex flex-wrap items-center gap-3">
-            <h1 className="text-2xl font-semibold tracking-tight">
-              {school.name ?? t("detailsTitle")}
-            </h1>
-            <StatusBadge status={school.status} />
-          </div>
-        </div>
-
-        <div className="flex shrink-0 gap-2">
           {school.status !== "approved" && (
             <Button onClick={() => setAction("approve")}>
               <Check className="size-4" />
@@ -143,18 +145,22 @@ export function SchoolDetail({ schoolId }: { schoolId: string }) {
             </Button>
           )}
           {school.status !== "rejected" && (
-            <Button variant="outline" onClick={() => setAction("reject")}>
+            <Button
+              variant="outline"
+              className="border-sidebar-border text-sidebar-foreground hover:bg-white/8"
+              onClick={() => setAction("reject")}
+            >
               <X className="size-4" />
               {t("reject")}
             </Button>
           )}
-        </div>
-      </div>
-
+        </>
+      }
+    >
       <div className="grid gap-5 lg:grid-cols-3">
         <Card className="lg:col-span-2">
           <CardHeader>
-            <CardTitle className="text-base">{t("detailsTitle")}</CardTitle>
+            <CardTitle>{t("detailsTitle")}</CardTitle>
           </CardHeader>
           <CardContent>
             <dl className="grid gap-x-8 sm:grid-cols-2">
@@ -221,7 +227,7 @@ export function SchoolDetail({ schoolId }: { schoolId: string }) {
 
           <Card>
             <CardHeader>
-              <CardTitle className="text-base">{tp("successStats")}</CardTitle>
+              <CardTitle>{tp("successStats")}</CardTitle>
             </CardHeader>
             <CardContent className="space-y-3">
               <div className="flex items-baseline justify-between text-sm">
@@ -249,7 +255,7 @@ export function SchoolDetail({ schoolId }: { schoolId: string }) {
 
           <Card>
             <CardHeader>
-              <CardTitle className="text-base">{tp("prices")}</CardTitle>
+              <CardTitle>{tp("prices")}</CardTitle>
             </CardHeader>
             <CardContent>
               {prices.length === 0 ? (
@@ -296,6 +302,6 @@ export function SchoolDetail({ schoolId }: { schoolId: string }) {
         pending={approve.isPending || reject.isPending}
         onConfirm={confirm}
       />
-    </>
+    </PageShell>
   );
 }

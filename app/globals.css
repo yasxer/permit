@@ -30,6 +30,8 @@
   --color-ring: var(--ring);
   --color-input: var(--input);
   --color-border: var(--border);
+  --color-separator: var(--separator);
+  --color-surface-head: var(--surface-head);
   --color-destructive: var(--destructive);
   --color-success: var(--success);
   --color-success-foreground: var(--success-foreground);
@@ -117,7 +119,13 @@
   --warning-foreground: oklch(1 0 0);
 
   --border: oklch(0.931 0.006 264.5);
-  --input: oklch(0.931 0.006 264.5);
+  /* Le filet interne d'une carte est plus clair que sa bordure : #F3F4F6. */
+  --separator: oklch(0.966 0.002 264.5);
+  /* L'en-tête de tableau : #FBFCFD, un demi-cran sous le blanc de la carte. */
+  --surface-head: oklch(0.99 0.002 247.8);
+  /* Le champ porte une bordure franche, #D1D5DB : plus sourde que la carte,
+     elle ne se confond pas avec le filet qui sépare deux lignes. */
+  --input: oklch(0.866 0.008 264.5);
   --ring: oklch(0.784 0.159 73);
 
   /* Série unique : l'ambre lisible, 3.2:1 sur blanc. */
@@ -127,11 +135,11 @@
   --chart-4: oklch(0.5 0.107 68.8);
   --chart-5: oklch(0.376 0.031 267.4);
   /* Rampe ordonnée pour les étapes (code → créneau → conduite) : une seule
-     teinte, du clair vers le foncé — la route qui s'assombrit à mesure qu'on
-     avance. Toutes au-dessus de 5:1 sur blanc. */
-  --chart-ordinal-1: oklch(0.555 0.03 266.4);
-  --chart-ordinal-2: oklch(0.376 0.031 267.4);
-  --chart-ordinal-3: oklch(0.257 0.032 266);
+     teinte ambre, du clair vers le foncé — la route qui s'assombrit à mesure
+     qu'on avance. #F8D28C → #E0A032 → #9A6008. */
+  --chart-ordinal-1: oklch(0.885 0.093 82);
+  --chart-ordinal-2: oklch(0.74 0.135 71);
+  --chart-ordinal-3: oklch(0.512 0.109 62);
 
   /* La barre de navigation reste bleu nuit même en thème clair : c'est elle
      qui porte l'identité « route de nuit » sur chaque écran. */
@@ -179,8 +187,10 @@
   --warning: oklch(0.784 0.159 73);
   --warning-foreground: oklch(0.257 0.032 266);
 
-  --border: oklch(1 0 0 / 10%);
-  --input: oklch(1 0 0 / 14%);
+  --border: oklch(0.262 0.022 266);
+  --separator: oklch(0.238 0.024 266.3);
+  --surface-head: oklch(0.21 0.028 266.4);
+  --input: oklch(0.345 0.045 267);
   --ring: oklch(0.784 0.159 73);
 
   --chart-1: oklch(0.784 0.159 73);
@@ -188,10 +198,10 @@
   --chart-3: oklch(0.723 0.192 149.6);
   --chart-4: oklch(0.822 0.142 77.9);
   --chart-5: oklch(0.663 0.028 266.5);
-  /* Sens inversé sur fond sombre : plus loin sur la route, plus clair. */
-  --chart-ordinal-1: oklch(0.555 0.03 266.4);
-  --chart-ordinal-2: oklch(0.663 0.028 266.5);
-  --chart-ordinal-3: oklch(0.77 0.021 267.2);
+  /* La même rampe, remontée d'un cran : sur #151B29 le #9A6008 se referme. */
+  --chart-ordinal-1: oklch(0.885 0.093 82);
+  --chart-ordinal-2: oklch(0.78 0.14 74);
+  --chart-ordinal-3: oklch(0.63 0.13 66);
 
   /* Identique au thème clair : la barre est bleu nuit partout, c'est le point
      fixe de l'identité. Elle se pose ici un cran au-dessus des cartes. */
@@ -230,6 +240,20 @@
   }
 }
 
+@layer components {
+  /* La demi-heure du planning : 38 px sur mobile, 42 px à partir de `md` —
+     la hauteur nécessaire pour que la pastille de 30 min affiche ses deux
+     lignes de texte sans rognage. */
+  .planning-grid {
+    --planning-row: 38px;
+  }
+  @media (width >= 48rem) {
+    .planning-grid {
+      --planning-row: 42px;
+    }
+  }
+}
+
 @layer utilities {
   /* Flip icons that encode direction (chevrons, arrows) under RTL. */
   [dir="rtl"] .rtl-flip {
@@ -250,6 +274,16 @@
       to left,
       var(--primary) 0%,
       var(--brand) 100%
+    );
+  }
+
+  /* La demi-heure fermée du planning : des hachures rouges très légères,
+     assez discrètes pour ne pas concurrencer les séances posées à côté. */
+  .slot-closed {
+    background-image: repeating-linear-gradient(
+      45deg,
+      color-mix(in oklch, var(--destructive) 10%, transparent) 0 4px,
+      transparent 4px 9px
     );
   }
 

@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
 
-import { PageHeader } from "@/components/shared/page-header";
+import { PageShell } from "@/components/shared/page-shell";
 import { requireApprovedSchool } from "@/lib/auth";
+import { getSchoolIdentity } from "@/lib/school";
 
 import { PlanningTabs } from "./planning-tabs";
 
@@ -14,11 +15,15 @@ export async function generateMetadata(): Promise<Metadata> {
 export default async function EcolePlanningPage() {
   const { school } = await requireApprovedSchool();
   const t = await getTranslations("ecole.planning");
+  const identity = await getSchoolIdentity();
 
   return (
-    <>
-      <PageHeader title={t("title")} description={t("subtitle")} />
+    <PageShell
+      kicker={identity?.kicker}
+      title={t("title")}
+      description={t("planningHint")}
+    >
       <PlanningTabs schoolId={school.id} />
-    </>
+    </PageShell>
   );
 }

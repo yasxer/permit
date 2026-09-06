@@ -1,18 +1,13 @@
 import { cn } from "@/lib/utils";
 
 /**
- * « La route de l'élève » de la charte : le dégradé bleu nuit → ambre, qui
- * s'éclaircit à mesure que le candidat avance, et bascule au vert une fois
- * l'étape acquise.
+ * La progression d'un dossier : un filet de 6 px, encre pleine sur une piste
+ * sourde, et le pourcentage écrit à côté.
  *
- * Le pourcentage est écrit à côté, alors la couleur n'a pas à porter le chiffre
- * une seconde fois — d'où un seul dégradé plutôt qu'une échelle rouge-orange-
- * vert qui traiterait de « mauvais » un dossier simplement récent.
+ * Une seule couleur, pas une échelle rouge-orange-vert : le chiffre est déjà
+ * là, et traiter de « mauvais » un dossier simplement récent serait faux. Le
+ * vert n'arrive qu'une fois l'étape acquise.
  */
-function toneFor(value: number): string {
-  return value >= 100 ? "bg-success" : "road-gradient";
-}
-
 export function ProgressBar({
   value,
   label,
@@ -34,15 +29,18 @@ export function ProgressBar({
         aria-valuemin={0}
         aria-valuemax={100}
         aria-label={label}
-        className="h-2.5 min-w-16 flex-1 overflow-hidden rounded-full bg-muted ring-1 ring-inset ring-foreground/5"
+        className="h-1.5 min-w-14 flex-1 overflow-hidden rounded-full bg-muted"
       >
         <div
-          className={cn("h-full rounded-full transition-[width]", toneFor(clamped))}
+          className={cn(
+            "h-full rounded-full transition-[width]",
+            clamped >= 100 ? "bg-success" : "bg-primary",
+          )}
           style={{ inlineSize: `${clamped}%` }}
         />
       </div>
       {showValue && (
-        <span className="w-9 shrink-0 text-end text-xs font-medium tabular-nums text-muted-foreground">
+        <span className="w-10 shrink-0 text-end text-[0.8125rem] font-semibold tabular-nums text-secondary-foreground">
           {clamped}%
         </span>
       )}

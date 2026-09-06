@@ -20,10 +20,11 @@ import { useLocale, useTranslations } from "next-intl";
 import { useState, type ReactNode } from "react";
 import { toast } from "sonner";
 
+import { CategoryBadge } from "@/components/shared/category-badge";
 import { ConfirmModal } from "@/components/shared/confirm-modal";
+import { PageShell } from "@/components/shared/page-shell";
 import { EmptyState } from "@/components/shared/empty-state";
 import { StatusBadge } from "@/components/shared/status-badge";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -71,14 +72,10 @@ function Detail({
   );
 }
 
-function initials(name: string | null): string {
-  const parts = (name ?? "?").trim().split(/\s+/);
-  return (parts[0]?.[0] ?? "?").concat(parts[1]?.[0] ?? "").toUpperCase();
-}
-
 export function StudentDetail({ enrollmentId }: { enrollmentId: string }) {
   const t = useTranslations("ecole.students");
   const tc = useTranslations("common");
+  const tNav = useTranslations("nav");
   const tErrors = useTranslations("errors");
   const locale = useLocale();
   const router = useRouter();
@@ -112,81 +109,72 @@ export function StudentDetail({ enrollmentId }: { enrollmentId: string }) {
     }
   }
 
+  // Le bandeau nuit tient sa place pendant l'attente : la page ne doit pas
+  // sauter d'un en-tête à l'autre entre le squelette et la fiche.
   if (isPending) {
     return (
-      <div className="grid gap-5 lg:grid-cols-3">
-        <Skeleton className="h-72 lg:col-span-2" />
-        <Skeleton className="h-72" />
-      </div>
+      <PageShell kicker={tNav("students")} title={<span className="block h-8 w-64 max-w-full animate-pulse rounded-md bg-white/12" />}>
+        <div className="grid gap-5 lg:grid-cols-3">
+          <Skeleton className="h-72 lg:col-span-2" />
+          <Skeleton className="h-72" />
+        </div>
+      </PageShell>
     );
   }
 
   if (isError || !file) {
     // The file we just deleted is gone from under its own page — that is the
     // redirect arriving, not a file that was never there.
-    return deleteEnrollment.isSuccess ? (
-      <Skeleton className="h-72" />
-    ) : (
-      <EmptyState title={tErrors("notFound")} />
+    return (
+      <PageShell kicker={tNav("students")} title={tNav("students")}>
+        {deleteEnrollment.isSuccess ? (
+          <Skeleton className="h-72" />
+        ) : (
+          <EmptyState title={tErrors("notFound")} />
+        )}
+      </PageShell>
     );
   }
 
   return (
-    <>
-      <div className="mb-6 space-y-2">
-        <div className="flex items-center justify-between gap-3">
-          <Button asChild variant="ghost" size="sm" className="-ms-2">
+    <PageShell
+      kicker={tNav("students")}
+      title={file.candidate_name_fr ?? file.candidate_name ?? "—"}
+      description={
+        <span className="flex flex-wrap items-center gap-2">
+          {file.candidate_name && file.candidate_name !== file.candidate_name_fr && (
+            <span lang="ar" dir="rtl">
+              {file.candidate_name}
+            </span>
+          )}
+          <CategoryBadge code={file.category_code} />
+          {/* Where the exam results have left them. */}
+          <Badge variant="outline" className="border-sidebar-border text-sidebar-foreground">
+            {t(STAGE_LABEL_KEYS[stageOf(file)])}
+          </Badge>
+          <StatusBadge status={file.status} />
+        </span>
+      }
+      actions={
+        <>
+          <Button asChild variant="outline" className="border-sidebar-border text-sidebar-foreground hover:bg-white/8">
             <Link href="/ecole/students">
               <ArrowLeft className="size-4 rtl-flip" />
               {tc("back")}
             </Link>
           </Button>
-
-          <Button
-            variant="destructive"
-            size="sm"
-            onClick={() => setDeleteOpen(true)}
-          >
+          <Button variant="destructive" onClick={() => setDeleteOpen(true)}>
             <Trash2 className="size-4" />
             {t("deleteCandidate")}
           </Button>
-        </div>
-
-        <div className="flex flex-wrap items-center gap-3">
-          <Avatar className="size-12">
-            {file.candidate_photo_url && (
-              <AvatarImage src={file.candidate_photo_url} alt="" />
-            )}
-            <AvatarFallback className="bg-primary/10 font-medium text-primary">
-              {initials(file.candidate_name)}
-            </AvatarFallback>
-          </Avatar>
-          <div className="min-w-0">
-            <h1 className="truncate font-heading text-2xl font-semibold tracking-tight">
-              {file.candidate_name ?? "—"}
-            </h1>
-            {file.candidate_name_fr && (
-              <p dir="ltr" className="truncate text-sm text-muted-foreground">
-                {file.candidate_name_fr}
-              </p>
-            )}
-            <div className="mt-1 flex flex-wrap items-center gap-2">
-              <Badge variant="secondary" className="font-mono font-semibold">
-                {file.category_code}
-              </Badge>
-              {/* Where the exam results have left them. */}
-              <Badge variant="outline">{t(STAGE_LABEL_KEYS[stageOf(file)])}</Badge>
-              <StatusBadge status={file.status} />
-            </div>
-          </div>
-        </div>
-      </div>
-
+        </>
+      }
+    >
       <div className="grid gap-5 lg:grid-cols-3">
         <div className="space-y-5 lg:col-span-2">
           <Card>
             <CardHeader>
-              <CardTitle className="text-base">{t("personalInfo")}</CardTitle>
+              <CardTitle>{t("personalInfo")}</CardTitle>
               {/* The candidate has no app to correct these from — the school
                   is the only one who can keep them right. */}
               <CardAction>
@@ -228,7 +216,7 @@ export function StudentDetail({ enrollmentId }: { enrollmentId: string }) {
           {showPayments && (
             <Card>
               <CardHeader>
-                <CardTitle className="text-base">{t("paymentHistory")}</CardTitle>
+                <CardTitle>{t("paymentHistory")}</CardTitle>
               </CardHeader>
               <CardContent className="px-0">
                 {paymentsPending ? (
@@ -272,7 +260,7 @@ export function StudentDetail({ enrollmentId }: { enrollmentId: string }) {
 
         <Card className="h-fit">
           <CardHeader>
-            <CardTitle className="text-base">{t("enrollmentInfo")}</CardTitle>
+            <CardTitle>{t("enrollmentInfo")}</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
             <dl className="space-y-3 text-sm">
@@ -387,6 +375,6 @@ export function StudentDetail({ enrollmentId }: { enrollmentId: string }) {
         pending={deleteEnrollment.isPending}
         onConfirm={confirmDelete}
       />
-    </>
+    </PageShell>
   );
 }

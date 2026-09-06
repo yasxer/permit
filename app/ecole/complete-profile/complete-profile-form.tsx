@@ -192,7 +192,7 @@ export function CompleteProfileForm({ school }: { school: SchoolRow }) {
     <form onSubmit={handleSubmit(onSubmit)} noValidate className="space-y-5">
       <Card>
         <CardHeader>
-          <CardTitle className="text-base">{t("title")}</CardTitle>
+          <CardTitle>{t("title")}</CardTitle>
         </CardHeader>
         <CardContent>
           <FieldGroup>
@@ -322,7 +322,7 @@ export function CompleteProfileForm({ school }: { school: SchoolRow }) {
 
       <Card>
         <CardHeader>
-          <CardTitle className="text-base">{t("prices")}</CardTitle>
+          <CardTitle>{t("prices")}</CardTitle>
         </CardHeader>
         <CardContent>
           <FieldGroup>
@@ -384,7 +384,7 @@ export function CompleteProfileForm({ school }: { school: SchoolRow }) {
 
       <Card>
         <CardHeader>
-          <CardTitle className="text-base">{t("successStats")}</CardTitle>
+          <CardTitle>{t("successStats")}</CardTitle>
         </CardHeader>
         <CardContent>
           <FieldGroup>

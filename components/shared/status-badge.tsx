@@ -3,12 +3,18 @@ import { useTranslations } from "next-intl";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 
-/** Every status the app shows, mapped onto one of four tones. */
+/**
+ * Une seule échelle de statut dans toute l'application — cinq tons, pas un de
+ * plus : au-delà, la couleur cesse d'être un signal et redevient de la
+ * décoration.
+ */
 const TONES = {
   neutral: "border-transparent bg-muted text-muted-foreground",
-  positive: "border-transparent bg-success/12 text-success",
-  warning: "border-transparent bg-warning/15 text-warning",
-  negative: "border-transparent bg-destructive/10 text-destructive",
+  positive: "border-transparent bg-success/13 text-success",
+  warning: "border-transparent bg-brand/12 text-warning",
+  negative: "border-transparent bg-destructive/13 text-destructive",
+  /** « Terminé » : un fait acquis, donc l'encre pleine plutôt qu'une teinte. */
+  ink: "border-transparent bg-primary text-primary-foreground",
 } as const;
 
 const STATUS_TONE: Record<string, keyof typeof TONES> = {
@@ -18,14 +24,15 @@ const STATUS_TONE: Record<string, keyof typeof TONES> = {
   active: "positive",
   passed: "positive",
   available: "positive",
-  completed: "neutral",
+  completed: "ink",
   scheduled: "neutral",
   notSet: "neutral",
   rejected: "negative",
   failed: "negative",
-  cancelled: "negative",
   unavailable: "negative",
-  absent: "warning",
+  // Ni réussite ni échec : l'absence et l'annulation sortent de l'échelle.
+  cancelled: "neutral",
+  absent: "neutral",
 };
 
 export function StatusBadge({
