@@ -8,10 +8,10 @@ import {
   GraduationCap,
   Inbox,
 } from "lucide-react";
+import dynamic from "next/dynamic";
 import Link from "next/link";
 import { useLocale, useTranslations } from "next-intl";
 
-import { MonthlyAreaChart } from "@/components/charts/monthly-area-chart";
 import { StageBars } from "@/components/charts/stage-bars";
 import { EmptyState } from "@/components/shared/empty-state";
 import { Notice } from "@/components/shared/notice";
@@ -29,6 +29,21 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { useSchoolStats } from "@/hooks/use-stats";
 import { formatCurrency, formatDate, formatNumber } from "@/lib/format";
+
+/**
+ * recharts pèse lourd et n'a rien à dessiner tant que les chiffres ne sont pas
+ * arrivés : chargé à part, il ne retarde plus l'affichage du tableau de bord.
+ */
+const MonthlyAreaChart = dynamic(
+  () =>
+    import("@/components/charts/monthly-area-chart").then(
+      (module) => module.MonthlyAreaChart,
+    ),
+  {
+    ssr: false,
+    loading: () => <Skeleton className="h-[110px] w-full rounded-xl md:h-64" />,
+  },
+);
 
 /** Combien de jours nous séparent d'une date, arrondi au jour civil. */
 function daysUntil(iso: string): number {

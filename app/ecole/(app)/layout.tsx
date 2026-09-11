@@ -1,7 +1,7 @@
 import type { ReactNode } from "react";
 
 import { AppShell } from "@/components/shared/app-shell";
-import { getSessionUser, requireApprovedSchool } from "@/lib/auth";
+import { requireApprovedSchool } from "@/lib/auth";
 import { getPendingRequestCount, getSchoolIdentity } from "@/lib/school";
 
 /**
@@ -10,9 +10,7 @@ import { getPendingRequestCount, getSchoolIdentity } from "@/lib/school";
  * /ecole/complete-profile, both of which sit outside this group.
  */
 export default async function EcoleAppLayout({ children }: { children: ReactNode }) {
-  const { school } = await requireApprovedSchool();
-  const session = await getSessionUser();
-  if (!session) return null;
+  const { session, school } = await requireApprovedSchool();
 
   const [identity, pending] = await Promise.all([
     getSchoolIdentity(),
