@@ -1,11 +1,10 @@
 import type { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
 
-import { PageHeader } from "@/components/shared/page-header";
 import { requireApprovedSchool } from "@/lib/auth";
+import { getSchoolIdentity } from "@/lib/school";
 
-import { AddCandidateButton } from "./add-candidate-button";
-import { StudentsTable } from "./students-table";
+import { StudentsScreen } from "./students-screen";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("ecole.students");
@@ -14,20 +13,7 @@ export async function generateMetadata(): Promise<Metadata> {
 
 export default async function EcoleStudentsPage() {
   const { school } = await requireApprovedSchool();
-  const t = await getTranslations("ecole.students");
+  const identity = await getSchoolIdentity();
 
-  return (
-    <>
-      <PageHeader
-        title={t("title")}
-        description={t("subtitle")}
-        actions={<AddCandidateButton schoolId={school.id} />}
-      />
-      <StudentsTable
-        schoolId={school.id}
-        status="active"
-        emptyTitle={t("empty")}
-      />
-    </>
-  );
+  return <StudentsScreen schoolId={school.id} kicker={identity?.kicker} />;
 }

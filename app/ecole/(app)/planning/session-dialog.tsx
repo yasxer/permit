@@ -5,7 +5,8 @@ import { useLocale, useTranslations } from "next-intl";
 import { useState } from "react";
 import { toast } from "sonner";
 
-import { Badge } from "@/components/ui/badge";
+import { CategoryBadge } from "@/components/shared/category-badge";
+import { Notice } from "@/components/shared/notice";
 import { Button } from "@/components/ui/button";
 import {
   Command,
@@ -24,7 +25,6 @@ import {
 } from "@/components/ui/dialog";
 import { Field, FieldDescription, FieldLabel } from "@/components/ui/field";
 import { Spinner } from "@/components/ui/spinner";
-import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useStudentFiles } from "@/hooks/use-enrollments";
 import {
   SESSION_TYPES,
@@ -74,7 +74,7 @@ export function SessionDialog({
 }) {
   return (
     <Dialog open={cell !== null} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-md">
+      <DialogContent className="sm:max-w-[32.5rem]">
         {cell &&
           (cell.slot ? (
             <ExistingSlot slot={cell.slot} onDone={() => onOpenChange(false)} />
@@ -165,44 +165,66 @@ function NewSession({
         {types.length > 1 && (
           <Field>
             <FieldLabel>{t("sessionType")}</FieldLabel>
-            <Tabs
-              value={type}
-              onValueChange={(value) => {
-                setType(value as LessonType);
-                // The next type offers a different set of candidates; keeping
-                // the old pick would submit someone no longer in the list.
-                setSelected(null);
-              }}
-            >
-              <TabsList className="w-full">
-                {types.map((option) => (
-                  <TabsTrigger key={option} value={option} className="flex-1">
+            {/* Des tuiles plutôt que des onglets : la durée se lit sur chacune,
+                et c'est elle qui décide de la place prise dans la grille. */}
+            <div className="grid grid-cols-2 gap-2">
+              {types.map((option) => {
+                const chosen = option === type;
+                return (
+                  <button
+                    key={option}
+                    type="button"
+                    aria-pressed={chosen}
+                    onClick={() => {
+                      setType(option);
+                      // The next type offers a different set of candidates;
+                      // keeping the old pick would submit someone no longer in
+                      // the list.
+                      setSelected(null);
+                    }}
+                    className={cn(
+                      "flex items-center justify-between gap-2 rounded-[10px] border px-3 py-2.5 text-start text-[0.8125rem] transition-colors",
+                      "focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-ring/35",
+                      chosen
+                        ? "border-brand bg-brand/10 font-semibold text-foreground"
+                        : "border-border font-medium text-secondary-foreground hover:bg-muted",
+                    )}
+                  >
                     {t(option)}
-                  </TabsTrigger>
-                ))}
-              </TabsList>
-            </Tabs>
-            <FieldDescription>
-              {t("duration")}: {t("minutes", { count: sessionMinutes(type) })}
-              {type === "perfectionnement" && perfRate !== null && (
-                <>
-                  {" · "}
-                  {t("sessionPrice", { amount: formatCurrency(perfRate, locale) })}
-                </>
-              )}
-            </FieldDescription>
+                    <span
+                      className={cn(
+                        "shrink-0 text-[0.6875rem] tabular-nums",
+                        chosen ? "text-warning" : "text-muted-foreground/70",
+                      )}
+                    >
+                      {t("minutes", { count: sessionMinutes(option) })}
+                    </span>
+                  </button>
+                );
+              })}
+            </div>
+            {type === "perfectionnement" && perfRate !== null && (
+              <FieldDescription>
+                {t("sessionPrice", { amount: formatCurrency(perfRate, locale) })}
+              </FieldDescription>
+            )}
           </Field>
         )}
 
         {rateMissing ? (
-          <p className="rounded-lg bg-destructive/10 p-3 text-sm text-destructive">
-            {t("perfRateMissing")}
-          </p>
+          <Notice>{t("perfRateMissing")}</Notice>
         ) : (
           <div className="space-y-2">
-            <p className="text-sm font-medium">{t("selectStudent")}</p>
-            <Command className="rounded-xl border">
+            <p className="text-[0.8125rem] font-semibold text-secondary-foreground">
+              {t("selectStudent")}
+            </p>
+            <Command className="rounded-[10px] border border-border">
               <CommandInput placeholder={t("searchStudent")} />
+              {/* L'en-tête dit *pourquoi* la liste est courte : elle ne
+                  propose que les dossiers arrivés à cette étape. */}
+              <p className="border-b border-border bg-background px-3 py-2.5 text-xs text-muted-foreground">
+                {t(ELIGIBLE_HINT[type])}
+              </p>
               <CommandList className="max-h-52">
                 <CommandEmpty>
                   {isPending ? tc("loading") : t("noEligible")}
@@ -226,37 +248,47 @@ function NewSession({
                       )}
                       aria-hidden
                     />
-                    <span className="min-w-0 flex-1 truncate">
-                      {student.candidate_name ?? "—"}
+                    <span className="flex min-w-0 flex-1 flex-col">
+                      <span className="truncate text-sm font-semibold">
+                        {student.candidate_name_fr ?? student.candidate_name ?? "—"}
+                      </span>
+                      {student.candidate_name &&
+                        student.candidate_name !== student.candidate_name_fr && (
+                          <span
+                            lang="ar"
+                            dir="rtl"
+                            className="truncate text-xs text-muted-foreground"
+                          >
+                            {student.candidate_name}
+                          </span>
+                        )}
                     </span>
-                    <Badge variant="secondary" className="font-mono font-semibold">
-                      {student.category_code}
-                    </Badge>
+                    <CategoryBadge code={student.category_code} />
                   </CommandItem>
                 ))}
               </CommandList>
             </Command>
-            <p className="text-xs text-muted-foreground">{t(ELIGIBLE_HINT[type])}</p>
           </div>
         )}
       </div>
 
-      <DialogFooter className="mt-6 gap-2 sm:flex-col sm:items-stretch">
-        <Button
-          onClick={onCreate}
-          disabled={!selected || rateMissing || busy}
-        >
-          {create.isPending ? <Spinner /> : <CalendarPlus className="size-4" />}
-          {t("createSession")}
-        </Button>
-        {/* A half hour with no lesson in it: a repair, a break, a day off. */}
-        <Button variant="outline" onClick={onBlock} disabled={busy}>
+      <DialogFooter className="mt-2 sm:justify-between">
+        {/* A half hour with no lesson in it: a repair, a break, a day off. Il
+            se range à l'opposé des deux autres — ce n'est pas une variante de
+            « créer », c'est le contraire. */}
+        <Button variant="outline" size="sm" onClick={onBlock} disabled={busy}>
           {block.isPending ? <Spinner /> : <Lock className="size-4" />}
           {t("closeSlot")}
         </Button>
-        <Button type="button" variant="ghost" onClick={onDone} disabled={busy}>
-          {tc("cancel")}
-        </Button>
+        <div className="flex gap-2.5">
+          <Button type="button" variant="outline" onClick={onDone} disabled={busy}>
+            {tc("cancel")}
+          </Button>
+          <Button onClick={onCreate} disabled={!selected || rateMissing || busy}>
+            {create.isPending ? <Spinner /> : <CalendarPlus className="size-4" />}
+            {t("createSession")}
+          </Button>
+        </div>
       </DialogFooter>
     </>
   );
@@ -304,28 +336,34 @@ function ExistingSlot({
           {t("closedHint")}
         </p>
       ) : (
-        <div className="space-y-3">
-          <div className="flex items-center gap-3 rounded-xl border bg-muted/40 p-4">
-            <User className="size-4 text-muted-foreground" aria-hidden />
-            <div className="min-w-0">
+        <div className="space-y-4">
+          <div className="flex items-center gap-3.5 rounded-xl bg-background p-3.5">
+            <User className="size-4 shrink-0 text-muted-foreground" aria-hidden />
+            <div className="min-w-0 flex-1">
               <p className="text-xs text-muted-foreground">{t("bookedBy")}</p>
-              <p className="truncate text-sm font-medium">
+              <p className="truncate text-[0.9375rem] font-semibold">
                 {slot.enrollment?.candidate?.full_name ?? "—"}
               </p>
             </div>
           </div>
 
-          <dl className="space-y-2 px-1 text-sm">
+          <dl className="space-y-2.5 text-sm">
             <div className="flex items-baseline justify-between gap-3">
-              <dt className="text-muted-foreground">{t("duration")}</dt>
-              <dd className="tabular-nums">
-                {formatTime(slot.start_time)} — {formatTime(slot.end_time)}
+              <dt className="text-[0.8125rem] text-muted-foreground">{tc("status")}</dt>
+              <dd className="font-semibold">{t(slot.lesson_type)}</dd>
+            </div>
+            <div className="flex items-baseline justify-between gap-3">
+              <dt className="text-[0.8125rem] text-muted-foreground">{t("duration")}</dt>
+              <dd className="tabular-nums" dir="ltr">
+                {formatTime(slot.start_time)} → {formatTime(slot.end_time)}
               </dd>
             </div>
             {slot.price !== null && (
               <div className="flex items-baseline justify-between gap-3">
-                <dt className="text-muted-foreground">{t("perfectionnement")}</dt>
-                <dd className="font-medium tabular-nums">
+                <dt className="text-[0.8125rem] text-muted-foreground">
+                  {t("perfectionnement")}
+                </dt>
+                <dd className="font-semibold tabular-nums">
                   {formatCurrency(slot.price, locale)}
                 </dd>
               </div>

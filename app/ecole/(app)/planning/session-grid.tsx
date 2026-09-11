@@ -1,15 +1,12 @@
 "use client";
 
-import { CalendarDays, ChevronLeft, ChevronRight, Plus } from "lucide-react";
+import { ChevronLeft, ChevronRight, Plus } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 import { useState } from "react";
 
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useMounted } from "@/hooks/use-mounted";
 import {
-  SESSION_TYPES,
   SLOT_TIMES,
   resourceOf,
   slotRowSpan,
@@ -19,82 +16,78 @@ import {
 } from "@/hooks/use-planning";
 import { DAY_KEYS, formatDate, formatTime } from "@/lib/format";
 import { cn } from "@/lib/utils";
-import {
-  addDays,
-  fromISODate,
-  startOfWeek,
-  toISODate,
-  workWeekDates,
-} from "@/lib/week";
+import { fromISODate, toISODate, workWeekDates } from "@/lib/week";
 
 import { SessionDialog } from "./session-dialog";
 
+/**
+ * Les pastilles de la charte. Le code et la conduite partagent l'encre, le
+ * créneau prend l'ambre, le perfectionnement le vert : trois teintes pour
+ * quatre types, parce que c'est la ressource qui sépare les deux premiers, et
+ * qu'on ne les voit jamais sur la même grille.
+ */
 const TYPE_STYLE: Record<string, string> = {
-  code: "bg-primary/15 text-primary hover:bg-primary/25",
-  creneau: "bg-warning/20 text-warning hover:bg-warning/30",
-  conduite: "bg-primary/15 text-primary hover:bg-primary/25",
-  perfectionnement: "bg-success/20 text-success hover:bg-success/30",
+  code: "bg-primary/15 text-primary",
+  conduite: "bg-primary/15 text-primary",
+  creneau: "bg-brand/20 text-[color-mix(in_oklch,var(--brand-ink),black_18%)] dark:text-brand",
+  perfectionnement:
+    "bg-success/20 text-[color-mix(in_oklch,var(--success),black_25%)] dark:text-success",
 };
-
-const BLOCKED_STYLE =
-  "bg-destructive/10 text-destructive hover:bg-destructive/20";
 
 const cellKey = (date: string, time: string) => `${date}|${time}`;
 
 /**
- * One week of one resource — the classroom or the car.
- *
- * Nothing is generated in advance and no availability is declared: every cell
- * is free until the school puts something on it, and the session is created at
- * that moment. A perfectionnement hour covers the half hour below it, so the
- * grid tracks what each row occupies rather than only where it starts.
+ * Une demi-heure fait 42 px sur desktop — la hauteur qu'il faut pour que la
+ * pastille de 30 min affiche ses deux lignes sans rognage — et 40 px sur
+ * mobile, où la colonne unique rend la place en largeur.
  */
+const ROWS = "[--planning-row:40px] md:[--planning-row:42px]";
+const ROW_TEMPLATE = { gridTemplateRows: `repeat(${SLOT_TIMES.length}, var(--planning-row))` };
+
 export function SessionGrid({
   schoolId,
   resource,
+  weekStart,
+  onShiftWeek,
 }: {
   schoolId: string;
   resource: Resource;
+  weekStart: string;
+  /** Tourne la semaine depuis la rangée des jours, sur mobile. */
+  onShiftWeek: (weeks: number) => void;
 }) {
   const t = useTranslations("ecole.planning");
   const tDays = useTranslations("days");
   const locale = useLocale();
 
-  const [weekStart, setWeekStart] = useState(() => toISODate(startOfWeek(new Date())));
   const [openCell, setOpenCell] = useState<{
     date: string;
     time: string;
     slot: SlotWithStudent | null;
   } | null>(null);
-
+  const days = workWeekDates(weekStart);
+  // Sur mobile, la grille s'ouvre sur aujourd'hui quand il tombe dans la
+  // semaine affichée — c'est le jour qu'on vient remplir. Vendredi, samedi.
+  const [activeDay, setActiveDay] = useState(() =>
+    Math.max(0, days.indexOf(toISODate(new Date()))),
+  );
   const { data: slots = [], isPending } = useSlots(schoolId, weekStart);
 
-  // Which week "today" falls in depends on the reader's clock and timezone, and
-  // month names come out differently from Node's ICU and the browser's — so
-  // the server has no way to render this grid the way the client will. It
-  // renders the skeleton the pending query would have shown anyway, and the
-  // week appears on the first client pass.
+  // The week the browser lands on depends on its clock, so the grid only
+  // settles on the first client pass; it renders the pending skeleton until
+  // then rather than a week the server guessed.
   const mounted = useMounted();
-  if (!mounted) {
-    return (
-      <div className="space-y-4">
-        <Skeleton className="h-9 w-72" />
-        <Skeleton className="h-[32rem]" />
-      </div>
-    );
+  if (!mounted || isPending) {
+    return <Skeleton className="h-[36rem] rounded-xl" />;
   }
 
-  const days = workWeekDates(weekStart);
-  const types = SESSION_TYPES[resource];
-
   const rows = slots.filter((slot) => resourceOf(slot.lesson_type) === resource);
-
   const startsAt = new Map(
     rows.map((slot) => [cellKey(slot.slot_date, slot.start_time), slot]),
   );
 
   // The half hours a longer session swallows: they get no cell of their own,
-  // the `rowSpan` above already covers them.
+  // the span above already covers them.
   const covered = new Set<string>();
   for (const slot of rows) {
     const index = SLOT_TIMES.indexOf(slot.start_time);
@@ -105,191 +98,215 @@ export function SessionGrid({
     }
   }
 
-  function shiftWeek(weeks: number) {
-    setWeekStart(toISODate(addDays(fromISODate(weekStart), weeks * 7)));
+  const dayName = (date: string) => tDays(DAY_KEYS[fromISODate(date).getDay()]);
+  // « sam », pas « sam. » : la puce fait 42 px de large.
+  const shortDay = (date: string) =>
+    formatDate(date, locale, { weekday: "short" }).replace(/\.$/, "");
+
+  function renderDay(date: string) {
+    return SLOT_TIMES.map((time, index) => {
+      if (covered.has(cellKey(date, time))) return null;
+
+      const slot = startsAt.get(cellKey(date, time));
+      const row = index + 1;
+      const rule = index > 0 && "border-t border-separator";
+
+      if (!slot) {
+        return (
+          <button
+            key={time}
+            type="button"
+            style={{ gridRow: row, gridColumn: 1 }}
+            onClick={() => setOpenCell({ date, time, slot: null })}
+            aria-label={`${dayName(date)} ${formatTime(time)} — ${t("newSession")}`}
+            className={cn(
+              "group transition-colors hover:bg-brand/10 focus-visible:bg-brand/10 focus-visible:outline-none",
+              rule,
+            )}
+          >
+            <Plus
+              className="mx-auto size-3.5 text-brand-ink opacity-0 transition-opacity group-hover:opacity-100 group-focus-visible:opacity-100"
+              aria-hidden
+            />
+          </button>
+        );
+      }
+
+      const blocked = slot.status !== "booked";
+      const span = slotRowSpan(slot.lesson_type);
+
+      if (blocked) {
+        return (
+          <button
+            key={time}
+            type="button"
+            style={{ gridRow: `${row} / span ${span}`, gridColumn: 1 }}
+            onClick={() => setOpenCell({ date, time, slot })}
+            className={cn(
+              "slot-closed flex items-center ps-2 text-start text-[0.625rem] font-semibold text-destructive focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-ring/35",
+              rule,
+            )}
+          >
+            {t("closed")}
+          </button>
+        );
+      }
+
+      return (
+        <button
+          key={time}
+          type="button"
+          style={{ gridRow: `${row} / span ${span}`, gridColumn: 1 }}
+          onClick={() => setOpenCell({ date, time, slot })}
+          className={cn(
+            // La pastille s'étire sur sa ou ses demi-heures : la hauteur vient
+            // de la grille, jamais d'un calcul en pixels qui s'en écarterait.
+            "mx-1.5 my-[2px] flex flex-col justify-center gap-px self-stretch overflow-hidden rounded-[9px] px-2 py-1 text-start transition-opacity hover:opacity-85 focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-ring/35 md:mx-[3px]",
+            TYPE_STYLE[slot.lesson_type],
+          )}
+        >
+          <span className="truncate text-[0.6875rem] font-bold leading-tight">
+            {t(slot.lesson_type)}
+          </span>
+          <span className="truncate text-[0.6875rem] leading-tight text-secondary-foreground">
+            {slot.enrollment?.candidate?.full_name ?? "—"}
+          </span>
+        </button>
+      );
+    });
   }
 
-  const weekLabel = `${formatDate(days[0], locale, {
-    day: "2-digit",
-    month: "short",
-  })} — ${formatDate(days[days.length - 1], locale, {
-    day: "2-digit",
-    month: "short",
-    year: "numeric",
-  })}`;
+  const chevron =
+    "grid w-7 shrink-0 place-items-center rounded-[11px] border border-border bg-card text-muted-foreground transition-colors hover:bg-muted focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-ring/35";
 
   return (
-    <div className="space-y-4">
-      <div className="flex flex-wrap items-center justify-between gap-3">
-        {/* Booking a month ahead is four taps on the arrow, so the week is a
-            page to turn rather than a date to type. */}
-        <div className="flex items-center gap-1.5">
-          <Button
-            variant="outline"
-            size="icon"
-            aria-label={t("previousWeek")}
-            onClick={() => shiftWeek(-1)}
-          >
-            <ChevronLeft className="size-4 rtl-flip" />
-          </Button>
-          <div className="min-w-44 text-center text-sm font-medium tabular-nums">
-            {weekLabel}
-          </div>
-          <Button
-            variant="outline"
-            size="icon"
-            aria-label={t("nextWeek")}
-            onClick={() => shiftWeek(1)}
-          >
-            <ChevronRight className="size-4 rtl-flip" />
-          </Button>
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={() => setWeekStart(toISODate(startOfWeek(new Date())))}
-          >
-            <CalendarDays className="size-4" />
-            {t("thisWeek")}
-          </Button>
+    <div className="flex flex-col gap-3 md:gap-5">
+      {/* Sous md : un jour à la fois (2g). Six colonnes sur 390 px ne se
+          cliquent pas — la rangée des jours remplace la largeur manquante, et
+          ses deux bouts tournent la semaine. */}
+      <div className="flex items-stretch gap-[7px] md:hidden">
+        <button
+          type="button"
+          className={chevron}
+          aria-label={t("previousWeek")}
+          onClick={() => onShiftWeek(-1)}
+        >
+          <ChevronLeft className="size-4 rtl-flip" aria-hidden />
+        </button>
+
+        {days.map((date, index) => {
+          const active = index === activeDay;
+          return (
+            <button
+              key={date}
+              type="button"
+              onClick={() => setActiveDay(index)}
+              aria-pressed={active}
+              aria-label={dayName(date)}
+              className={cn(
+                "flex min-w-0 flex-1 flex-col items-center gap-0.5 rounded-[11px] py-2 transition-colors focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-ring/35",
+                // Le jour actif reste bleu nuit dans les deux thèmes, comme la
+                // barre : c'est un repère, pas une surface. En sombre, le nuit
+                // se confond avec les cartes — un filet ambre le détache.
+                active
+                  ? "bg-sidebar text-white dark:ring-1 dark:ring-inset dark:ring-brand/60"
+                  : "border border-border bg-card",
+              )}
+            >
+              <span
+                className={cn(
+                  "text-[0.625rem] leading-none",
+                  active ? "text-brand" : "text-muted-foreground/80",
+                )}
+              >
+                {shortDay(date)}
+              </span>
+              <span
+                className={cn(
+                  "text-sm leading-tight tabular-nums",
+                  active ? "font-bold" : "font-semibold",
+                )}
+              >
+                {formatDate(date, locale, { day: "numeric" })}
+              </span>
+            </button>
+          );
+        })}
+
+        <button
+          type="button"
+          className={chevron}
+          aria-label={t("nextWeek")}
+          onClick={() => onShiftWeek(1)}
+        >
+          <ChevronRight className="size-4 rtl-flip" aria-hidden />
+        </button>
+      </div>
+
+      <div className="overflow-hidden rounded-xl border border-border bg-card">
+        {/* En-tête des jours — desktop seulement : sur mobile, la rangée de
+            puces nomme déjà le jour affiché. */}
+        <div className="hidden grid-cols-[76px_repeat(6,1fr)] border-b border-border md:grid">
+          <span className="p-3 text-center font-mono text-[0.6875rem] text-muted-foreground/80">
+            {t("hour")}
+          </span>
+          {days.map((date) => (
+            <div
+              key={date}
+              className="flex flex-col items-center gap-0.5 border-s border-border p-3"
+            >
+              <span className="text-[0.8125rem] font-semibold capitalize">{dayName(date)}</span>
+              <span className="text-xs tabular-nums text-muted-foreground/80">
+                {formatDate(date, locale, { day: "2-digit", month: "2-digit" })}
+              </span>
+            </div>
+          ))}
         </div>
 
-        <div className="flex flex-wrap items-center gap-4 text-xs">
-          <span className="sr-only">{t("legend")}</span>
-          {types.map((type) => (
-            <span key={type} className="flex items-center gap-1.5">
+        <div className={cn("grid grid-cols-[58px_1fr] md:grid-cols-[76px_repeat(6,1fr)]", ROWS)}>
+          {/* La colonne des heures, en mono : ce sont des repères, pas du
+              texte. Calée au début sur mobile, centrée sur desktop. */}
+          <div className="grid" style={ROW_TEMPLATE}>
+            {SLOT_TIMES.map((time, index) => (
               <span
-                className={cn("size-3 rounded-sm", TYPE_STYLE[type])}
-                aria-hidden
-              />
-              {t(type)}
-            </span>
+                key={time}
+                className={cn(
+                  "flex justify-start ps-2 pt-[9px] font-mono text-[0.6875rem] tabular-nums text-muted-foreground/80 md:justify-center md:ps-0 md:pt-1",
+                  index > 0 && "border-t border-separator",
+                )}
+              >
+                {formatTime(time)}
+              </span>
+            ))}
+          </div>
+
+          {days.map((date, index) => (
+            <div
+              key={date}
+              className={cn(
+                "border-s border-separator md:border-border",
+                index === activeDay ? "grid" : "hidden md:grid",
+              )}
+              style={ROW_TEMPLATE}
+            >
+              {renderDay(date)}
+            </div>
           ))}
-          <span className="flex items-center gap-1.5">
-            <span className={cn("size-3 rounded-sm", BLOCKED_STYLE)} aria-hidden />
-            {t("closed")}
-          </span>
-          <Input
-            type="date"
-            value={weekStart}
-            dir="ltr"
-            aria-label={t("selectWeek")}
-            // Snap any picked day back to its Saturday: the grid is a week.
-            onChange={(event) => {
-              const value = event.target.value;
-              if (!value) return;
-              setWeekStart(toISODate(startOfWeek(fromISODate(value))));
-            }}
-            className="w-40"
-          />
         </div>
       </div>
 
-      <p className="text-sm text-muted-foreground">{t("gridHint")}</p>
+      <p className="text-xs text-muted-foreground md:hidden">{t("gridLegendHintTouch")}</p>
 
-      {isPending ? (
-        <Skeleton className="h-[32rem]" />
-      ) : (
-        <div className="overflow-x-auto rounded-xl border">
-          <table className="w-full border-collapse text-sm">
-            <caption className="sr-only">
-              {t(resource === "code" ? "code" : "conduite")}
-            </caption>
-            <thead>
-              <tr>
-                <th
-                  scope="col"
-                  className="sticky start-0 z-10 bg-background px-3 py-2 text-start text-xs font-medium text-muted-foreground"
-                >
-                  {t("hour")}
-                </th>
-                {days.map((date) => (
-                  <th
-                    key={date}
-                    scope="col"
-                    className="px-2 py-2 text-xs font-medium text-muted-foreground"
-                  >
-                    <span className="block">
-                      {tDays(DAY_KEYS[fromISODate(date).getDay()])}
-                    </span>
-                    <span className="block font-normal tabular-nums">
-                      {formatDate(date, locale, { day: "2-digit", month: "2-digit" })}
-                    </span>
-                  </th>
-                ))}
-              </tr>
-            </thead>
-            <tbody>
-              {SLOT_TIMES.map((time) => (
-                <tr key={time}>
-                  <th
-                    scope="row"
-                    className="sticky start-0 z-10 bg-background px-3 py-1 text-start text-xs font-normal tabular-nums text-muted-foreground"
-                  >
-                    {formatTime(time)}
-                  </th>
-                  {days.map((date) => {
-                    if (covered.has(cellKey(date, time))) return null;
-                    const slot = startsAt.get(cellKey(date, time));
-
-                    if (!slot) {
-                      return (
-                        <td key={date} className="p-0.5">
-                          <button
-                            type="button"
-                            onClick={() => setOpenCell({ date, time, slot: null })}
-                            aria-label={`${tDays(DAY_KEYS[fromISODate(date).getDay()])} ${formatTime(time)} — ${t("newSession")}`}
-                            className="group flex h-9 w-full min-w-24 items-center justify-center rounded-md border border-dashed border-transparent bg-muted/30 transition-colors hover:border-border hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-                          >
-                            <Plus
-                              className="size-3.5 text-muted-foreground opacity-0 transition-opacity group-hover:opacity-100 group-focus-visible:opacity-100"
-                              aria-hidden
-                            />
-                          </button>
-                        </td>
-                      );
-                    }
-
-                    const blocked = slot.status !== "booked";
-                    const span = slotRowSpan(slot.lesson_type);
-
-                    return (
-                      <td key={date} className="p-0.5 align-top" rowSpan={span}>
-                        <button
-                          type="button"
-                          onClick={() => setOpenCell({ date, time, slot })}
-                          title={
-                            blocked
-                              ? t("closed")
-                              : `${t(slot.lesson_type)} — ${slot.enrollment?.candidate?.full_name ?? ""}`
-                          }
-                          className={cn(
-                            "flex w-full min-w-24 flex-col justify-center gap-0.5 rounded-md px-1.5 py-1 text-[0.65rem] font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
-                            span === 2 ? "h-[4.75rem]" : "h-9",
-                            blocked ? BLOCKED_STYLE : TYPE_STYLE[slot.lesson_type],
-                          )}
-                        >
-                          {blocked ? (
-                            <span className="truncate">{t("closed")}</span>
-                          ) : (
-                            <>
-                              <span className="truncate">
-                                {slot.enrollment?.candidate?.full_name ?? "—"}
-                              </span>
-                              <span className="truncate font-normal opacity-80">
-                                {t(slot.lesson_type)}
-                              </span>
-                            </>
-                          )}
-                        </button>
-                      </td>
-                    );
-                  })}
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      )}
+      <div className="hidden flex-wrap items-center justify-between gap-x-6 gap-y-3 md:flex">
+        <ul className="flex flex-wrap items-center gap-x-[18px] gap-y-2">
+          <span className="sr-only">{t("legend")}</span>
+          <LegendItem swatch="bg-primary/15" label={t("legendCodeConduite")} />
+          <LegendItem swatch="bg-brand/20" label={t("legendCreneau")} />
+          <LegendItem swatch="bg-success/20" label={t("legendPerf")} />
+          <LegendItem swatch="slot-closed" label={t("legendClosed")} />
+        </ul>
+        <p className="text-[0.8125rem] text-muted-foreground">{t("gridLegendHint")}</p>
+      </div>
 
       <SessionDialog
         cell={openCell}
@@ -298,5 +315,14 @@ export function SessionGrid({
         onOpenChange={(open) => !open && setOpenCell(null)}
       />
     </div>
+  );
+}
+
+function LegendItem({ swatch, label }: { swatch: string; label: string }) {
+  return (
+    <li className="flex items-center gap-2 text-[0.8125rem] text-secondary-foreground">
+      <span className={cn("size-3.5 shrink-0 rounded-[5px]", swatch)} aria-hidden />
+      {label}
+    </li>
   );
 }

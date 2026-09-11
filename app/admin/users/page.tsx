@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
 
-import { PageHeader } from "@/components/shared/page-header";
+import { PageShell } from "@/components/shared/page-shell";
 
 import { UsersTable } from "./users-table";
 
@@ -14,9 +14,8 @@ export default async function AdminUsersPage() {
   const t = await getTranslations("admin.users");
 
   return (
-    <>
-      <PageHeader title={t("title")} description={t("subtitle")} />
+    <PageShell title={t("title")} description={t("subtitle")}>
       <UsersTable />
-    </>
+    </PageShell>
   );
 }

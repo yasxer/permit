@@ -68,7 +68,7 @@ export default async function PendingPage() {
 
           <CardContent className="space-y-3">
             {rejected && school?.rejection_reason && (
-              <p className="rounded-lg border border-destructive/20 bg-destructive/5 px-3.5 py-2.5 text-sm text-foreground">
+              <p className="rounded-xl border border-destructive/30 bg-destructive/9 px-3.5 py-3 text-[0.8125rem] text-foreground">
                 {school.rejection_reason}
               </p>
             )}

@@ -268,14 +268,28 @@ export type AdminDashboardStats = {
 };
 
 /** Returned by the `school_dashboard_stats` RPC. */
+export type StageCounts = { code: number; creneau: number; conduite: number };
+
 export type SchoolDashboardStats = {
   students_active: number;
   requests_pending: number;
   students_completed: number;
   revenue_total: number;
-  next_exam: { date: string; candidates: number } | null;
+  next_exam:
+    | { date: string; candidates: number; stages?: StageCounts | null }
+    | null;
   payments_by_month: { month: string; value: number }[];
-  stage_breakdown: { code: number; creneau: number; conduite: number };
+  stage_breakdown: StageCounts;
+  /**
+   * La seconde lecture de chaque carte — ce qui a bougé, pas l'état. Optionnel
+   * côté type : l'agrégat qui les remonte est arrivé après l'écran, et une
+   * base restée en arrière doit afficher la carte sans sa ligne de contexte
+   * plutôt que « undefined ce mois ».
+   */
+  students_active_this_month?: number;
+  requests_today?: number;
+  students_completed_this_quarter?: number;
+  revenue_this_month?: number;
 };
 
 /**

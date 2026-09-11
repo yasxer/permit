@@ -1,75 +1,90 @@
-import { TrendingDown, TrendingUp, type LucideIcon } from "lucide-react";
+import type { LucideIcon } from "lucide-react";
 import type { ReactNode } from "react";
 
-import { Card, CardContent } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
+
+const HINT_TONE = {
+  muted: "text-muted-foreground",
+  // #8A5A06 : l'ambre lisible en texte, pour ce qui demande une action.
+  warning: "font-medium text-warning",
+  success: "font-medium text-success",
+} as const;
 
 /**
  * Un chiffre, et ce qu'il compte.
  *
- * L'étiquette passe au-dessus et le chiffre en dessous, en gros : sur une
- * rangée de quatre, l'œil balaie les valeurs d'abord et ne lit les étiquettes
- * que là où il s'arrête. L'icône recule en haut à droite — elle repère la
- * carte, elle n'est pas l'information.
+ * L'étiquette passe au-dessus en micro-capitales et le chiffre en dessous, en
+ * gros : sur une rangée de quatre, l'œil balaie les valeurs d'abord et ne lit
+ * les étiquettes que là où il s'arrête. L'icône recule dans un aplat sourd au
+ * coin de fin — elle repère la carte, elle n'est pas l'information. La ligne
+ * de contexte est séparée par un filet : c'est une seconde lecture, pas la
+ * suite de la première.
  */
 export function StatsCard({
   icon: Icon,
   label,
+  shortLabel,
   value,
   hint,
-  trend,
+  hintTone = "muted",
+  /** Les montants longs descendent d'un cran pour tenir sur une ligne. */
+  compact = false,
   className,
 }: {
   icon: LucideIcon;
   label: ReactNode;
+  /** « Actifs » plutôt que « Candidats actifs » — la carte mobile fait 150 px. */
+  shortLabel?: ReactNode;
   value: ReactNode;
   hint?: ReactNode;
-  /** Percentage change against the previous period. */
-  trend?: number;
+  hintTone?: keyof typeof HINT_TONE;
+  compact?: boolean;
   className?: string;
 }) {
-  const rising = typeof trend === "number" && trend >= 0;
-  const TrendIcon = rising ? TrendingUp : TrendingDown;
-
   return (
-    <Card
+    <div
       className={cn(
-        // La carte porte un `ring`, pas une bordure — c'est lui qui s'anime.
-        "transition-shadow hover:ring-primary/25",
+        "flex flex-col gap-2 rounded-xl border border-border bg-card p-3.5 sm:gap-4 sm:p-5",
         className,
       )}
     >
-      <CardContent className="space-y-3">
-        <div className="flex items-start justify-between gap-3">
-          <p className="min-w-0 truncate pt-1 text-sm text-muted-foreground">
-            {label}
-          </p>
-          <span className="grid size-9 shrink-0 place-items-center rounded-lg bg-primary/10 text-primary">
-            <Icon className="size-[1.05rem]" aria-hidden />
+      <div className="flex items-start justify-between gap-3">
+        <div className="flex min-w-0 flex-col gap-2 sm:gap-2.5">
+          <span className="flex items-center gap-[7px] text-[0.6875rem] font-semibold uppercase tracking-[0.05em] text-muted-foreground sm:tracking-[0.09em]">
+            {/* Sur 390 px, l'icône se met en tête de l'étiquette : le coin de
+                fin est déjà pris par le chiffre. */}
+            <Icon className="size-3.5 shrink-0 sm:hidden" strokeWidth={1.9} aria-hidden />
+            <span className="truncate sm:hidden">{shortLabel ?? label}</span>
+            <span className="hidden truncate sm:inline">{label}</span>
+          </span>
+
+          <span
+            className={cn(
+              "font-heading font-bold leading-none tracking-[-0.03em] tabular-nums",
+              compact
+                ? "text-[1.1875rem] leading-tight sm:text-[1.6875rem]"
+                : "text-[1.75rem] sm:text-[2.25rem]",
+            )}
+          >
+            {value}
           </span>
         </div>
 
-        <p className="font-heading text-3xl font-bold tracking-tight tabular-nums">
-          {value}
-        </p>
+        <span className="hidden size-9.5 shrink-0 place-items-center rounded-[11px] bg-primary/6 text-primary sm:grid">
+          <Icon className="size-[1.1875rem]" strokeWidth={1.8} aria-hidden />
+        </span>
+      </div>
 
-        {(hint || typeof trend === "number") && (
-          <p className="flex flex-wrap items-center gap-2 text-xs text-muted-foreground">
-            {typeof trend === "number" && (
-              <span
-                className={cn(
-                  "inline-flex items-center gap-1 font-medium",
-                  rising ? "text-success" : "text-destructive",
-                )}
-              >
-                <TrendIcon className="size-3.5" aria-hidden />
-                {Math.abs(trend)}%
-              </span>
-            )}
-            {hint}
-          </p>
-        )}
-      </CardContent>
-    </Card>
+      {hint && (
+        <p
+          className={cn(
+            "hidden border-t border-separator pt-3 text-xs tabular-nums sm:block",
+            HINT_TONE[hintTone],
+          )}
+        >
+          {hint}
+        </p>
+      )}
+    </div>
   );
 }

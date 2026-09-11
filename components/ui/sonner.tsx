@@ -10,6 +10,8 @@ const Toaster = ({ ...props }: ToasterProps) => {
   return (
     <Sonner
       theme={theme as ToasterProps["theme"]}
+      // La charte veut le toast en bas, au coin de fin, sur le bleu nuit.
+      position="bottom-right"
       className="toaster group"
       icons={{
         success: (
@@ -30,9 +32,9 @@ const Toaster = ({ ...props }: ToasterProps) => {
       }}
       style={
         {
-          "--normal-bg": "var(--popover)",
-          "--normal-text": "var(--popover-foreground)",
-          "--normal-border": "var(--border)",
+          "--normal-bg": "var(--sidebar)",
+          "--normal-text": "var(--sidebar-foreground)",
+          "--normal-border": "var(--sidebar-border)",
           "--border-radius": "var(--radius)",
         } as React.CSSProperties
       }

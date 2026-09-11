@@ -1,6 +1,6 @@
 "use client";
 
-import { ArrowLeft, CalendarDays, ClipboardCheck, Trash2, Users } from "lucide-react";
+import { ArrowLeft, ClipboardCheck, Trash2, Users } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useLocale, useTranslations } from "next-intl";
@@ -9,6 +9,7 @@ import { toast } from "sonner";
 
 import { ConfirmModal } from "@/components/shared/confirm-modal";
 import { EmptyState } from "@/components/shared/empty-state";
+import { PageShell } from "@/components/shared/page-shell";
 import { StatusBadge } from "@/components/shared/status-badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -39,6 +40,7 @@ export function ExamDetail({
 }) {
   const t = useTranslations("ecole.exams");
   const tc = useTranslations("common");
+  const tNav = useTranslations("nav");
   const tErrors = useTranslations("errors");
   const locale = useLocale();
   const router = useRouter();
@@ -76,60 +78,66 @@ export function ExamDetail({
     [roster],
   );
 
+  // Le bandeau nuit tient sa place pendant l'attente : la page ne doit pas
+  // sauter d'un en-tête à l'autre entre le squelette et la séance.
   if (isPending) {
     return (
-      <div className="space-y-5">
-        <Skeleton className="h-24" />
+      <PageShell kicker={tNav("exams")} back="/ecole/exams" title={<span className="block h-8 w-72 max-w-full animate-pulse rounded-md bg-white/12" />}>
         <Skeleton className="h-96" />
-      </div>
+      </PageShell>
     );
   }
 
   if (isError || !exam) {
     // The session we just deleted is gone from under its own page — that is the
     // redirect arriving, not a session that was never there.
-    return deleteExam.isSuccess ? (
-      <Skeleton className="h-96" />
-    ) : (
-      <EmptyState icon={ClipboardCheck} title={tErrors("notFound")} />
+    return (
+      <PageShell kicker={tNav("exams")} back="/ecole/exams" title={tNav("exams")}>
+        {deleteExam.isSuccess ? (
+          <Skeleton className="h-96" />
+        ) : (
+          <EmptyState icon={ClipboardCheck} title={tErrors("notFound")} />
+        )}
+      </PageShell>
     );
   }
 
   const filling = editing || (!rosterPending && roster.length === 0);
 
   return (
-    <>
-      <div className="mb-6 space-y-2">
-        <div className="flex items-center justify-between gap-3">
-          <Button asChild variant="ghost" size="sm" className="-ms-2">
+    <PageShell
+      kicker={tNav("exams")} back="/ecole/exams"
+      title={formatDate(exam.exam_date, locale, { dateStyle: "full" })}
+      description={
+        <span className="flex flex-wrap items-center gap-2">
+          <span className="inline-flex items-center gap-1.5">
+            <Users className="size-4" aria-hidden />
+            {t("candidatesAssigned", { count: roster.length })}
+          </span>
+          <StatusBadge status={exam.status} />
+        </span>
+      }
+      mobileFooter={
+        <Button variant="destructive" className="w-full" onClick={() => setDeleteOpen(true)}>
+          <Trash2 className="size-4" />
+          {t("deleteExam")}
+        </Button>
+      }
+      actions={
+        <>
+          <Button asChild variant="outline" className="border-sidebar-border text-sidebar-foreground hover:bg-white/8">
             <Link href="/ecole/exams">
               <ArrowLeft className="size-4 rtl-flip" />
               {tc("back")}
             </Link>
           </Button>
-
-          <Button
-            variant="destructive"
-            size="sm"
-            onClick={() => setDeleteOpen(true)}
-          >
+          <Button variant="destructive" onClick={() => setDeleteOpen(true)}>
             <Trash2 className="size-4" />
             {t("deleteExam")}
           </Button>
-        </div>
-
-        <div className="flex flex-wrap items-center gap-3">
-          <h1 className="flex items-center gap-2 font-heading text-2xl font-semibold tracking-tight">
-            <CalendarDays className="size-5 text-muted-foreground" aria-hidden />
-            {formatDate(exam.exam_date, locale, { dateStyle: "full" })}
-          </h1>
-          <StatusBadge status={exam.status} />
-        </div>
-        <p className="text-sm text-muted-foreground">
-          {t("candidatesAssigned", { count: roster.length })}
-        </p>
-      </div>
-
+        </>
+      }
+    >
       {filling ? (
         <RosterWizard
           examId={examId}
@@ -140,7 +148,7 @@ export function ExamDetail({
       ) : (
         <Card>
           <CardHeader>
-            <CardTitle className="text-base">{t("results")}</CardTitle>
+            <CardTitle>{t("results")}</CardTitle>
             <CardAction>
               <Button variant="outline" size="sm" onClick={() => setEditing(true)}>
                 <Users className="size-4" />
@@ -174,6 +182,6 @@ export function ExamDetail({
         pending={deleteExam.isPending}
         onConfirm={confirmDelete}
       />
-    </>
+    </PageShell>
   );
 }

@@ -1,29 +1,43 @@
 import type { ReactNode } from "react";
 
+import { MobileTabBar } from "@/components/shared/mobile-nav";
 import { Navbar, type NavUser } from "@/components/shared/navbar";
-import { SidebarRail } from "@/components/shared/sidebar-rail";
+import { ShellProvider, type ShellIdentity } from "@/components/shared/shell-context";
+import { homePathFor } from "@/lib/auth";
 
 /**
- * The frame every signed-in page renders inside: a top bar from lg up, an icon
- * rail below it. `ps-14` reserves the rail's width on small screens.
+ * Le cadre de toute page connectée.
+ *
+ * À partir de `lg`, deux blocs bleu nuit contigus se lisent comme un seul
+ * en-tête : la barre de navigation, puis le bandeau que `PageShell` pose
+ * dessous. Sous `lg`, l'en-tête appartient à la page — son titre partage la
+ * ligne de l'avatar — et la navigation descend dans cinq onglets en bas.
+ *
+ * Le contexte transmet à cet en-tête mobile ce que seule la mise en page
+ * connaît : l'utilisateur, l'auto-école, l'accueil.
  */
 export function AppShell({
   user,
+  identity,
+  badges,
   children,
 }: {
   user: NavUser;
+  /** Nom et lieu affichés dans l'en-tête mobile (l'auto-école, en pratique). */
+  identity?: ShellIdentity;
+  /** Compteur par href — la pastille ambre de « Demandes ». */
+  badges?: Record<string, number>;
   children: ReactNode;
 }) {
-  return (
-    <div className="flex min-h-svh flex-col">
-      <Navbar user={user} />
-      <SidebarRail user={user} />
+  const home = homePathFor(user.role);
 
-      <main className="flex-1 ps-14 lg:ps-0">
-        <div className="mx-auto w-full max-w-[90rem] px-4 py-6 sm:px-6 lg:px-8 lg:py-8">
-          {children}
-        </div>
-      </main>
-    </div>
+  return (
+    <ShellProvider value={{ user, home, identity, badges }}>
+      <div className="flex min-h-svh flex-col">
+        <Navbar user={user} home={home} badges={badges} />
+        <main className="flex-1">{children}</main>
+        <MobileTabBar user={user} badges={badges} />
+      </div>
+    </ShellProvider>
   );
 }

@@ -6,7 +6,9 @@ import { useLocale, useTranslations } from "next-intl";
 import { CategoryBarChart } from "@/components/charts/category-bar-chart";
 import { MonthlyAreaChart } from "@/components/charts/monthly-area-chart";
 import { EmptyState } from "@/components/shared/empty-state";
+import { Notice } from "@/components/shared/notice";
 import { StatsCard } from "@/components/shared/stats-card";
+import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useAdminStats } from "@/hooks/use-stats";
@@ -31,12 +33,12 @@ export function AdminDashboard() {
   const tc = useTranslations("common");
   const locale = useLocale();
 
-  const { data, isPending, isError } = useAdminStats();
+  const { data, isPending, isError, refetch, isFetching } = useAdminStats();
 
   if (isPending) {
     return (
       <div className="space-y-6">
-        <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+        <div className="grid grid-cols-2 gap-3 sm:gap-5 xl:grid-cols-4">
           {Array.from({ length: 4 }, (_, index) => (
             <Skeleton key={index} className="h-24" />
           ))}
@@ -49,8 +51,26 @@ export function AdminDashboard() {
     );
   }
 
+  // Un bandeau plutôt qu'une page d'erreur : le tableau de bord est une
+  // lecture, et la relancer doit coûter un clic, pas une navigation.
   if (isError || !data) {
-    return <EmptyState title={tc("error")} description={tc("noResultsHint")} />;
+    return (
+      <Notice
+        action={
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => void refetch()}
+            disabled={isFetching}
+            className="border-destructive/50 text-destructive hover:bg-destructive/10"
+          >
+            {tc("retry")}
+          </Button>
+        }
+      >
+        {tc("error")}
+      </Notice>
+    );
   }
 
   // Top wilayas only: past ~10 bars the chart stops being readable and the
@@ -63,7 +83,7 @@ export function AdminDashboard() {
 
   return (
     <div className="space-y-6">
-      <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+      <div className="grid grid-cols-2 gap-3 sm:gap-5 xl:grid-cols-4">
         <StatsCard
           icon={Building2}
           label={t("totalSchools")}
@@ -87,13 +107,14 @@ export function AdminDashboard() {
           icon={Wallet}
           label={t("revenue")}
           value={formatCurrency(data.revenue_total, locale)}
+          compact
         />
       </div>
 
       <div className="grid gap-5 lg:grid-cols-2">
         <Card>
           <CardHeader>
-            <CardTitle className="text-base">{t("enrollmentsPerMonth")}</CardTitle>
+            <CardTitle>{t("enrollmentsPerMonth")}</CardTitle>
           </CardHeader>
           <CardContent>
             <MonthlyAreaChart
@@ -105,7 +126,7 @@ export function AdminDashboard() {
 
         <Card>
           <CardHeader>
-            <CardTitle className="text-base">{t("schoolsByWilaya")}</CardTitle>
+            <CardTitle>{t("schoolsByWilaya")}</CardTitle>
           </CardHeader>
           <CardContent>
             {wilayaBars.length === 0 ? (
