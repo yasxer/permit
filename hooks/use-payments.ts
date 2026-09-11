@@ -37,17 +37,19 @@ export function useAddPayment() {
       note?: string;
     }) => {
       const supabase = createClient();
+      // The local session is enough: RLS checks created_by against the
+      // verified token, so a stale id is refused rather than trusted.
       const {
-        data: { user },
-      } = await supabase.auth.getUser();
-      if (!user) throw new Error("No session");
+        data: { session },
+      } = await supabase.auth.getSession();
+      if (!session) throw new Error("No session");
 
       // The RLS policy requires created_by to be the caller.
       const { error } = await supabase.from("payments").insert({
         enrollment_id: enrollmentId,
         amount,
         note: note?.trim() || null,
-        created_by: user.id,
+        created_by: session.user.id,
       });
       if (error) throw new Error(error.message);
     },

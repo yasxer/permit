@@ -12,15 +12,17 @@ export function useMySchool() {
     queryKey: queryKeys.schools.mine,
     queryFn: async () => {
       const supabase = createClient();
+      // The local session, not a round trip to the auth server: RLS scopes
+      // the read to the verified token either way.
       const {
-        data: { user },
-      } = await supabase.auth.getUser();
-      if (!user) throw new Error("No session");
+        data: { session },
+      } = await supabase.auth.getSession();
+      if (!session) throw new Error("No session");
 
       const result = await supabase
         .from("schools")
         .select("*")
-        .eq("owner_id", user.id)
+        .eq("owner_id", session.user.id)
         .single();
       return unwrap(result) as SchoolRow;
     },

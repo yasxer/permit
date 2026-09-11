@@ -43,11 +43,12 @@ const isPublic = (pathname: string) => matches(PUBLIC_PATHS, pathname);
 export async function proxy(request: NextRequest) {
   const { supabase, getResponse, withAuthCookies } = createProxyClient(request);
 
-  // Must be getUser(), not getSession(): only getUser() revalidates the JWT
-  // against the auth server, and it is what refreshes the cookie.
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  // getClaims(), not getSession(): it verifies the JWT signature (locally,
+  // with asymmetric signing keys) and refreshes an expiring session, which is
+  // what rewrites the cookie. getUser() would do the same at the cost of a
+  // round trip to the auth server on every request, prefetches included.
+  const { data } = await supabase.auth.getClaims();
+  const user = data?.claims ?? null;
 
   const { pathname } = request.nextUrl;
 

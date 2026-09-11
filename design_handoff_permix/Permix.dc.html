@@ -1,0 +1,1758 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="design_doc_mode" content="canvas" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="" />
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Noto+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+  body { margin: 0; background: #E8EAEE; font-family: Inter, sans-serif; }
+  a { color: #C97F0A; text-decoration: none; }
+  a:hover { color: #1C2333; }
+</style>
+</helmet>
+
+<section style="display:flex; flex-direction:column; gap:64px; padding:56px 48px 96px">
+
+  <div style="display:flex; align-items:baseline; gap:16px; font-family:Poppins, sans-serif">
+    <span style="font-size:30px; font-weight:700; color:#1C2333; letter-spacing:-0.02em">Permix — maquettes UI</span>
+    <span style="font-family:'JetBrains Mono', monospace; font-size:13px; color:#6B7280">lot 1 · planche de style · shell · /ecole/dashboard</span>
+  </div>
+
+  <div id="1a" style="display:flex; flex-direction:column; gap:14px">
+    <div style="display:flex; align-items:center; gap:12px">
+      <span style="font-family:'JetBrains Mono', monospace; font-size:12px; font-weight:500; background:#1C2333; color:#F5A623; padding:4px 9px; border-radius:6px">1a</span>
+      <span style="font-family:Poppins, sans-serif; font-size:17px; font-weight:600; color:#1C2333">Planche de style</span>
+      <span style="font-family:'JetBrains Mono', monospace; font-size:12px; color:#6B7280">tokens · composants · états</span>
+    </div>
+
+    <div style="width:1440px; background:#F9FAFB; border:1px solid #D8DCE3; border-radius:16px; overflow:hidden">
+      <div style="padding:40px 48px; display:flex; flex-direction:column; gap:40px">
+
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:24px">
+          <div style="background:#FFFFFF; border:1px solid #EBEDF1; border-radius:16px; padding:24px; display:flex; flex-direction:column; gap:16px">
+            <span style="font-family:Poppins, sans-serif; font-size:15px; font-weight:600; color:#1C2333">Palette — thème clair</span>
+            <div style="display:grid; grid-template-columns:repeat(3, 1fr); gap:12px">
+              <div style="display:flex; flex-direction:column; gap:8px">
+                <div style="height:64px; border-radius:10px; background:#F9FAFB; border:1px solid #E5E7EB"></div>
+                <span style="font-size:12px; color:#1C2333; font-weight:600">Page</span>
+                <span style="font-family:'JetBrains Mono', monospace; font-size:11px; color:#6B7280">#F9FAFB</span>
+              </div>
+              <div style="display:flex; flex-direction:column; gap:8px">
+                <div style="height:64px; border-radius:10px; background:#FFFFFF; border:1px solid #E5E7EB"></div>
+                <span style="font-size:12px; color:#1C2333; font-weight:600">Carte</span>
+                <span style="font-family:'JetBrains Mono', monospace; font-size:11px; color:#6B7280">#FFFFFF</span>
+              </div>
+              <div style="display:flex; flex-direction:column; gap:8px">
+                <div style="height:64px; border-radius:10px; background:#1C2333"></div>
+                <span style="font-size:12px; color:#1C2333; font-weight:600">Encre · 30 %</span>
+                <span style="font-family:'JetBrains Mono', monospace; font-size:11px; color:#6B7280">#1C2333</span>
+              </div>
+              <div style="display:flex; flex-direction:column; gap:8px">
+                <div style="height:64px; border-radius:10px; background:#F5A623"></div>
+                <span style="font-size:12px; color:#1C2333; font-weight:600">Accent · 10 %</span>
+                <span style="font-family:'JetBrains Mono', monospace; font-size:11px; color:#6B7280">#F5A623</span>
+              </div>
+              <div style="display:flex; flex-direction:column; gap:8px">
+                <div style="height:64px; border-radius:10px; background:#C97F0A"></div>
+                <span style="font-size:12px; color:#1C2333; font-weight:600">Accent texte</span>
+                <span style="font-family:'JetBrains Mono', monospace; font-size:11px; color:#6B7280">#C97F0A</span>
+              </div>
+              <div style="display:flex; flex-direction:column; gap:8px">
+                <div style="height:64px; border-radius:10px; background:#E5E7EB"></div>
+                <span style="font-size:12px; color:#1C2333; font-weight:600">Bordure</span>
+                <span style="font-family:'JetBrains Mono', monospace; font-size:11px; color:#6B7280">#E5E7EB</span>
+              </div>
+            </div>
+            <div style="display:flex; gap:10px; align-items:center; padding-top:4px">
+              <span style="width:14px; height:14px; border-radius:4px; background:#16A34A"></span>
+              <span style="font-size:12px; color:#4B5563">Succès</span>
+              <span style="width:14px; height:14px; border-radius:4px; background:oklch(0.637 0.208 25.3); margin-inline-start:12px"></span>
+              <span style="font-size:12px; color:#4B5563">Destructif</span>
+              <span style="width:14px; height:14px; border-radius:4px; background:#C97F0A; margin-inline-start:12px"></span>
+              <span style="font-size:12px; color:#4B5563">Avertissement</span>
+            </div>
+          </div>
+
+          <div style="background:#151B29; border:1px solid #232B3B; border-radius:16px; padding:24px; display:flex; flex-direction:column; gap:16px">
+            <span style="font-family:Poppins, sans-serif; font-size:15px; font-weight:600; color:#F3F4F6">Palette — thème sombre</span>
+            <div style="display:grid; grid-template-columns:repeat(3, 1fr); gap:12px">
+              <div style="display:flex; flex-direction:column; gap:8px">
+                <div style="height:64px; border-radius:10px; background:#0F1420; border:1px solid #232B3B"></div>
+                <span style="font-size:12px; color:#F3F4F6; font-weight:600">Page</span>
+                <span style="font-family:'JetBrains Mono', monospace; font-size:11px; color:#9AA3B2">#0F1420</span>
+              </div>
+              <div style="display:flex; flex-direction:column; gap:8px">
+                <div style="height:64px; border-radius:10px; background:#151B29; border:1px solid #232B3B"></div>
+                <span style="font-size:12px; color:#F3F4F6; font-weight:600">Carte</span>
+                <span style="font-family:'JetBrains Mono', monospace; font-size:11px; color:#9AA3B2">#151B29</span>
+              </div>
+              <div style="display:flex; flex-direction:column; gap:8px">
+                <div style="height:64px; border-radius:10px; background:#F3F4F6"></div>
+                <span style="font-size:12px; color:#F3F4F6; font-weight:600">Encre inversée</span>
+                <span style="font-family:'JetBrains Mono', monospace; font-size:11px; color:#9AA3B2">#F3F4F6</span>
+              </div>
+              <div style="display:flex; flex-direction:column; gap:8px">
+                <div style="height:64px; border-radius:10px; background:#F5A623"></div>
+                <span style="font-size:12px; color:#F3F4F6; font-weight:600">Accent — fixe</span>
+                <span style="font-family:'JetBrains Mono', monospace; font-size:11px; color:#9AA3B2">#F5A623</span>
+              </div>
+              <div style="display:flex; flex-direction:column; gap:8px">
+                <div style="height:64px; border-radius:10px; background:#232B3B"></div>
+                <span style="font-size:12px; color:#F3F4F6; font-weight:600">Bordure</span>
+                <span style="font-family:'JetBrains Mono', monospace; font-size:11px; color:#9AA3B2">#232B3B</span>
+              </div>
+              <div style="display:flex; flex-direction:column; gap:8px">
+                <div style="height:64px; border-radius:10px; background:#9AA3B2"></div>
+                <span style="font-size:12px; color:#F3F4F6; font-weight:600">Gris sourd</span>
+                <span style="font-family:'JetBrains Mono', monospace; font-size:11px; color:#9AA3B2">#9AA3B2</span>
+              </div>
+            </div>
+            <span style="font-size:12px; color:#9AA3B2; line-height:1.6">La barre de navigation reste <span style="color:#F5A623">bleu nuit</span> dans les deux thèmes.</span>
+          </div>
+        </div>
+
+        <div style="display:grid; grid-template-columns:1.1fr 1fr; gap:24px">
+          <div style="background:#FFFFFF; border:1px solid #EBEDF1; border-radius:16px; padding:24px; display:flex; flex-direction:column; gap:18px">
+            <span style="font-family:Poppins, sans-serif; font-size:15px; font-weight:600; color:#1C2333">Échelle typographique</span>
+            <div style="display:flex; flex-direction:column; gap:14px">
+              <div style="display:flex; align-items:baseline; gap:16px">
+                <span style="font-family:Poppins, sans-serif; font-size:34px; font-weight:700; color:#1C2333; letter-spacing:-0.03em">Tableau de bord</span>
+                <span style="font-family:'JetBrains Mono', monospace; font-size:11px; color:#9CA3AF">Poppins 700 · 34/40</span>
+              </div>
+              <div style="display:flex; align-items:baseline; gap:16px">
+                <span style="font-family:Poppins, sans-serif; font-size:22px; font-weight:600; color:#1C2333; letter-spacing:-0.02em">Prochain examen</span>
+                <span style="font-family:'JetBrains Mono', monospace; font-size:11px; color:#9CA3AF">Poppins 600 · 22/28</span>
+              </div>
+              <div style="display:flex; align-items:baseline; gap:16px">
+                <span style="font-size:15px; color:#374151; line-height:1.6">Le corps, les tableaux et les formulaires sont en Inter.</span>
+                <span style="font-family:'JetBrains Mono', monospace; font-size:11px; color:#9CA3AF">Inter 400 · 15/24</span>
+              </div>
+              <div style="display:flex; align-items:baseline; gap:16px">
+                <span style="font-size:15px; color:#1C2333; font-variant-numeric:tabular-nums; font-weight:600">48 000,00 DA · 05 55 21 84 09 · 09:30</span>
+                <span style="font-family:'JetBrains Mono', monospace; font-size:11px; color:#9CA3AF">tabular-nums</span>
+              </div>
+              <div style="display:flex; align-items:baseline; gap:16px">
+                <span style="font-family:'JetBrains Mono', monospace; font-size:14px; color:#1C2333">PMX-2026-00418</span>
+                <span style="font-family:'JetBrains Mono', monospace; font-size:11px; color:#9CA3AF">JetBrains Mono</span>
+              </div>
+              <div style="display:flex; align-items:baseline; gap:16px; direction:rtl">
+                <span style="font-family:'Noto Sans Arabic', sans-serif; font-size:22px; font-weight:600; color:#1C2333">لوحة التحكم</span>
+                <span style="font-family:'JetBrains Mono', monospace; font-size:11px; color:#9CA3AF; direction:ltr">Noto Sans Arabic 600</span>
+              </div>
+            </div>
+          </div>
+
+          <div style="background:#FFFFFF; border:1px solid #EBEDF1; border-radius:16px; padding:24px; display:flex; flex-direction:column; gap:18px">
+            <span style="font-family:Poppins, sans-serif; font-size:15px; font-weight:600; color:#1C2333">Boutons</span>
+            <div style="display:grid; grid-template-columns:repeat(2, 1fr); gap:14px">
+              <div style="display:flex; flex-direction:column; gap:7px">
+                <button style="border:none; background:#F5A623; color:#1C2333; font-family:Inter, sans-serif; font-size:14px; font-weight:600; padding:11px 18px; border-radius:12px; cursor:pointer" style-hover="background:#E39A1D">Ajouter un candidat</button>
+                <span style="font-family:'JetBrains Mono', monospace; font-size:11px; color:#9CA3AF">primaire · repos</span>
+              </div>
+              <div style="display:flex; flex-direction:column; gap:7px">
+                <button style="border:none; background:#E39A1D; color:#1C2333; font-family:Inter, sans-serif; font-size:14px; font-weight:600; padding:11px 18px; border-radius:12px; box-shadow:0 0 0 3px rgba(245,166,35,0.35); cursor:pointer">Ajouter un candidat</button>
+                <span style="font-family:'JetBrains Mono', monospace; font-size:11px; color:#9CA3AF">primaire · focus ambre</span>
+              </div>
+              <div style="display:flex; flex-direction:column; gap:7px">
+                <button style="border:1px solid #D1D5DB; background:#FFFFFF; color:#1C2333; font-family:Inter, sans-serif; font-size:14px; font-weight:600; padding:11px 18px; border-radius:12px; cursor:pointer" style-hover="background:#F3F4F6">Annuler</button>
+                <span style="font-family:'JetBrains Mono', monospace; font-size:11px; color:#9CA3AF">secondaire</span>
+              </div>
+              <div style="display:flex; flex-direction:column; gap:7px">
+                <button style="border:1px solid oklch(0.637 0.208 25.3); background:#FFFFFF; color:oklch(0.55 0.19 25.3); font-family:Inter, sans-serif; font-size:14px; font-weight:600; padding:11px 18px; border-radius:12px; cursor:pointer">Refuser</button>
+                <span style="font-family:'JetBrains Mono', monospace; font-size:11px; color:#9CA3AF">destructif · contour</span>
+              </div>
+              <div style="display:flex; flex-direction:column; gap:7px">
+                <button style="border:none; background:#F5A623; color:#1C2333; font-family:Inter, sans-serif; font-size:14px; font-weight:600; padding:11px 18px; border-radius:12px; opacity:0.6; display:flex; align-items:center; justify-content:center; gap:9px">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#1C2333" stroke-width="2.5" stroke-linecap="round"><path d="M12 3a9 9 0 1 0 9 9" /></svg>
+                  Connexion…
+                </button>
+                <span style="font-family:'JetBrains Mono', monospace; font-size:11px; color:#9CA3AF">chargement</span>
+              </div>
+              <div style="display:flex; flex-direction:column; gap:7px">
+                <button style="border:none; background:#E5E7EB; color:#9CA3AF; font-family:Inter, sans-serif; font-size:14px; font-weight:600; padding:11px 18px; border-radius:12px">Enregistrer</button>
+                <span style="font-family:'JetBrains Mono', monospace; font-size:11px; color:#9CA3AF">désactivé</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:24px">
+          <div style="background:#FFFFFF; border:1px solid #EBEDF1; border-radius:16px; padding:24px; display:flex; flex-direction:column; gap:18px">
+            <span style="font-family:Poppins, sans-serif; font-size:15px; font-weight:600; color:#1C2333">Champs</span>
+            <label style="display:flex; flex-direction:column; gap:6px">
+              <span style="font-size:13px; font-weight:600; color:#374151">Adresse e-mail</span>
+              <input type="text" value="contact@auto-ecole-elamel.dz" readOnly="" style="font-family:Inter, sans-serif; font-size:14px; color:#1C2333; padding:11px 13px; border:1px solid #D1D5DB; border-radius:12px; background:#FFFFFF; outline:none" />
+              <span style="font-size:11px; color:#9CA3AF; font-family:'JetBrains Mono', monospace">repos</span>
+            </label>
+            <label style="display:flex; flex-direction:column; gap:6px">
+              <span style="font-size:13px; font-weight:600; color:#374151">Téléphone</span>
+              <input type="text" value="05 55 21 84 09" readOnly="" dir="ltr" style="font-family:Inter, sans-serif; font-size:14px; color:#1C2333; padding:11px 13px; border:1px solid #F5A623; border-radius:12px; background:#FFFFFF; box-shadow:0 0 0 3px rgba(245,166,35,0.28); outline:none; font-variant-numeric:tabular-nums" />
+              <span style="font-size:11px; color:#9CA3AF; font-family:'JetBrains Mono', monospace">focus ambre</span>
+            </label>
+            <label style="display:flex; flex-direction:column; gap:6px">
+              <span style="font-size:13px; font-weight:600; color:#374151">Mot de passe</span>
+              <input type="text" value="1234" readOnly="" style="font-family:Inter, sans-serif; font-size:14px; color:#1C2333; padding:11px 13px; border:1px solid oklch(0.637 0.208 25.3); border-radius:12px; background:#FFFFFF; outline:none" />
+              <span style="font-size:11px; color:oklch(0.55 0.19 25.3)">8 caractères minimum.</span>
+            </label>
+          </div>
+
+          <div style="background:#FFFFFF; border:1px solid #EBEDF1; border-radius:16px; padding:24px; display:flex; flex-direction:column; gap:18px">
+            <span style="font-family:Poppins, sans-serif; font-size:15px; font-weight:600; color:#1C2333">Badges de statut</span>
+            <div style="display:flex; flex-wrap:wrap; gap:8px">
+              <span style="font-size:12px; font-weight:600; padding:5px 11px; border-radius:999px; background:rgba(245,166,35,0.16); color:#8A5A06">En attente</span>
+              <span style="font-size:12px; font-weight:600; padding:5px 11px; border-radius:999px; background:rgba(22,163,74,0.13); color:#15803D">Approuvé</span>
+              <span style="font-size:12px; font-weight:600; padding:5px 11px; border-radius:999px; background:rgba(22,163,74,0.13); color:#15803D">Réussi</span>
+              <span style="font-size:12px; font-weight:600; padding:5px 11px; border-radius:999px; background:oklch(0.637 0.208 25.3 / 0.13); color:oklch(0.5 0.19 25.3)">Refusé</span>
+              <span style="font-size:12px; font-weight:600; padding:5px 11px; border-radius:999px; background:oklch(0.637 0.208 25.3 / 0.13); color:oklch(0.5 0.19 25.3)">Échoué</span>
+              <span style="font-size:12px; font-weight:600; padding:5px 11px; border-radius:999px; background:rgba(28,35,51,0.10); color:#1C2333">Terminé</span>
+              <span style="font-size:12px; font-weight:600; padding:5px 11px; border-radius:999px; background:#F3F4F6; color:#6B7280">Absent</span>
+              <span style="font-size:12px; font-weight:600; padding:5px 11px; border-radius:999px; background:#F3F4F6; color:#6B7280">Annulé</span>
+            </div>
+            <span style="font-family:Poppins, sans-serif; font-size:15px; font-weight:600; color:#1C2333; padding-top:6px">Catégorie · badge mono</span>
+            <div style="display:flex; gap:8px">
+              <span style="font-family:'JetBrains Mono', monospace; font-size:12px; font-weight:500; padding:5px 10px; border-radius:8px; background:#1C2333; color:#F9FAFB">B</span>
+              <span style="font-family:'JetBrains Mono', monospace; font-size:12px; font-weight:500; padding:5px 10px; border-radius:8px; background:#F3F4F6; color:#1C2333; border:1px solid #E5E7EB">A1</span>
+              <span style="font-family:'JetBrains Mono', monospace; font-size:12px; font-weight:500; padding:5px 10px; border-radius:8px; background:#F3F4F6; color:#1C2333; border:1px solid #E5E7EB">C</span>
+              <span style="font-family:'JetBrains Mono', monospace; font-size:12px; font-weight:500; padding:5px 10px; border-radius:8px; background:#F3F4F6; color:#1C2333; border:1px solid #E5E7EB">D</span>
+            </div>
+            <span style="font-family:Poppins, sans-serif; font-size:15px; font-weight:600; color:#1C2333; padding-top:6px">Onglets</span>
+            <div style="display:flex; gap:0; border-bottom:1px solid #E5E7EB">
+              <span style="font-size:14px; font-weight:600; color:#1C2333; padding:9px 14px; border-bottom:2px solid #F5A623">Conduite</span>
+              <span style="font-size:14px; font-weight:500; color:#6B7280; padding:9px 14px; border-bottom:2px solid transparent">Code</span>
+            </div>
+          </div>
+
+          <div style="background:#FFFFFF; border:1px solid #EBEDF1; border-radius:16px; padding:24px; display:flex; flex-direction:column; gap:18px">
+            <span style="font-family:Poppins, sans-serif; font-size:15px; font-weight:600; color:#1C2333">Carte de statistique</span>
+            <div style="background:#F9FAFB; border-radius:12px; padding:18px; display:flex; align-items:flex-start; justify-content:space-between">
+              <div style="display:flex; flex-direction:column; gap:6px">
+                <span style="font-size:12px; font-weight:600; color:#6B7280; text-transform:uppercase; letter-spacing:0.06em">Candidats actifs</span>
+                <span style="font-family:Poppins, sans-serif; font-size:32px; font-weight:700; color:#1C2333; font-variant-numeric:tabular-nums; letter-spacing:-0.02em">87</span>
+              </div>
+              <span style="width:38px; height:38px; border-radius:10px; background:rgba(28,35,51,0.07); display:flex; align-items:center; justify-content:center">
+                <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#1C2333" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" /><circle cx="9" cy="7" r="4" /><path d="M22 21v-2a4 4 0 0 0-3-3.87" /></svg>
+              </span>
+            </div>
+            <span style="font-family:Poppins, sans-serif; font-size:15px; font-weight:600; color:#1C2333">Squelette de chargement</span>
+            <div style="display:flex; flex-direction:column; gap:10px">
+              <div style="height:12px; width:70%; border-radius:6px; background:#EDEFF2"></div>
+              <div style="height:12px; width:90%; border-radius:6px; background:#EDEFF2"></div>
+              <div style="height:12px; width:55%; border-radius:6px; background:#EDEFF2"></div>
+            </div>
+          </div>
+        </div>
+
+        <div style="display:grid; grid-template-columns:1.4fr 1fr; gap:24px">
+          <div style="background:#FFFFFF; border:1px solid #EBEDF1; border-radius:16px; padding:24px; display:flex; flex-direction:column; gap:14px">
+            <span style="font-family:Poppins, sans-serif; font-size:15px; font-weight:600; color:#1C2333">Ligne de tableau</span>
+            <div style="display:grid; grid-template-columns:1.4fr 1fr 0.6fr 1.2fr 0.9fr; gap:16px; padding:0 12px 10px; border-bottom:1px solid #E5E7EB; font-size:12px; font-weight:600; color:#6B7280; text-transform:uppercase; letter-spacing:0.05em">
+              <span>Nom</span><span>Téléphone</span><span>Catégorie</span><span>Progression</span><span style="text-align:end">Restant</span>
+            </div>
+            <div style="display:grid; grid-template-columns:1.4fr 1fr 0.6fr 1.2fr 0.9fr; gap:16px; align-items:center; padding:14px 12px; border-radius:10px; background:#F9FAFB">
+              <div style="display:flex; flex-direction:column"><span style="font-size:14px; font-weight:600; color:#1C2333">Benali Karim</span><span style="font-family:'Noto Sans Arabic', sans-serif; font-size:13px; color:#6B7280">كريم بن علي</span></div>
+              <span dir="ltr" style="font-size:14px; color:#374151; font-variant-numeric:tabular-nums">05 55 21 84 09</span>
+              <span style="font-family:'JetBrains Mono', monospace; font-size:12px; padding:4px 9px; border-radius:8px; background:#1C2333; color:#F9FAFB; justify-self:start">B</span>
+              <div style="display:flex; align-items:center; gap:10px">
+                <div style="flex:1; height:6px; border-radius:999px; background:#E5E7EB; overflow:hidden"><div style="width:64%; height:100%; background:#1C2333"></div></div>
+                <span style="font-size:13px; color:#374151; font-variant-numeric:tabular-nums; font-weight:600">64 %</span>
+              </div>
+              <span style="font-size:14px; font-weight:600; color:#15803D; text-align:end; font-variant-numeric:tabular-nums">Soldé</span>
+            </div>
+            <div style="display:grid; grid-template-columns:1.4fr 1fr 0.6fr 1.2fr 0.9fr; gap:16px; align-items:center; padding:14px 12px">
+              <div style="display:flex; flex-direction:column"><span style="font-size:14px; font-weight:600; color:#1C2333">Hamdi Nour</span><span style="font-family:'Noto Sans Arabic', sans-serif; font-size:13px; color:#6B7280">نور حمدي</span></div>
+              <span dir="ltr" style="font-size:14px; color:#374151; font-variant-numeric:tabular-nums">05 55 74 02 61</span>
+              <span style="font-family:'JetBrains Mono', monospace; font-size:12px; padding:4px 9px; border-radius:8px; background:#F3F4F6; color:#1C2333; border:1px solid #E5E7EB; justify-self:start">A1</span>
+              <div style="display:flex; align-items:center; gap:10px">
+                <div style="flex:1; height:6px; border-radius:999px; background:#E5E7EB; overflow:hidden"><div style="width:28%; height:100%; background:#1C2333"></div></div>
+                <span style="font-size:13px; color:#374151; font-variant-numeric:tabular-nums; font-weight:600">28 %</span>
+              </div>
+              <span style="font-size:14px; font-weight:600; color:#1C2333; text-align:end; font-variant-numeric:tabular-nums">18 000,00 DA</span>
+            </div>
+            <div style="display:flex; flex-direction:column; gap:10px; padding:14px 12px; border-top:1px solid #F3F4F6">
+              <div style="display:grid; grid-template-columns:1.4fr 1fr 0.6fr 1.2fr 0.9fr; gap:16px; align-items:center">
+                <div style="height:12px; border-radius:6px; background:#EDEFF2"></div>
+                <div style="height:12px; border-radius:6px; background:#EDEFF2"></div>
+                <div style="height:12px; width:32px; border-radius:6px; background:#EDEFF2"></div>
+                <div style="height:12px; border-radius:6px; background:#EDEFF2"></div>
+                <div style="height:12px; border-radius:6px; background:#EDEFF2"></div>
+              </div>
+              <span style="font-family:'JetBrains Mono', monospace; font-size:11px; color:#9CA3AF">squelette de ligne — même forme que le réel</span>
+            </div>
+          </div>
+
+          <div style="display:flex; flex-direction:column; gap:24px">
+            <div style="background:#FFFFFF; border:1px solid #EBEDF1; border-radius:16px; padding:32px 24px; display:flex; flex-direction:column; align-items:center; gap:12px; text-align:center">
+              <span style="width:52px; height:52px; border-radius:999px; background:rgba(28,35,51,0.07); display:flex; align-items:center; justify-content:center">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#1C2333" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-6l-2 3h-4l-2-3H2" /><path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z" /></svg>
+              </span>
+              <span style="font-family:Poppins, sans-serif; font-size:17px; font-weight:600; color:#1C2333">Aucune demande pour le moment</span>
+              <span style="font-size:13px; color:#6B7280; max-width:34ch; line-height:1.6">Les demandes d'inscription apparaîtront ici dès qu'un candidat sera orienté vers votre auto-école.</span>
+            </div>
+            <div style="background:#FFFFFF; border:1px solid #EBEDF1; border-radius:16px; padding:24px; display:flex; flex-direction:column; gap:14px">
+              <span style="font-family:Poppins, sans-serif; font-size:15px; font-weight:600; color:#1C2333">Bandeaux &amp; toast</span>
+              <div style="display:flex; align-items:center; gap:10px; padding:11px 13px; border-radius:12px; background:oklch(0.637 0.208 25.3 / 0.09); border:1px solid oklch(0.637 0.208 25.3 / 0.3)">
+                <span style="font-size:13px; color:oklch(0.48 0.18 25.3); flex:1">Impossible de charger le planning.</span>
+                <button style="border:1px solid oklch(0.637 0.208 25.3); background:transparent; color:oklch(0.5 0.19 25.3); font-size:12px; font-weight:600; padding:6px 11px; border-radius:9px; cursor:pointer">Réessayer</button>
+              </div>
+              <div style="display:flex; align-items:center; gap:10px; padding:11px 13px; border-radius:12px; background:rgba(245,166,35,0.12); border:1px solid rgba(245,166,35,0.4)">
+                <span style="font-size:13px; color:#8A5A06">Complétez votre profil pour accéder aux autres pages.</span>
+              </div>
+              <div style="display:flex; align-items:center; gap:10px; padding:13px 15px; border-radius:12px; background:#1C2333">
+                <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#16A34A" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m20 6 -11 11 -5-5" /></svg>
+                <span style="font-size:13px; color:#F9FAFB; font-weight:500">Versement de 12 000,00 DA enregistré.</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <div id="1b" style="display:flex; flex-direction:column; gap:14px">
+    <div style="display:flex; align-items:center; gap:12px">
+      <span style="font-family:'JetBrains Mono', monospace; font-size:12px; font-weight:500; background:#1C2333; color:#F5A623; padding:4px 9px; border-radius:6px">1b</span>
+      <span style="font-family:Poppins, sans-serif; font-size:17px; font-weight:600; color:#1C2333">Tableau de bord auto-école</span>
+      <span style="font-family:'JetBrains Mono', monospace; font-size:12px; color:#6B7280">/ecole/dashboard · desktop 1440 · clair</span>
+    </div>
+
+    <div style="width:1440px; background:#F9FAFB; border:1px solid #D8DCE3; border-radius:16px; overflow:hidden">
+
+      <div style="background:#1C2333; display:flex; align-items:center; justify-content:space-between; padding:0 32px; height:64px">
+        <div style="display:flex; align-items:center; gap:10px">
+          <span style="width:28px; height:28px; border-radius:8px; background:#F5A623; display:flex; align-items:center; justify-content:center; font-family:Poppins, sans-serif; font-weight:800; font-size:15px; color:#1C2333">P</span>
+          <span style="font-family:Poppins, sans-serif; font-size:17px; font-weight:700; color:#F9FAFB; letter-spacing:-0.01em">Permix</span>
+        </div>
+        <div style="display:flex; align-items:center; gap:2px; background:rgba(255,255,255,0.05); padding:4px; border-radius:14px">
+          <span style="display:flex; align-items:center; gap:8px; font-size:14px; font-weight:600; color:#1C2333; background:#F5A623; padding:8px 14px; border-radius:10px">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#1C2333" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="9" rx="1" /><rect x="14" y="3" width="7" height="5" rx="1" /><rect x="14" y="12" width="7" height="9" rx="1" /><rect x="3" y="16" width="7" height="5" rx="1" /></svg>
+            Tableau de bord
+          </span>
+          <span style="display:flex; align-items:center; gap:8px; font-size:14px; font-weight:500; color:#C9CFDB; padding:8px 14px; border-radius:10px">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#C9CFDB" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-6l-2 3h-4l-2-3H2" /><path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z" /></svg>
+            Demandes
+            <span style="font-size:11px; font-weight:700; background:#F5A623; color:#1C2333; border-radius:999px; padding:1px 6px; font-variant-numeric:tabular-nums">12</span>
+          </span>
+          <span style="display:flex; align-items:center; gap:8px; font-size:14px; font-weight:500; color:#C9CFDB; padding:8px 14px; border-radius:10px">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#C9CFDB" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z" /><path d="M6 12v5c3 3 9 3 12 0v-5" /></svg>
+            Candidats
+          </span>
+          <span style="display:flex; align-items:center; gap:8px; font-size:14px; font-weight:500; color:#C9CFDB; padding:8px 14px; border-radius:10px">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#C9CFDB" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="6" /><path d="M15.477 12.89 17 22l-5-3-5 3 1.523-9.11" /></svg>
+            Diplômés
+          </span>
+          <span style="display:flex; align-items:center; gap:8px; font-size:14px; font-weight:500; color:#C9CFDB; padding:8px 14px; border-radius:10px">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#C9CFDB" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" /><path d="M16 2v4M8 2v4M3 10h18" /></svg>
+            Planning
+          </span>
+          <span style="display:flex; align-items:center; gap:8px; font-size:14px; font-weight:500; color:#C9CFDB; padding:8px 14px; border-radius:10px">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#C9CFDB" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="2" width="8" height="4" rx="1" /><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2" /><path d="m9 14 2 2 4-4" /></svg>
+            Examens
+          </span>
+        </div>
+        <div style="display:flex; align-items:center; gap:14px">
+          <span style="display:flex; align-items:center; gap:6px; font-size:13px; font-weight:600; color:#C9CFDB; border:1px solid #33405C; border-radius:10px; padding:7px 10px">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#C9CFDB" stroke-width="1.9" stroke-linecap="round"><circle cx="12" cy="12" r="10" /><path d="M2 12h20M12 2a15 15 0 0 1 0 20a15 15 0 0 1 0-20" /></svg>
+            FR
+          </span>
+          <span style="width:33px; height:33px; border:1px solid #33405C; border-radius:10px; display:flex; align-items:center; justify-content:center">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#C9CFDB" stroke-width="1.9" stroke-linecap="round"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9z" /></svg>
+          </span>
+          <div style="display:flex; align-items:center; gap:10px; padding-inline-start:6px; border-inline-start:1px solid #33405C">
+            <span style="width:34px; height:34px; border-radius:999px; background:#33405C; color:#F9FAFB; display:flex; align-items:center; justify-content:center; font-size:13px; font-weight:600">SA</span>
+            <div style="display:flex; flex-direction:column; line-height:1.3">
+              <span style="font-size:13px; font-weight:600; color:#F9FAFB">Samir Aït Ahmed</span>
+              <span style="font-size:11px; color:#9AA3B2">Auto-école</span>
+            </div>
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#9AA3B2" stroke-width="2" stroke-linecap="round"><path d="m6 9 6 6 6-6" /></svg>
+          </div>
+        </div>
+      </div>
+
+      <div style="background:#1C2333; padding:8px 32px 60px; display:flex; align-items:flex-end; justify-content:space-between; gap:24px">
+        <div style="display:flex; flex-direction:column; gap:8px">
+          <span style="font-family:'JetBrains Mono', monospace; font-size:11px; color:#F5A623; letter-spacing:0.12em; text-transform:uppercase">Auto-école El Amel · Alger</span>
+          <span style="font-family:Poppins, sans-serif; font-size:34px; font-weight:700; color:#F9FAFB; letter-spacing:-0.03em; line-height:1.1">Tableau de bord</span>
+          <span style="font-size:14px; color:#9AA3B2">Activité de la semaine du 5 septembre 2026.</span>
+        </div>
+        <div style="display:flex; gap:10px">
+          <button style="border:1px solid #33405C; background:transparent; color:#F9FAFB; font-size:14px; font-weight:600; padding:11px 17px; border-radius:12px; cursor:pointer" style-hover="background:#242E44">Voir le planning</button>
+          <button style="border:none; background:#F5A623; color:#1C2333; font-size:14px; font-weight:600; padding:11px 17px; border-radius:12px; cursor:pointer" style-hover="background:#E39A1D">Ajouter un candidat</button>
+        </div>
+      </div>
+
+      <div style="padding:0 32px 48px; margin-top:-40px; display:flex; flex-direction:column; gap:20px">
+
+        <div style="display:grid; grid-template-columns:repeat(4, 1fr); gap:20px">
+          <div style="background:#FFFFFF; border:1px solid #EBEDF1; border-radius:16px; padding:20px; display:flex; flex-direction:column; gap:16px">
+            <div style="display:flex; align-items:flex-start; justify-content:space-between">
+              <div style="display:flex; flex-direction:column; gap:9px">
+                <span style="font-size:11px; font-weight:600; color:#6B7280; text-transform:uppercase; letter-spacing:0.09em">Candidats actifs</span>
+                <span style="font-family:Poppins, sans-serif; font-size:36px; font-weight:700; color:#1C2333; font-variant-numeric:tabular-nums; letter-spacing:-0.03em; line-height:1">87</span>
+              </div>
+              <span style="width:38px; height:38px; border-radius:11px; background:rgba(28,35,51,0.06); display:flex; align-items:center; justify-content:center">
+                <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#1C2333" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z" /><path d="M6 12v5c3 3 9 3 12 0v-5" /></svg>
+              </span>
+            </div>
+            <span style="font-size:12px; color:#6B7280; border-top:1px solid #F3F4F6; padding-top:12px; font-variant-numeric:tabular-nums">+6 dossiers ce mois</span>
+          </div>
+          <div style="background:#FFFFFF; border:1px solid #EBEDF1; border-radius:16px; padding:20px; display:flex; flex-direction:column; gap:16px">
+            <div style="display:flex; align-items:flex-start; justify-content:space-between">
+              <div style="display:flex; flex-direction:column; gap:9px">
+                <span style="font-size:11px; font-weight:600; color:#6B7280; text-transform:uppercase; letter-spacing:0.09em">Demandes en attente</span>
+                <span style="font-family:Poppins, sans-serif; font-size:36px; font-weight:700; color:#1C2333; font-variant-numeric:tabular-nums; letter-spacing:-0.03em; line-height:1">12</span>
+              </div>
+              <span style="width:38px; height:38px; border-radius:11px; background:rgba(28,35,51,0.06); display:flex; align-items:center; justify-content:center">
+                <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#1C2333" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-6l-2 3h-4l-2-3H2" /><path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z" /></svg>
+              </span>
+            </div>
+            <span style="font-size:12px; color:#8A5A06; border-top:1px solid #F3F4F6; padding-top:12px; font-variant-numeric:tabular-nums; font-weight:500">3 arrivées aujourd'hui</span>
+          </div>
+          <div style="background:#FFFFFF; border:1px solid #EBEDF1; border-radius:16px; padding:20px; display:flex; flex-direction:column; gap:16px">
+            <div style="display:flex; align-items:flex-start; justify-content:space-between">
+              <div style="display:flex; flex-direction:column; gap:9px">
+                <span style="font-size:11px; font-weight:600; color:#6B7280; text-transform:uppercase; letter-spacing:0.09em">Revenus encaissés</span>
+                <span style="font-family:Poppins, sans-serif; font-size:27px; font-weight:700; color:#1C2333; font-variant-numeric:tabular-nums; letter-spacing:-0.03em; line-height:1.15">1 284 000,00 DA</span>
+              </div>
+              <span style="width:38px; height:38px; border-radius:11px; background:rgba(28,35,51,0.06); display:flex; align-items:center; justify-content:center">
+                <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#1C2333" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="20" height="12" rx="2" /><circle cx="12" cy="12" r="2.5" /></svg>
+              </span>
+            </div>
+            <span style="font-size:12px; color:#15803D; border-top:1px solid #F3F4F6; padding-top:12px; font-variant-numeric:tabular-nums; font-weight:500">+184 000,00 DA ce mois</span>
+          </div>
+          <div style="background:#FFFFFF; border:1px solid #EBEDF1; border-radius:16px; padding:20px; display:flex; flex-direction:column; gap:16px">
+            <div style="display:flex; align-items:flex-start; justify-content:space-between">
+              <div style="display:flex; flex-direction:column; gap:9px">
+                <span style="font-size:11px; font-weight:600; color:#6B7280; text-transform:uppercase; letter-spacing:0.09em">Candidats diplômés</span>
+                <span style="font-family:Poppins, sans-serif; font-size:36px; font-weight:700; color:#1C2333; font-variant-numeric:tabular-nums; letter-spacing:-0.03em; line-height:1">143</span>
+              </div>
+              <span style="width:38px; height:38px; border-radius:11px; background:rgba(28,35,51,0.06); display:flex; align-items:center; justify-content:center">
+                <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#1C2333" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="6" /><path d="M15.477 12.89 17 22l-5-3-5 3 1.523-9.11" /></svg>
+              </span>
+            </div>
+            <span style="font-size:12px; color:#6B7280; border-top:1px solid #F3F4F6; padding-top:12px; font-variant-numeric:tabular-nums">+11 ce trimestre</span>
+          </div>
+        </div>
+
+        <div style="background:#FFFFFF; border:1px solid #EBEDF1; border-radius:16px; padding:22px 24px; display:flex; align-items:center; justify-content:space-between; gap:24px">
+          <div style="display:flex; align-items:center; gap:18px">
+            <div style="display:flex; flex-direction:column; align-items:center; justify-content:center; width:62px; height:62px; border-radius:14px; background:#1C2333; gap:1px">
+              <span style="font-family:'JetBrains Mono', monospace; font-size:10px; color:#F5A623; letter-spacing:0.1em">SEP</span>
+              <span style="font-family:Poppins, sans-serif; font-size:24px; font-weight:700; color:#F9FAFB; line-height:1; font-variant-numeric:tabular-nums">16</span>
+            </div>
+            <div style="display:flex; flex-direction:column; gap:6px">
+              <span style="font-size:11px; font-weight:600; color:#6B7280; text-transform:uppercase; letter-spacing:0.09em">Prochain examen</span>
+              <span style="font-family:Poppins, sans-serif; font-size:22px; font-weight:600; color:#1C2333; letter-spacing:-0.02em">Mercredi 16 septembre 2026</span>
+              <span style="font-size:13px; color:#6B7280; font-variant-numeric:tabular-nums">18 candidats inscrits · 6 code · 7 créneau · 5 conduite</span>
+            </div>
+          </div>
+          <div style="display:flex; align-items:center; gap:12px">
+            <span style="font-size:12px; font-weight:600; padding:6px 12px; border-radius:999px; background:rgba(245,166,35,0.16); color:#8A5A06">Dans 10 jours</span>
+            <button style="border:none; background:#F5A623; color:#1C2333; font-size:14px; font-weight:600; padding:12px 18px; border-radius:12px; cursor:pointer" style-hover="background:#E39A1D">Ouvrir la séance</button>
+          </div>
+        </div>
+
+        <div style="display:grid; grid-template-columns:1.55fr 1fr; gap:20px">
+
+          <div style="background:#FFFFFF; border:1px solid #EBEDF1; border-radius:16px; padding:24px; display:flex; flex-direction:column; gap:22px">
+            <div style="display:flex; align-items:flex-start; justify-content:space-between; gap:16px">
+              <div style="display:flex; flex-direction:column; gap:4px">
+                <span style="font-family:Poppins, sans-serif; font-size:17px; font-weight:600; color:#1C2333">Paiements par mois</span>
+                <span style="font-size:13px; color:#6B7280">12 derniers mois · dinars encaissés</span>
+              </div>
+              <div style="display:flex; flex-direction:column; align-items:flex-end; gap:2px">
+                <span style="font-family:Poppins, sans-serif; font-size:19px; font-weight:700; color:#1C2333; font-variant-numeric:tabular-nums">184 000,00 DA</span>
+                <span style="font-size:12px; color:#6B7280">septembre 2026</span>
+              </div>
+            </div>
+            <svg viewBox="0 0 1020 236" style="width:100%; height:236px; overflow:visible">
+              <defs>
+                <linearGradient id="permixArea" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stop-color="#C97F0A" stop-opacity="0.20" />
+                  <stop offset="100%" stop-color="#C97F0A" stop-opacity="0" />
+                </linearGradient>
+              </defs>
+              <g stroke="#EEF0F3" stroke-width="1">
+                <line x1="44" y1="20" x2="1010" y2="20" /><line x1="44" y1="62" x2="1010" y2="62" /><line x1="44" y1="104" x2="1010" y2="104" /><line x1="44" y1="146" x2="1010" y2="146" />
+              </g>
+              <line x1="44" y1="188" x2="1010" y2="188" stroke="#DDE1E7" stroke-width="1" />
+              <g font-family="Inter, sans-serif" font-size="11" fill="#9CA3AF" text-anchor="end">
+                <text x="32" y="24">1,2 M</text><text x="32" y="66">900 k</text><text x="32" y="108">600 k</text><text x="32" y="150">300 k</text><text x="32" y="192">0</text>
+              </g>
+              <path d="M76,132 C118,132 118,146 160,146 C202,146 202,118 244,118 C286,118 286,108 328,108 C370,108 370,122 412,122 C454,122 454,98 496,98 C538,98 538,88 580,88 C622,88 622,108 664,108 C706,108 706,78 748,78 C790,78 790,64 832,64 C874,64 874,88 916,88 C958,88 958,44 1000,44 L1000,188 L76,188 Z" fill="url(#permixArea)" />
+              <path d="M76,132 C118,132 118,146 160,146 C202,146 202,118 244,118 C286,118 286,108 328,108 C370,108 370,122 412,122 C454,122 454,98 496,98 C538,98 538,88 580,88 C622,88 622,108 664,108 C706,108 706,78 748,78 C790,78 790,64 832,64 C874,64 874,88 916,88 C958,88 958,44 1000,44" fill="none" stroke="#C97F0A" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round" />
+              <line x1="1000" y1="44" x2="1000" y2="188" stroke="#C97F0A" stroke-width="1" stroke-dasharray="3 4" opacity="0.45" />
+              <circle cx="1000" cy="44" r="5" fill="#FFFFFF" stroke="#C97F0A" stroke-width="2.4" />
+              <g font-family="Inter, sans-serif" font-size="11" fill="#9CA3AF" text-anchor="middle">
+                <text x="76" y="212">oct.</text><text x="160" y="212">nov.</text><text x="244" y="212">déc.</text><text x="328" y="212">janv.</text><text x="412" y="212">févr.</text><text x="496" y="212">mars</text><text x="580" y="212">avr.</text><text x="664" y="212">mai</text><text x="748" y="212">juin</text><text x="832" y="212">juil.</text><text x="916" y="212">août</text>
+                <text x="1000" y="212" fill="#1C2333" font-weight="600">sept.</text>
+              </g>
+            </svg>
+          </div>
+
+          <div style="background:#FFFFFF; border:1px solid #EBEDF1; border-radius:16px; padding:24px; display:flex; flex-direction:column; gap:22px">
+            <div style="display:flex; flex-direction:column; gap:4px">
+              <span style="font-family:Poppins, sans-serif; font-size:17px; font-weight:600; color:#1C2333">Répartition par étape</span>
+              <span style="font-size:13px; color:#6B7280">87 candidats actifs</span>
+            </div>
+            <div style="flex:1; display:grid; grid-template-columns:repeat(3, 1fr); gap:18px; align-items:end; border-bottom:1px solid #DDE1E7; padding-bottom:0">
+              <div style="display:flex; flex-direction:column; align-items:center; gap:9px">
+                <span style="font-family:Poppins, sans-serif; font-size:16px; font-weight:700; color:#1C2333; font-variant-numeric:tabular-nums">41</span>
+                <div style="width:100%; height:158px; border-radius:12px 12px 0 0; background:#F8D28C"></div>
+              </div>
+              <div style="display:flex; flex-direction:column; align-items:center; gap:9px">
+                <span style="font-family:Poppins, sans-serif; font-size:16px; font-weight:700; color:#1C2333; font-variant-numeric:tabular-nums">26</span>
+                <div style="width:100%; height:100px; border-radius:12px 12px 0 0; background:#E0A032"></div>
+              </div>
+              <div style="display:flex; flex-direction:column; align-items:center; gap:9px">
+                <span style="font-family:Poppins, sans-serif; font-size:16px; font-weight:700; color:#1C2333; font-variant-numeric:tabular-nums">20</span>
+                <div style="width:100%; height:77px; border-radius:12px 12px 0 0; background:#9A6008"></div>
+              </div>
+            </div>
+            <div style="display:grid; grid-template-columns:repeat(3, 1fr); gap:18px; margin-top:-14px">
+              <span style="font-size:13px; font-weight:600; color:#374151; text-align:center">Code</span>
+              <span style="font-size:13px; font-weight:600; color:#374151; text-align:center">Créneau</span>
+              <span style="font-size:13px; font-weight:600; color:#374151; text-align:center">Conduite</span>
+            </div>
+            <span style="font-size:12px; color:#9CA3AF; line-height:1.6">La rampe suit l'ordre du parcours : plus le candidat avance, plus la teinte est foncée.</span>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div style="display:flex; gap:40px; flex-wrap:wrap">
+
+    <div id="1c" style="display:flex; flex-direction:column; gap:14px">
+      <div style="display:flex; align-items:center; gap:12px">
+        <span style="font-family:'JetBrains Mono', monospace; font-size:12px; font-weight:500; background:#1C2333; color:#F5A623; padding:4px 9px; border-radius:6px">1c</span>
+        <span style="font-family:Poppins, sans-serif; font-size:17px; font-weight:600; color:#1C2333">Dashboard mobile</span>
+        <span style="font-family:'JetBrains Mono', monospace; font-size:12px; color:#6B7280">/ecole/dashboard · 390</span>
+      </div>
+      <div style="width:390px; background:#F9FAFB; border:1px solid #D8DCE3; border-radius:28px; overflow:hidden; display:flex; flex-direction:column">
+
+        <div style="background:#1C2333; padding:12px 18px 18px; display:flex; flex-direction:column; gap:16px">
+          <div style="display:flex; align-items:center; justify-content:space-between; font-family:'JetBrains Mono', monospace; font-size:11px; color:#9AA3B2">
+            <span style="font-variant-numeric:tabular-nums">09:24</span>
+            <span style="display:flex; gap:5px; align-items:center">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#9AA3B2" stroke-width="2.4" stroke-linecap="round"><path d="M2 20h.01M7 20v-4M12 20v-8M17 20V8" /></svg>
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#9AA3B2" stroke-width="2.2" stroke-linecap="round"><path d="M5 12.5a10 10 0 0 1 14 0M8.5 16a5.5 5.5 0 0 1 7 0M12 20h.01" /></svg>
+              <span style="width:18px; height:9px; border:1.4px solid #9AA3B2; border-radius:3px; display:inline-block; position:relative"><span style="position:absolute; inset:1.5px; inset-inline-end:6px; background:#9AA3B2; border-radius:1px; display:block"></span></span>
+            </span>
+          </div>
+          <div style="display:flex; align-items:center; justify-content:space-between">
+            <div style="display:flex; align-items:center; gap:10px">
+              <span style="width:30px; height:30px; border-radius:9px; background:#F5A623; display:flex; align-items:center; justify-content:center; font-family:Poppins, sans-serif; font-weight:800; font-size:15px; color:#1C2333">P</span>
+              <div style="display:flex; flex-direction:column; line-height:1.25">
+                <span style="font-family:Poppins, sans-serif; font-size:14px; font-weight:600; color:#F9FAFB">El Amel</span>
+                <span style="font-size:11px; color:#9AA3B2">Alger · Auto-école</span>
+              </div>
+            </div>
+            <div style="display:flex; align-items:center; gap:8px">
+              <span style="font-size:12px; font-weight:600; color:#C9CFDB; border:1px solid #33405C; border-radius:9px; padding:6px 9px">FR</span>
+              <span style="width:31px; height:31px; border:1px solid #33405C; border-radius:9px; display:flex; align-items:center; justify-content:center">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#C9CFDB" stroke-width="1.9" stroke-linecap="round"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9z" /></svg>
+              </span>
+              <span style="width:31px; height:31px; border-radius:999px; background:#33405C; color:#F9FAFB; display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:600">SA</span>
+            </div>
+          </div>
+          <div style="display:flex; flex-direction:column; gap:3px">
+            <span style="font-family:Poppins, sans-serif; font-size:24px; font-weight:700; color:#F9FAFB; letter-spacing:-0.02em">Tableau de bord</span>
+            <span style="font-size:12px; color:#9AA3B2">Semaine du 5 septembre 2026</span>
+          </div>
+        </div>
+
+        <div style="flex:1; padding:16px 16px 20px; display:flex; flex-direction:column; gap:14px; min-width:0; margin-top:-10px; background:#F9FAFB; border-radius:20px 20px 0 0">
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px">
+            <div style="background:#FFFFFF; border:1px solid #EBEDF1; border-radius:16px; padding:14px; display:flex; flex-direction:column; gap:8px">
+              <span style="display:flex; align-items:center; gap:7px">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z" /><path d="M6 12v5c3 3 9 3 12 0v-5" /></svg>
+                <span style="font-size:11px; font-weight:600; color:#6B7280; text-transform:uppercase; letter-spacing:0.05em">Actifs</span>
+              </span>
+              <span style="font-family:Poppins, sans-serif; font-size:28px; font-weight:700; color:#1C2333; line-height:1; font-variant-numeric:tabular-nums">87</span>
+            </div>
+            <div style="background:#FFFFFF; border:1px solid #EBEDF1; border-radius:16px; padding:14px; display:flex; flex-direction:column; gap:8px">
+              <span style="display:flex; align-items:center; gap:7px">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-6l-2 3h-4l-2-3H2" /><path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z" /></svg>
+                <span style="font-size:11px; font-weight:600; color:#6B7280; text-transform:uppercase; letter-spacing:0.05em">En attente</span>
+              </span>
+              <span style="font-family:Poppins, sans-serif; font-size:28px; font-weight:700; color:#1C2333; line-height:1; font-variant-numeric:tabular-nums">12</span>
+            </div>
+            <div style="background:#FFFFFF; border:1px solid #EBEDF1; border-radius:16px; padding:14px; display:flex; flex-direction:column; gap:8px">
+              <span style="display:flex; align-items:center; gap:7px">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="20" height="12" rx="2" /><circle cx="12" cy="12" r="2.5" /></svg>
+                <span style="font-size:11px; font-weight:600; color:#6B7280; text-transform:uppercase; letter-spacing:0.05em">Encaissé</span>
+              </span>
+              <span style="font-family:Poppins, sans-serif; font-size:19px; font-weight:700; color:#1C2333; line-height:1.2; font-variant-numeric:tabular-nums">1 284 000,00 DA</span>
+            </div>
+            <div style="background:#FFFFFF; border:1px solid #EBEDF1; border-radius:16px; padding:14px; display:flex; flex-direction:column; gap:8px">
+              <span style="display:flex; align-items:center; gap:7px">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="6" /><path d="M15.477 12.89 17 22l-5-3-5 3 1.523-9.11" /></svg>
+                <span style="font-size:11px; font-weight:600; color:#6B7280; text-transform:uppercase; letter-spacing:0.05em">Diplômés</span>
+              </span>
+              <span style="font-family:Poppins, sans-serif; font-size:28px; font-weight:700; color:#1C2333; line-height:1; font-variant-numeric:tabular-nums">143</span>
+            </div>
+          </div>
+
+          <div style="background:#FFFFFF; border:1px solid #EBEDF1; border-radius:16px; padding:16px; display:flex; flex-direction:column; gap:12px">
+            <div style="display:flex; align-items:center; justify-content:space-between">
+              <span style="font-size:11px; font-weight:600; color:#6B7280; text-transform:uppercase; letter-spacing:0.05em">Prochain examen</span>
+              <span style="font-size:11px; font-weight:600; padding:4px 9px; border-radius:999px; background:rgba(245,166,35,0.16); color:#8A5A06">Dans 10 jours</span>
+            </div>
+            <span style="font-family:Poppins, sans-serif; font-size:18px; font-weight:600; color:#1C2333; line-height:1.35; letter-spacing:-0.01em">Mercredi 16 septembre 2026</span>
+            <div style="display:flex; gap:14px; font-size:12px; color:#6B7280; font-variant-numeric:tabular-nums; border-top:1px solid #F3F4F6; padding-top:11px">
+              <span><span style="font-weight:700; color:#1C2333">6</span> code</span>
+              <span><span style="font-weight:700; color:#1C2333">7</span> créneau</span>
+              <span><span style="font-weight:700; color:#1C2333">5</span> conduite</span>
+            </div>
+            <button style="border:none; background:#F5A623; color:#1C2333; font-size:15px; font-weight:600; padding:13px; border-radius:12px; width:100%; cursor:pointer">Ouvrir la séance</button>
+          </div>
+
+          <div style="background:#FFFFFF; border:1px solid #EBEDF1; border-radius:16px; padding:16px; display:flex; flex-direction:column; gap:12px">
+            <div style="display:flex; align-items:baseline; justify-content:space-between">
+              <span style="font-family:Poppins, sans-serif; font-size:15px; font-weight:600; color:#1C2333">Paiements par mois</span>
+              <span style="font-size:11px; color:#9CA3AF">12 mois</span>
+            </div>
+            <svg viewBox="0 0 320 120" style="width:100%; height:110px">
+              <defs>
+                <linearGradient id="permixAreaM" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stop-color="#C97F0A" stop-opacity="0.22" />
+                  <stop offset="100%" stop-color="#C97F0A" stop-opacity="0" />
+                </linearGradient>
+              </defs>
+              <g stroke="#EDEFF2" stroke-width="1"><line x1="0" y1="8" x2="320" y2="8" /><line x1="0" y1="46" x2="320" y2="46" /><line x1="0" y1="84" x2="320" y2="84" /></g>
+              <path d="M8,66 C22,66 22,74 36,74 C50,74 50,58 64,58 C78,58 78,52 92,52 C106,52 106,61 120,61 C134,61 134,47 148,47 C162,47 162,41 176,41 C190,41 190,53 204,53 C218,53 218,35 232,35 C246,35 246,27 260,27 C274,27 274,41 288,41 C300,41 300,16 312,16 L312,84 L8,84 Z" fill="url(#permixAreaM)" />
+              <path d="M8,66 C22,66 22,74 36,74 C50,74 50,58 64,58 C78,58 78,52 92,52 C106,52 106,61 120,61 C134,61 134,47 148,47 C162,47 162,41 176,41 C190,41 190,53 204,53 C218,53 218,35 232,35 C246,35 246,27 260,27 C274,27 274,41 288,41 C300,41 300,16 312,16" fill="none" stroke="#C97F0A" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />
+              <circle cx="312" cy="16" r="3.5" fill="#C97F0A" />
+            </svg>
+          </div>
+
+          <div style="background:#FFFFFF; border:1px solid #EBEDF1; border-radius:16px; padding:16px; display:flex; flex-direction:column; gap:14px">
+            <span style="font-family:Poppins, sans-serif; font-size:15px; font-weight:600; color:#1C2333">Répartition par étape</span>
+            <div style="display:flex; flex-direction:column; gap:11px">
+              <div style="display:flex; align-items:center; gap:10px">
+                <span style="font-size:13px; color:#374151; width:64px">Code</span>
+                <div style="flex:1; height:24px; border-radius:7px; background:#F8D28C; display:flex; align-items:center; justify-content:flex-end; padding-inline-end:8px"><span style="font-size:12px; font-weight:700; color:#1C2333; font-variant-numeric:tabular-nums">41</span></div>
+              </div>
+              <div style="display:flex; align-items:center; gap:10px">
+                <span style="font-size:13px; color:#374151; width:64px">Créneau</span>
+                <div style="width:63%; height:24px; border-radius:7px; background:#E0A032; display:flex; align-items:center; justify-content:flex-end; padding-inline-end:8px"><span style="font-size:12px; font-weight:700; color:#1C2333; font-variant-numeric:tabular-nums">26</span></div>
+              </div>
+              <div style="display:flex; align-items:center; gap:10px">
+                <span style="font-size:13px; color:#374151; width:64px">Conduite</span>
+                <div style="width:49%; height:24px; border-radius:7px; background:#9A6008; display:flex; align-items:center; justify-content:flex-end; padding-inline-end:8px"><span style="font-size:12px; font-weight:700; color:#FFFFFF; font-variant-numeric:tabular-nums">20</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div style="background:#1C2333; padding:10px 8px 14px; display:grid; grid-template-columns:repeat(5, 1fr); gap:2px; border-radius:20px 20px 0 0">
+          <span style="display:flex; flex-direction:column; align-items:center; gap:5px; padding:8px 0; border-radius:12px; background:rgba(245,166,35,0.14); min-height:48px">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#F5A623" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="9" rx="1" /><rect x="14" y="3" width="7" height="5" rx="1" /><rect x="14" y="12" width="7" height="9" rx="1" /><rect x="3" y="16" width="7" height="5" rx="1" /></svg>
+            <span style="font-size:10px; font-weight:600; color:#F5A623">Bord</span>
+          </span>
+          <span style="display:flex; flex-direction:column; align-items:center; gap:5px; padding:8px 0; border-radius:12px; min-height:48px; position:relative">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#9AA3B2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-6l-2 3h-4l-2-3H2" /><path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z" /></svg>
+            <span style="font-size:10px; font-weight:500; color:#9AA3B2">Demandes</span>
+            <span style="position:absolute; top:5px; inset-inline-end:16px; min-width:16px; height:16px; border-radius:999px; background:#F5A623; color:#1C2333; font-size:10px; font-weight:700; display:flex; align-items:center; justify-content:center; font-variant-numeric:tabular-nums">12</span>
+          </span>
+          <span style="display:flex; flex-direction:column; align-items:center; gap:5px; padding:8px 0; border-radius:12px; min-height:48px">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#9AA3B2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z" /><path d="M6 12v5c3 3 9 3 12 0v-5" /></svg>
+            <span style="font-size:10px; font-weight:500; color:#9AA3B2">Candidats</span>
+          </span>
+          <span style="display:flex; flex-direction:column; align-items:center; gap:5px; padding:8px 0; border-radius:12px; min-height:48px">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#9AA3B2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" /><path d="M16 2v4M8 2v4M3 10h18" /></svg>
+            <span style="font-size:10px; font-weight:500; color:#9AA3B2">Planning</span>
+          </span>
+          <span style="display:flex; flex-direction:column; align-items:center; gap:5px; padding:8px 0; border-radius:12px; min-height:48px">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#9AA3B2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="2" width="8" height="4" rx="1" /><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2" /><path d="m9 14 2 2 4-4" /></svg>
+            <span style="font-size:10px; font-weight:500; color:#9AA3B2">Examens</span>
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <div id="1d" style="display:flex; flex-direction:column; gap:14px">
+      <div style="display:flex; align-items:center; gap:12px">
+        <span style="font-family:'JetBrains Mono', monospace; font-size:12px; font-weight:500; background:#1C2333; color:#F5A623; padding:4px 9px; border-radius:6px">1d</span>
+        <span style="font-family:Poppins, sans-serif; font-size:17px; font-weight:600; color:#1C2333">لوحة التحكم — arabe RTL</span>
+        <span style="font-family:'JetBrains Mono', monospace; font-size:12px; color:#6B7280">/ecole/dashboard · 960 · dir=rtl</span>
+      </div>
+      <div dir="rtl" style="width:960px; background:#F9FAFB; border:1px solid #D8DCE3; border-radius:16px; overflow:hidden; font-family:'Noto Sans Arabic', sans-serif">
+        <div style="background:#1C2333; display:flex; align-items:center; justify-content:space-between; padding:0 24px; height:60px">
+          <div style="display:flex; align-items:center; gap:10px">
+            <span style="width:28px; height:28px; border-radius:8px; background:#F5A623; display:flex; align-items:center; justify-content:center; font-family:Poppins, sans-serif; font-weight:800; font-size:15px; color:#1C2333">P</span>
+            <span style="font-family:Poppins, sans-serif; font-size:17px; font-weight:700; color:#F9FAFB">Permix</span>
+          </div>
+          <div style="display:flex; align-items:center; gap:2px; background:rgba(255,255,255,0.05); padding:4px; border-radius:14px">
+            <span style="font-size:13px; font-weight:600; color:#1C2333; background:#F5A623; padding:7px 13px; border-radius:10px">لوحة التحكم</span>
+            <span style="font-size:13px; font-weight:500; color:#C9CFDB; padding:7px 13px">الطلبات</span>
+            <span style="font-size:13px; font-weight:500; color:#C9CFDB; padding:7px 13px">المترشحون</span>
+            <span style="font-size:13px; font-weight:500; color:#C9CFDB; padding:7px 13px">المتخرجون</span>
+            <span style="font-size:13px; font-weight:500; color:#C9CFDB; padding:7px 13px">البرنامج</span>
+            <span style="font-size:13px; font-weight:500; color:#C9CFDB; padding:7px 13px">الامتحانات</span>
+          </div>
+          <div style="display:flex; align-items:center; gap:10px">
+            <span style="font-size:13px; font-weight:600; color:#C9CFDB; border:1px solid #33405C; border-radius:10px; padding:6px 10px">AR</span>
+            <span style="width:32px; height:32px; border-radius:999px; background:#33405C; color:#F9FAFB; display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:600">س ع</span>
+          </div>
+        </div>
+        <div style="background:#1C2333; padding:0 24px 56px; display:flex; align-items:flex-end; justify-content:space-between; gap:20px">
+          <div style="display:flex; flex-direction:column; gap:7px">
+            <span style="font-family:'JetBrains Mono', monospace; font-size:11px; color:#F5A623; letter-spacing:0.1em; direction:ltr">EL AMEL · ALGER</span>
+            <span style="font-size:30px; font-weight:700; color:#F9FAFB; line-height:1.2">لوحة التحكم</span>
+            <span style="font-size:13px; color:#9AA3B2">نشاط الأسبوع الممتد من 5 سبتمبر 2026.</span>
+          </div>
+          <div style="display:flex; gap:10px">
+            <button style="border:1px solid #33405C; background:transparent; color:#F9FAFB; font-family:'Noto Sans Arabic', sans-serif; font-size:14px; font-weight:600; padding:11px 17px; border-radius:12px; cursor:pointer">عرض البرنامج</button>
+            <button style="border:none; background:#F5A623; color:#1C2333; font-family:'Noto Sans Arabic', sans-serif; font-size:14px; font-weight:600; padding:11px 17px; border-radius:12px; cursor:pointer">إضافة مترشح</button>
+          </div>
+        </div>
+
+        <div style="padding:0 24px 28px; margin-top:-38px; display:flex; flex-direction:column; gap:16px">
+          <div style="display:grid; grid-template-columns:repeat(4, 1fr); gap:16px">
+            <div style="background:#FFFFFF; border:1px solid #EBEDF1; border-radius:16px; padding:18px; display:flex; flex-direction:column; gap:14px">
+              <div style="display:flex; align-items:flex-start; justify-content:space-between">
+                <div style="display:flex; flex-direction:column; gap:8px">
+                  <span style="font-size:12px; font-weight:600; color:#6B7280">المترشحون النشطون</span>
+                  <span dir="ltr" style="font-family:Poppins, sans-serif; font-size:32px; font-weight:700; color:#1C2333; line-height:1; font-variant-numeric:tabular-nums; text-align:end">87</span>
+                </div>
+                <span style="width:36px; height:36px; border-radius:11px; background:rgba(28,35,51,0.06); display:flex; align-items:center; justify-content:center">
+                  <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#1C2333" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z" /><path d="M6 12v5c3 3 9 3 12 0v-5" /></svg>
+                </span>
+              </div>
+              <span style="font-size:12px; color:#6B7280; border-top:1px solid #F3F4F6; padding-top:11px">6 ملفات جديدة هذا الشهر</span>
+            </div>
+            <div style="background:#FFFFFF; border:1px solid #EBEDF1; border-radius:16px; padding:18px; display:flex; flex-direction:column; gap:14px">
+              <div style="display:flex; align-items:flex-start; justify-content:space-between">
+                <div style="display:flex; flex-direction:column; gap:8px">
+                  <span style="font-size:12px; font-weight:600; color:#6B7280">الطلبات المعلّقة</span>
+                  <span dir="ltr" style="font-family:Poppins, sans-serif; font-size:32px; font-weight:700; color:#1C2333; line-height:1; font-variant-numeric:tabular-nums; text-align:end">12</span>
+                </div>
+                <span style="width:36px; height:36px; border-radius:11px; background:rgba(28,35,51,0.06); display:flex; align-items:center; justify-content:center">
+                  <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#1C2333" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-6l-2 3h-4l-2-3H2" /><path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z" /></svg>
+                </span>
+              </div>
+              <span style="font-size:12px; color:#8A5A06; font-weight:500; border-top:1px solid #F3F4F6; padding-top:11px">3 طلبات وصلت اليوم</span>
+            </div>
+            <div style="background:#FFFFFF; border:1px solid #EBEDF1; border-radius:16px; padding:18px; display:flex; flex-direction:column; gap:14px">
+              <div style="display:flex; align-items:flex-start; justify-content:space-between">
+                <div style="display:flex; flex-direction:column; gap:8px">
+                  <span style="font-size:12px; font-weight:600; color:#6B7280">المبالغ المحصّلة</span>
+                  <span dir="ltr" style="font-family:Poppins, sans-serif; font-size:24px; font-weight:700; color:#1C2333; line-height:1.15; font-variant-numeric:tabular-nums; text-align:end">1 284 000,00 DA</span>
+                </div>
+                <span style="width:36px; height:36px; border-radius:11px; background:rgba(28,35,51,0.06); display:flex; align-items:center; justify-content:center">
+                  <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#1C2333" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="20" height="12" rx="2" /><circle cx="12" cy="12" r="2.5" /></svg>
+                </span>
+              </div>
+              <span dir="ltr" style="font-size:12px; color:#15803D; font-weight:500; border-top:1px solid #F3F4F6; padding-top:11px; text-align:end; font-variant-numeric:tabular-nums">+184 000,00 DA</span>
+            </div>
+            <div style="background:#FFFFFF; border:1px solid #EBEDF1; border-radius:16px; padding:18px; display:flex; flex-direction:column; gap:14px">
+              <div style="display:flex; align-items:flex-start; justify-content:space-between">
+                <div style="display:flex; flex-direction:column; gap:8px">
+                  <span style="font-size:12px; font-weight:600; color:#6B7280">المتخرجون</span>
+                  <span dir="ltr" style="font-family:Poppins, sans-serif; font-size:32px; font-weight:700; color:#1C2333; line-height:1; font-variant-numeric:tabular-nums; text-align:end">143</span>
+                </div>
+                <span style="width:36px; height:36px; border-radius:11px; background:rgba(28,35,51,0.06); display:flex; align-items:center; justify-content:center">
+                  <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#1C2333" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="6" /><path d="M15.477 12.89 17 22l-5-3-5 3 1.523-9.11" /></svg>
+                </span>
+              </div>
+              <span style="font-size:12px; color:#6B7280; border-top:1px solid #F3F4F6; padding-top:11px">11 خلال هذا الفصل</span>
+            </div>
+          </div>
+
+          <div style="background:#FFFFFF; border:1px solid #EBEDF1; border-radius:16px; padding:20px; display:flex; align-items:center; justify-content:space-between; gap:20px">
+            <div style="display:flex; align-items:center; gap:16px">
+              <div style="display:flex; flex-direction:column; align-items:center; justify-content:center; width:58px; height:58px; border-radius:14px; background:#1C2333; gap:1px">
+                <span style="font-family:'JetBrains Mono', monospace; font-size:10px; color:#F5A623; letter-spacing:0.08em">SEP</span>
+                <span style="font-family:Poppins, sans-serif; font-size:23px; font-weight:700; color:#F9FAFB; line-height:1; font-variant-numeric:tabular-nums">16</span>
+              </div>
+              <div style="display:flex; flex-direction:column; gap:5px">
+                <span style="font-size:12px; font-weight:600; color:#6B7280">الامتحان القادم</span>
+                <span style="font-size:19px; font-weight:600; color:#1C2333">الأربعاء 16 سبتمبر 2026</span>
+                <span style="font-size:13px; color:#6B7280">18 مترشحًا مسجّلًا · 6 قانون · 7 مناورة · 5 سياقة</span>
+              </div>
+            </div>
+            <div style="display:flex; align-items:center; gap:12px">
+              <span style="font-size:12px; font-weight:600; padding:6px 12px; border-radius:999px; background:rgba(245,166,35,0.16); color:#8A5A06">بعد 10 أيام</span>
+              <button style="border:none; background:#F5A623; color:#1C2333; font-family:'Noto Sans Arabic', sans-serif; font-size:14px; font-weight:600; padding:12px 18px; border-radius:12px; cursor:pointer">فتح الحصة</button>
+            </div>
+          </div>
+
+          <div style="display:grid; grid-template-columns:1.5fr 1fr; gap:16px">
+            <div style="background:#FFFFFF; border:1px solid #EBEDF1; border-radius:16px; padding:20px; display:flex; flex-direction:column; gap:18px">
+              <div style="display:flex; align-items:flex-start; justify-content:space-between; gap:14px">
+                <div style="display:flex; flex-direction:column; gap:3px">
+                  <span style="font-size:16px; font-weight:600; color:#1C2333">المدفوعات شهريًا</span>
+                  <span style="font-size:12px; color:#6B7280">آخر 12 شهرًا · بالدينار</span>
+                </div>
+                <div style="display:flex; flex-direction:column; align-items:flex-start; gap:2px">
+                  <span dir="ltr" style="font-family:Poppins, sans-serif; font-size:18px; font-weight:700; color:#1C2333; font-variant-numeric:tabular-nums">184 000,00 DA</span>
+                  <span style="font-size:12px; color:#6B7280">سبتمبر 2026</span>
+                </div>
+              </div>
+              <svg viewBox="0 0 520 168" dir="ltr" style="width:100%; height:156px">
+                <defs>
+                  <linearGradient id="permixAreaAr" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stop-color="#C97F0A" stop-opacity="0.20" />
+                    <stop offset="100%" stop-color="#C97F0A" stop-opacity="0" />
+                  </linearGradient>
+                </defs>
+                <g stroke="#EEF0F3" stroke-width="1"><line x1="0" y1="12" x2="520" y2="12" /><line x1="0" y1="60" x2="520" y2="60" /></g>
+                <line x1="0" y1="108" x2="520" y2="108" stroke="#DDE1E7" stroke-width="1" />
+                <path d="M10,86 C33,86 33,96 56,96 C79,96 79,74 102,74 C125,74 125,66 148,66 C171,66 171,78 194,78 C217,78 217,60 240,60 C263,60 263,52 286,52 C309,52 309,68 332,68 C355,68 355,44 378,44 C401,44 401,34 424,34 C447,34 447,52 470,52 C491,52 491,22 512,22 L512,108 L10,108 Z" fill="url(#permixAreaAr)" />
+                <path d="M10,86 C33,86 33,96 56,96 C79,96 79,74 102,74 C125,74 125,66 148,66 C171,66 171,78 194,78 C217,78 217,60 240,60 C263,60 263,52 286,52 C309,52 309,68 332,68 C355,68 355,44 378,44 C401,44 401,34 424,34 C447,34 447,52 470,52 C491,52 491,22 512,22" fill="none" stroke="#C97F0A" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round" />
+                <line x1="512" y1="22" x2="512" y2="108" stroke="#C97F0A" stroke-width="1" stroke-dasharray="3 4" opacity="0.45" />
+                <circle cx="512" cy="22" r="4.5" fill="#FFFFFF" stroke="#C97F0A" stroke-width="2.4" />
+                <g font-family="Inter, sans-serif" font-size="10" fill="#9CA3AF" text-anchor="middle">
+                  <text x="10" y="128">10</text><text x="102" y="128">12</text><text x="194" y="128">02</text><text x="286" y="128">04</text><text x="378" y="128">06</text><text x="470" y="128">08</text>
+                </g>
+              </svg>
+            </div>
+            <div style="background:#FFFFFF; border:1px solid #EBEDF1; border-radius:16px; padding:20px; display:flex; flex-direction:column; gap:18px">
+              <div style="display:flex; flex-direction:column; gap:3px">
+                <span style="font-size:16px; font-weight:600; color:#1C2333">التوزيع حسب المرحلة</span>
+                <span style="font-size:12px; color:#6B7280">87 مترشحًا نشطًا</span>
+              </div>
+              <div style="display:flex; flex-direction:column; gap:12px">
+                <div style="display:flex; align-items:center; gap:10px">
+                  <span style="font-size:13px; color:#374151; width:58px">القانون</span>
+                  <div style="flex:1; height:24px; border-radius:7px; background:#F8D28C; display:flex; align-items:center; justify-content:flex-end; padding-inline-end:8px"><span dir="ltr" style="font-size:12px; font-weight:700; color:#1C2333; font-variant-numeric:tabular-nums">41</span></div>
+                </div>
+                <div style="display:flex; align-items:center; gap:10px">
+                  <span style="font-size:13px; color:#374151; width:58px">المناورة</span>
+                  <div style="width:63%; height:24px; border-radius:7px; background:#E0A032; display:flex; align-items:center; justify-content:flex-end; padding-inline-end:8px"><span dir="ltr" style="font-size:12px; font-weight:700; color:#1C2333; font-variant-numeric:tabular-nums">26</span></div>
+                </div>
+                <div style="display:flex; align-items:center; gap:10px">
+                  <span style="font-size:13px; color:#374151; width:58px">السياقة</span>
+                  <div style="width:49%; height:24px; border-radius:7px; background:#9A6008; display:flex; align-items:center; justify-content:flex-end; padding-inline-end:8px"><span dir="ltr" style="font-size:12px; font-weight:700; color:#FFFFFF; font-variant-numeric:tabular-nums">20</span></div>
+              </div>
+              </div>
+              <span style="font-size:12px; color:#9CA3AF; line-height:1.7">تتبع التدرجات ترتيب المسار: كلما تقدّم المترشح غمقت الدرجة.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div id="2a" style="display:flex; flex-direction:column; gap:14px">
+    <div style="display:flex; align-items:center; gap:12px">
+      <span style="font-family:&#39;JetBrains Mono&#39;, monospace; font-size:12px; font-weight:500; background:#1C2333; color:#F5A623; padding:4px 9px; border-radius:6px">2a</span>
+      <span style="font-family:Poppins, sans-serif; font-size:17px; font-weight:600; color:#1C2333">Planning — semaine</span>
+      <span style="font-family:&#39;JetBrains Mono&#39;, monospace; font-size:12px; color:#6B7280">/ecole/planning · desktop 1440</span>
+    </div>
+    <div style="width:1440px; background:#F9FAFB; border:1px solid #D8DCE3; border-radius:16px; overflow:hidden">
+      <div style="background:#1C2333; display:flex; align-items:center; justify-content:space-between; padding:0 32px; height:64px">
+        <div style="display:flex; align-items:center; gap:10px">
+          <span style="width:28px; height:28px; border-radius:8px; background:#F5A623; display:flex; align-items:center; justify-content:center; font-family:Poppins, sans-serif; font-weight:800; font-size:15px; color:#1C2333">P</span>
+          <span style="font-family:Poppins, sans-serif; font-size:17px; font-weight:700; color:#F9FAFB; letter-spacing:-0.01em">Permix</span>
+        </div>
+        <div style="display:flex; align-items:center; gap:2px; background:rgba(255,255,255,0.05); padding:4px; border-radius:14px">
+          <span style="display:flex; align-items:center; gap:8px; font-size:14px; font-weight:500; color:#C9CFDB; background:transparent; padding:8px 14px; border-radius:10px"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#C9CFDB" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="9" rx="1" /><rect x="14" y="3" width="7" height="5" rx="1" /><rect x="14" y="12" width="7" height="9" rx="1" /><rect x="3" y="16" width="7" height="5" rx="1" /></svg>Tableau de bord</span>
+          <span style="display:flex; align-items:center; gap:8px; font-size:14px; font-weight:500; color:#C9CFDB; background:transparent; padding:8px 14px; border-radius:10px"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#C9CFDB" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-6l-2 3h-4l-2-3H2" /><path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z" /></svg>Demandes<span style="font-size:11px; font-weight:700; background:#F5A623; color:#1C2333; border-radius:999px; padding:1px 6px; font-variant-numeric:tabular-nums">12</span></span>
+          <span style="display:flex; align-items:center; gap:8px; font-size:14px; font-weight:500; color:#C9CFDB; background:transparent; padding:8px 14px; border-radius:10px"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#C9CFDB" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z" /><path d="M6 12v5c3 3 9 3 12 0v-5" /></svg>Candidats</span>
+          <span style="display:flex; align-items:center; gap:8px; font-size:14px; font-weight:500; color:#C9CFDB; background:transparent; padding:8px 14px; border-radius:10px"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#C9CFDB" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="6" /><path d="M15.477 12.89 17 22l-5-3-5 3 1.523-9.11" /></svg>Diplômés</span>
+          <span style="display:flex; align-items:center; gap:8px; font-size:14px; font-weight:600; color:#1C2333; background:#F5A623; padding:8px 14px; border-radius:10px"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#1C2333" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" /><path d="M16 2v4M8 2v4M3 10h18" /></svg>Planning</span>
+          <span style="display:flex; align-items:center; gap:8px; font-size:14px; font-weight:500; color:#C9CFDB; background:transparent; padding:8px 14px; border-radius:10px"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#C9CFDB" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="2" width="8" height="4" rx="1" /><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2" /><path d="m9 14 2 2 4-4" /></svg>Examens</span>
+        </div>
+        <div style="display:flex; align-items:center; gap:14px">
+          <span style="font-size:13px; font-weight:600; color:#C9CFDB; border:1px solid #33405C; border-radius:10px; padding:7px 10px">FR</span>
+          <span style="width:33px; height:33px; border:1px solid #33405C; border-radius:10px; display:flex; align-items:center; justify-content:center">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#C9CFDB" stroke-width="1.9" stroke-linecap="round"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9z" /></svg>
+          </span>
+          <div style="display:flex; align-items:center; gap:10px; padding-inline-start:6px; border-inline-start:1px solid #33405C">
+            <span style="width:34px; height:34px; border-radius:999px; background:#33405C; color:#F9FAFB; display:flex; align-items:center; justify-content:center; font-size:13px; font-weight:600">SA</span>
+            <div style="display:flex; flex-direction:column; line-height:1.3">
+              <span style="font-size:13px; font-weight:600; color:#F9FAFB">Samir Aït Ahmed</span>
+              <span style="font-size:11px; color:#9AA3B2">Auto-école</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div style="background:#1C2333; padding:8px 32px 56px; display:flex; align-items:flex-end; justify-content:space-between; gap:24px">
+        <div style="display:flex; flex-direction:column; gap:8px">
+          <span style="font-family:&#39;JetBrains Mono&#39;, monospace; font-size:11px; color:#F5A623; letter-spacing:0.12em; text-transform:uppercase">Auto-école El Amel · Alger</span>
+          <span style="font-family:Poppins, sans-serif; font-size:34px; font-weight:700; color:#F9FAFB; letter-spacing:-0.03em; line-height:1.1">Planning</span>
+          <span style="font-size:14px; color:#9AA3B2">Une case libre se remplit en un clic. Rien n’est réservé d’avance.</span>
+        </div>
+        <div style="display:flex; gap:10px"><button style="border:1px solid #33405C; background:transparent; color:#F9FAFB; font-size:14px; font-weight:600; padding:11px 17px; border-radius:12px; cursor:pointer" style-hover="background:#242E44">Fermer une plage</button><button style="border:none; background:#F5A623; color:#1C2333; font-size:14px; font-weight:600; padding:11px 17px; border-radius:12px; cursor:pointer" style-hover="background:#E39A1D">Nouvelle séance</button></div>
+      </div>
+
+      <div style="padding:0 32px 48px; margin-top:-40px; display:flex; flex-direction:column; gap:20px">
+
+        <div style="background:#FFFFFF; border:1px solid #EBEDF1; border-radius:16px; padding:18px 20px; display:flex; align-items:center; justify-content:space-between; gap:24px">
+          <div style="display:flex; gap:2px; background:#F3F4F6; padding:4px; border-radius:12px">
+            <span style="font-size:14px; font-weight:600; color:#1C2333; background:#FFFFFF; border:1px solid #E5E7EB; padding:8px 18px; border-radius:9px">Conduite</span>
+            <span style="font-size:14px; font-weight:500; color:#6B7280; padding:8px 18px; border-radius:9px">Code</span>
+          </div>
+          <div style="display:flex; align-items:center; gap:10px">
+            <span style="width:34px; height:34px; border:1px solid #D1D5DB; border-radius:10px; display:flex; align-items:center; justify-content:center; cursor:pointer" style-hover="background:#F3F4F6">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#374151" stroke-width="2" stroke-linecap="round"><path d="m15 18-6-6 6-6" /></svg>
+            </span>
+            <span style="font-size:14px; font-weight:600; color:#1C2333; border:1px solid #D1D5DB; border-radius:10px; padding:8px 14px; cursor:pointer">Cette semaine</span>
+            <span style="display:flex; align-items:center; gap:8px; font-size:14px; color:#374151; border:1px solid #D1D5DB; border-radius:10px; padding:8px 14px; font-variant-numeric:tabular-nums; cursor:pointer">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="1.9" stroke-linecap="round"><rect x="3" y="4" width="18" height="18" rx="2" /><path d="M16 2v4M8 2v4M3 10h18" /></svg>
+              5 – 10 septembre 2026
+            </span>
+            <span style="width:34px; height:34px; border:1px solid #D1D5DB; border-radius:10px; display:flex; align-items:center; justify-content:center; cursor:pointer" style-hover="background:#F3F4F6">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#374151" stroke-width="2" stroke-linecap="round"><path d="m9 18 6-6-6-6" /></svg>
+            </span>
+          </div>
+        </div>
+
+        <div style="background:#FFFFFF; border:1px solid #EBEDF1; border-radius:16px; overflow:hidden">
+          <div style="display:grid; grid-template-columns:76px repeat(6, 1fr); border-bottom:1px solid #EBEDF1">
+            <span style="padding:12px 10px; font-family:'JetBrains Mono', monospace; font-size:11px; color:#9CA3AF; text-align:center">h</span>
+            <sc-for list="{{ dayNames }}" as="d" hint-placeholder-count="6">
+              <div style="padding:12px 10px; border-inline-start:1px solid #EBEDF1; display:flex; flex-direction:column; gap:2px; align-items:center">
+                <span style="font-size:13px; font-weight:600; color:#1C2333; text-transform:capitalize">{{ d.name }}</span>
+                <span style="font-size:12px; color:#9CA3AF; font-variant-numeric:tabular-nums">{{ d.date }}</span>
+              </div>
+            </sc-for>
+          </div>
+          <div style="display:grid; grid-template-columns:76px repeat(6, 1fr)">
+            <div style="display:grid; grid-template-rows:repeat(20, 42px)">
+              <sc-for list="{{ times }}" as="t" hint-placeholder-count="20">
+                <span style="display:flex; align-items:flex-start; justify-content:center; padding-top:3px; font-family:'JetBrains Mono', monospace; font-size:11px; color:#9CA3AF; border-top:1px solid #F4F5F7; font-variant-numeric:tabular-nums">{{ t.label }}</span>
+              </sc-for>
+            </div>
+            <sc-for list="{{ days }}" as="day" hint-placeholder-count="6">
+              <div style="display:grid; grid-template-rows:repeat(20, 42px); border-inline-start:1px solid #EBEDF1">
+                <sc-for list="{{ day.cells }}" as="cell" hint-placeholder-count="20">
+                  <div style="grid-row:{{ cell.gridRow }}; grid-column:1; border-top:1px solid #F4F5F7; cursor:pointer" style-hover="background:rgba(245,166,35,0.10)"></div>
+                </sc-for>
+                <sc-for list="{{ day.closed }}" as="cl" hint-placeholder-count="0">
+                  <div style="grid-row:{{ cl.gridRow }}; grid-column:1; border-top:1px solid #F4F5F7; background:repeating-linear-gradient(45deg, oklch(0.637 0.208 25.3 / 0.10) 0 4px, transparent 4px 9px); display:flex; align-items:center; padding-inline-start:8px">
+                    <span style="font-size:10px; font-weight:600; color:oklch(0.5 0.19 25.3)">Fermé</span>
+                  </div>
+                </sc-for>
+                <sc-for list="{{ day.sessions }}" as="ss" hint-placeholder-count="3">
+                  <div style="grid-row:{{ ss.gridRow }}; grid-column:1; margin:2px 3px; border-radius:9px; background:{{ ss.bg }}; padding:5px 8px; display:flex; flex-direction:column; justify-content:center; gap:1px; overflow:hidden; cursor:pointer">
+                    <span style="font-size:11px; font-weight:700; color:{{ ss.fg }}; white-space:nowrap">{{ ss.type }}</span>
+                    <span style="font-size:11px; color:#374151; white-space:nowrap; overflow:hidden; text-overflow:ellipsis">{{ ss.name }}</span>
+                  </div>
+                </sc-for>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+
+        <div style="display:flex; align-items:center; justify-content:space-between; gap:24px; flex-wrap:wrap">
+          <div style="display:flex; align-items:center; gap:18px; flex-wrap:wrap">
+            <span style="display:flex; align-items:center; gap:8px; font-size:13px; color:#374151"><span style="width:14px; height:14px; border-radius:5px; background:rgba(28,35,51,0.15)"></span>Code / Conduite · 30 min</span>
+            <span style="display:flex; align-items:center; gap:8px; font-size:13px; color:#374151"><span style="width:14px; height:14px; border-radius:5px; background:rgba(245,166,35,0.20)"></span>Créneau · 30 min</span>
+            <span style="display:flex; align-items:center; gap:8px; font-size:13px; color:#374151"><span style="width:14px; height:14px; border-radius:5px; background:rgba(22,163,74,0.20)"></span>Perfectionnement · 1 h</span>
+            <span style="display:flex; align-items:center; gap:8px; font-size:13px; color:#374151"><span style="width:14px; height:14px; border-radius:5px; background:repeating-linear-gradient(45deg, oklch(0.637 0.208 25.3 / 0.16) 0 3px, transparent 3px 7px)"></span>Demi-heure fermée</span>
+          </div>
+          <span style="font-size:13px; color:#6B7280">Cliquez sur une case vide pour créer une séance ou fermer la demi-heure.</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="2b" style="display:flex; flex-direction:column; gap:14px">
+    <div style="display:flex; align-items:center; gap:12px">
+      <span style="font-family:&#39;JetBrains Mono&#39;, monospace; font-size:12px; font-weight:500; background:#1C2333; color:#F5A623; padding:4px 9px; border-radius:6px">2b</span>
+      <span style="font-family:Poppins, sans-serif; font-size:17px; font-weight:600; color:#1C2333">Modales de cellule</span>
+      <span style="font-family:&#39;JetBrains Mono&#39;, monospace; font-size:12px; color:#6B7280">/ecole/planning · case vide + case occupée</span>
+    </div>
+    <div style="display:flex; gap:32px; align-items:flex-start; flex-wrap:wrap">
+
+      <div style="width:520px; background:rgba(28,35,51,0.45); border-radius:16px; padding:36px">
+        <div style="background:#FFFFFF; border-radius:16px; padding:24px; display:flex; flex-direction:column; gap:18px">
+          <div style="display:flex; align-items:flex-start; justify-content:space-between; gap:16px">
+            <div style="display:flex; flex-direction:column; gap:4px">
+              <span style="font-family:Poppins, sans-serif; font-size:20px; font-weight:600; color:#1C2333; letter-spacing:-0.02em">Nouvelle séance</span>
+              <span style="font-size:13px; color:#6B7280; font-variant-numeric:tabular-nums">Lundi 7 septembre · 10:30</span>
+            </div>
+            <span style="width:30px; height:30px; border-radius:9px; border:1px solid #E5E7EB; display:flex; align-items:center; justify-content:center; cursor:pointer">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2.2" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12" /></svg>
+            </span>
+          </div>
+
+          <div style="display:flex; flex-direction:column; gap:8px">
+            <span style="font-size:13px; font-weight:600; color:#374151">Type de séance</span>
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px">
+              <span style="display:flex; align-items:center; justify-content:space-between; font-size:13px; font-weight:500; color:#374151; border:1px solid #E5E7EB; border-radius:10px; padding:10px 12px; cursor:pointer">Code<span style="font-size:11px; color:#9CA3AF">30 min</span></span>
+              <span style="display:flex; align-items:center; justify-content:space-between; font-size:13px; font-weight:600; color:#1C2333; border:1px solid #F5A623; background:rgba(245,166,35,0.10); border-radius:10px; padding:10px 12px; cursor:pointer">Créneau<span style="font-size:11px; color:#8A5A06">30 min</span></span>
+              <span style="display:flex; align-items:center; justify-content:space-between; font-size:13px; font-weight:500; color:#374151; border:1px solid #E5E7EB; border-radius:10px; padding:10px 12px; cursor:pointer">Conduite<span style="font-size:11px; color:#9CA3AF">30 min</span></span>
+              <span style="display:flex; align-items:center; justify-content:space-between; font-size:13px; font-weight:500; color:#374151; border:1px solid #E5E7EB; border-radius:10px; padding:10px 12px; cursor:pointer">Perfectionnement<span style="font-size:11px; color:#9CA3AF">1 h</span></span>
+            </div>
+          </div>
+
+          <div style="display:flex; flex-direction:column; gap:8px">
+            <span style="font-size:13px; font-weight:600; color:#374151">Candidat</span>
+            <div style="display:flex; align-items:center; gap:9px; border:1px solid #F5A623; border-radius:10px; padding:10px 12px; box-shadow:0 0 0 3px rgba(245,166,35,0.28)">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#9CA3AF" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7" /><path d="m20 20-3.5-3.5" /></svg>
+              <span style="font-size:14px; color:#1C2333">Bou</span>
+            </div>
+            <div style="border:1px solid #E5E7EB; border-radius:10px; overflow:hidden">
+              <span style="display:block; padding:9px 12px; font-size:12px; color:#6B7280; background:#F9FAFB; border-bottom:1px solid #EBEDF1">Candidats au stade créneau.</span>
+              <span style="display:flex; align-items:center; justify-content:space-between; padding:10px 12px; background:rgba(245,166,35,0.08)">
+                <span style="display:flex; flex-direction:column"><span style="font-size:14px; font-weight:600; color:#1C2333">Bouzid Salima</span><span style="font-family:'Noto Sans Arabic', sans-serif; font-size:12px; color:#6B7280">سليمة بوزيد</span></span>
+                <span style="font-family:'JetBrains Mono', monospace; font-size:11px; padding:3px 8px; border-radius:7px; background:#1C2333; color:#F9FAFB">B</span>
+              </span>
+              <span style="display:flex; align-items:center; justify-content:space-between; padding:10px 12px; border-top:1px solid #F3F4F6">
+                <span style="display:flex; flex-direction:column"><span style="font-size:14px; font-weight:600; color:#1C2333">Boukhalfa Idir</span><span style="font-family:'Noto Sans Arabic', sans-serif; font-size:12px; color:#6B7280">إيدير بوخالفة</span></span>
+                <span style="font-family:'JetBrains Mono', monospace; font-size:11px; padding:3px 8px; border-radius:7px; background:#F3F4F6; color:#1C2333; border:1px solid #E5E7EB">A1</span>
+              </span>
+            </div>
+          </div>
+
+          <div style="display:flex; align-items:center; gap:9px; padding:11px 13px; border-radius:12px; background:oklch(0.637 0.208 25.3 / 0.09); border:1px solid oklch(0.637 0.208 25.3 / 0.3)">
+            <span style="font-size:13px; color:oklch(0.48 0.18 25.3)">Ce candidat a déjà un créneau à cette heure.</span>
+          </div>
+
+          <div style="display:flex; align-items:center; justify-content:space-between; gap:12px; border-top:1px solid #F3F4F6; padding-top:16px">
+            <button style="border:1px solid #D1D5DB; background:#FFFFFF; color:#374151; font-size:13px; font-weight:600; padding:10px 14px; border-radius:11px; cursor:pointer">Fermer cette demi-heure</button>
+            <div style="display:flex; gap:10px">
+              <button style="border:1px solid #D1D5DB; background:#FFFFFF; color:#1C2333; font-size:14px; font-weight:600; padding:11px 16px; border-radius:12px; cursor:pointer">Annuler</button>
+              <button style="border:none; background:#F5A623; color:#1C2333; font-size:14px; font-weight:600; padding:11px 16px; border-radius:12px; cursor:pointer">Créer la séance</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div style="width:520px; background:rgba(28,35,51,0.45); border-radius:16px; padding:36px">
+        <div style="background:#FFFFFF; border-radius:16px; padding:24px; display:flex; flex-direction:column; gap:18px">
+          <div style="display:flex; align-items:flex-start; justify-content:space-between; gap:16px">
+            <div style="display:flex; flex-direction:column; gap:4px">
+              <span style="font-family:Poppins, sans-serif; font-size:20px; font-weight:600; color:#1C2333; letter-spacing:-0.02em">Séance de perfectionnement</span>
+              <span style="font-size:13px; color:#6B7280; font-variant-numeric:tabular-nums">Jeudi 10 septembre · 12:30 → 13:30</span>
+            </div>
+            <span style="width:30px; height:30px; border-radius:9px; border:1px solid #E5E7EB; display:flex; align-items:center; justify-content:center; cursor:pointer">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2.2" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12" /></svg>
+            </span>
+          </div>
+
+          <div style="display:flex; align-items:center; gap:14px; background:#F9FAFB; border-radius:12px; padding:14px">
+            <span style="width:44px; height:44px; border-radius:999px; background:#1C2333; color:#F9FAFB; display:flex; align-items:center; justify-content:center; font-size:15px; font-weight:600">YR</span>
+            <div style="display:flex; flex-direction:column; gap:2px">
+              <span style="font-size:15px; font-weight:600; color:#1C2333">Yahiaoui Rachid</span>
+              <span style="font-family:'Noto Sans Arabic', sans-serif; font-size:13px; color:#6B7280">رشيد يحياوي</span>
+            </div>
+            <span style="flex:1"></span>
+            <span style="font-family:'JetBrains Mono', monospace; font-size:12px; padding:4px 9px; border-radius:8px; background:#1C2333; color:#F9FAFB">B</span>
+          </div>
+
+          <div style="display:flex; flex-direction:column; gap:11px">
+            <div style="display:flex; align-items:center; justify-content:space-between"><span style="font-size:13px; color:#6B7280">Type</span><span style="font-size:14px; font-weight:600; color:#145F32">Perfectionnement · 1 h</span></div>
+            <div style="display:flex; align-items:center; justify-content:space-between"><span style="font-size:13px; color:#6B7280">Ressource</span><span style="font-size:14px; color:#1C2333">Véhicule — Renault Symbol</span></div>
+            <div style="display:flex; align-items:center; justify-content:space-between"><span style="font-size:13px; color:#6B7280">Facturé</span><span style="font-size:14px; font-weight:600; color:#1C2333; font-variant-numeric:tabular-nums">1 200,00 DA</span></div>
+            <div style="display:flex; align-items:center; justify-content:space-between"><span style="font-size:13px; color:#6B7280">Créée par</span><span style="font-size:14px; color:#1C2333">Samir Aït Ahmed · 2 sept. 2026</span></div>
+          </div>
+
+          <div style="display:flex; justify-content:flex-end; gap:10px; border-top:1px solid #F3F4F6; padding-top:16px">
+            <button style="border:1px solid #D1D5DB; background:#FFFFFF; color:#1C2333; font-size:14px; font-weight:600; padding:11px 16px; border-radius:12px; cursor:pointer">Fermer</button>
+            <button style="border:1px solid oklch(0.637 0.208 25.3); background:#FFFFFF; color:oklch(0.55 0.19 25.3); font-size:14px; font-weight:600; padding:11px 16px; border-radius:12px; cursor:pointer">Supprimer la séance</button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div id="2c" style="display:flex; flex-direction:column; gap:14px">
+    <div style="display:flex; align-items:center; gap:12px">
+      <span style="font-family:&#39;JetBrains Mono&#39;, monospace; font-size:12px; font-weight:500; background:#1C2333; color:#F5A623; padding:4px 9px; border-radius:6px">2c</span>
+      <span style="font-family:Poppins, sans-serif; font-size:17px; font-weight:600; color:#1C2333">Demandes d’inscription</span>
+      <span style="font-family:&#39;JetBrains Mono&#39;, monospace; font-size:12px; color:#6B7280">/ecole/requests · desktop 1440</span>
+    </div>
+    <div style="width:1440px; background:#F9FAFB; border:1px solid #D8DCE3; border-radius:16px; overflow:hidden">
+      <div style="background:#1C2333; display:flex; align-items:center; justify-content:space-between; padding:0 32px; height:64px">
+        <div style="display:flex; align-items:center; gap:10px">
+          <span style="width:28px; height:28px; border-radius:8px; background:#F5A623; display:flex; align-items:center; justify-content:center; font-family:Poppins, sans-serif; font-weight:800; font-size:15px; color:#1C2333">P</span>
+          <span style="font-family:Poppins, sans-serif; font-size:17px; font-weight:700; color:#F9FAFB; letter-spacing:-0.01em">Permix</span>
+        </div>
+        <div style="display:flex; align-items:center; gap:2px; background:rgba(255,255,255,0.05); padding:4px; border-radius:14px">
+          <span style="display:flex; align-items:center; gap:8px; font-size:14px; font-weight:500; color:#C9CFDB; background:transparent; padding:8px 14px; border-radius:10px"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#C9CFDB" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="9" rx="1" /><rect x="14" y="3" width="7" height="5" rx="1" /><rect x="14" y="12" width="7" height="9" rx="1" /><rect x="3" y="16" width="7" height="5" rx="1" /></svg>Tableau de bord</span>
+          <span style="display:flex; align-items:center; gap:8px; font-size:14px; font-weight:600; color:#1C2333; background:#F5A623; padding:8px 14px; border-radius:10px"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#1C2333" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-6l-2 3h-4l-2-3H2" /><path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z" /></svg>Demandes<span style="font-size:11px; font-weight:700; background:#1C2333; color:#F5A623; border-radius:999px; padding:1px 6px; font-variant-numeric:tabular-nums">12</span></span>
+          <span style="display:flex; align-items:center; gap:8px; font-size:14px; font-weight:500; color:#C9CFDB; background:transparent; padding:8px 14px; border-radius:10px"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#C9CFDB" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z" /><path d="M6 12v5c3 3 9 3 12 0v-5" /></svg>Candidats</span>
+          <span style="display:flex; align-items:center; gap:8px; font-size:14px; font-weight:500; color:#C9CFDB; background:transparent; padding:8px 14px; border-radius:10px"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#C9CFDB" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="6" /><path d="M15.477 12.89 17 22l-5-3-5 3 1.523-9.11" /></svg>Diplômés</span>
+          <span style="display:flex; align-items:center; gap:8px; font-size:14px; font-weight:500; color:#C9CFDB; background:transparent; padding:8px 14px; border-radius:10px"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#C9CFDB" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" /><path d="M16 2v4M8 2v4M3 10h18" /></svg>Planning</span>
+          <span style="display:flex; align-items:center; gap:8px; font-size:14px; font-weight:500; color:#C9CFDB; background:transparent; padding:8px 14px; border-radius:10px"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#C9CFDB" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="2" width="8" height="4" rx="1" /><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2" /><path d="m9 14 2 2 4-4" /></svg>Examens</span>
+        </div>
+        <div style="display:flex; align-items:center; gap:14px">
+          <span style="font-size:13px; font-weight:600; color:#C9CFDB; border:1px solid #33405C; border-radius:10px; padding:7px 10px">FR</span>
+          <span style="width:33px; height:33px; border:1px solid #33405C; border-radius:10px; display:flex; align-items:center; justify-content:center"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#C9CFDB" stroke-width="1.9" stroke-linecap="round"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9z" /></svg></span>
+          <div style="display:flex; align-items:center; gap:10px; padding-inline-start:6px; border-inline-start:1px solid #33405C">
+            <span style="width:34px; height:34px; border-radius:999px; background:#33405C; color:#F9FAFB; display:flex; align-items:center; justify-content:center; font-size:13px; font-weight:600">SA</span>
+            <div style="display:flex; flex-direction:column; line-height:1.3">
+              <span style="font-size:13px; font-weight:600; color:#F9FAFB">Samir Aït Ahmed</span>
+              <span style="font-size:11px; color:#9AA3B2">Auto-école</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div style="background:#1C2333; padding:8px 32px 56px; display:flex; align-items:flex-end; justify-content:space-between; gap:24px">
+        <div style="display:flex; flex-direction:column; gap:8px">
+          <span style="font-family:&#39;JetBrains Mono&#39;, monospace; font-size:11px; color:#F5A623; letter-spacing:0.12em; text-transform:uppercase">Auto-école El Amel · Alger</span>
+          <span style="font-family:Poppins, sans-serif; font-size:34px; font-weight:700; color:#F9FAFB; letter-spacing:-0.03em; line-height:1.1">Demandes</span>
+          <span style="font-size:14px; color:#9AA3B2">Chaque geste ouvre une confirmation avant d’être appliqué.</span>
+        </div>
+        <div style="display:flex; gap:10px; align-items:center"></div>
+      </div>
+      <div style="padding:0 32px 48px; margin-top:-40px; display:flex; flex-direction:column; gap:20px">
+        <div style="background:#FFFFFF; border:1px solid #EBEDF1; border-radius:16px; padding:16px 20px; display:flex; align-items:center; justify-content:space-between; gap:20px">
+          <div style="display:flex; gap:2px; background:#F3F4F6; padding:4px; border-radius:12px"><span style="display:flex; align-items:center; gap:7px; font-size:14px; font-weight:500; color:#6B7280; padding:7px 15px; border-radius:9px; cursor:pointer">Toutes<span style="font-size:11px; font-weight:700; color:#9CA3AF; font-variant-numeric:tabular-nums">31</span></span><span style="display:flex; align-items:center; gap:7px; font-size:14px; font-weight:600; color:#1C2333; background:#FFFFFF; border:1px solid #E5E7EB; padding:7px 15px; border-radius:9px; cursor:pointer">En attente<span style="font-size:11px; font-weight:700; color:#8A5A06; font-variant-numeric:tabular-nums">12</span></span><span style="display:flex; align-items:center; gap:7px; font-size:14px; font-weight:500; color:#6B7280; padding:7px 15px; border-radius:9px; cursor:pointer">Acceptées<span style="font-size:11px; font-weight:700; color:#9CA3AF; font-variant-numeric:tabular-nums">15</span></span><span style="display:flex; align-items:center; gap:7px; font-size:14px; font-weight:500; color:#6B7280; padding:7px 15px; border-radius:9px; cursor:pointer">Refusées<span style="font-size:11px; font-weight:700; color:#9CA3AF; font-variant-numeric:tabular-nums">4</span></span></div>
+          <div style="display:flex; align-items:center; gap:9px; border:1px solid #D1D5DB; border-radius:11px; padding:9px 12px; min-width:280px">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#9CA3AF" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7" /><path d="m20 20-3.5-3.5" /></svg>
+            <span style="font-size:14px; color:#9CA3AF">Nom ou téléphone…</span>
+          </div>
+        </div>
+        <div style="display:grid; grid-template-columns:repeat(3, 1fr); gap:20px">
+          <div style="background:#FFFFFF; border:1px solid #EBEDF1; border-radius:16px; padding:20px; display:flex; flex-direction:column; gap:16px">
+            <div style="display:flex; align-items:center; gap:13px">
+              <span style="width:44px; height:44px; border-radius:999px; background:rgba(28,35,51,0.07); color:#1C2333; display:flex; align-items:center; justify-content:center; font-size:14px; font-weight:600">BS</span>
+              <div style="display:flex; flex-direction:column; gap:2px; min-width:0">
+                <span style="font-size:15px; font-weight:600; color:#1C2333">Bouzid Salima</span>
+                <span style="font-family:'Noto Sans Arabic', sans-serif; font-size:13px; color:#6B7280">سليمة بوزيد</span>
+              </div>
+              <span style="flex:1"></span>
+              <span style="font-family:&#39;JetBrains Mono&#39;, monospace; font-size:12px; font-weight:500; padding:4px 9px; border-radius:8px; background:#1C2333; color:#F9FAFB">B</span>
+            </div>
+            <div style="display:flex; flex-direction:column; gap:7px; border-top:1px solid #F3F4F6; padding-top:14px">
+              <span style="display:flex; align-items:center; gap:8px; font-size:13px; color:#374151"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#9CA3AF" stroke-width="1.9" stroke-linecap="round"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1 1 .3 1.9.6 2.8a2 2 0 0 1-.5 2.1L8.1 9.9a16 16 0 0 0 6 6l1.3-1.1a2 2 0 0 1 2.1-.5c.9.3 1.8.5 2.8.6a2 2 0 0 1 1.7 2z" /></svg><span dir="ltr" style="font-variant-numeric:tabular-nums">05 55 41 22 08</span></span>
+              <span style="font-size:13px; color:#6B7280">Demandé le 3 septembre 2026</span>
+            </div>
+            <div style="display:flex; gap:9px">
+              <button style="flex:1; border:none; background:#F5A623; color:#1C2333; font-size:14px; font-weight:600; padding:10px; border-radius:11px; cursor:pointer" style-hover="background:#E39A1D">Accepter</button>
+              <button style="flex:1; border:1px solid oklch(0.637 0.208 25.3); background:#FFFFFF; color:oklch(0.55 0.19 25.3); font-size:14px; font-weight:600; padding:10px; border-radius:11px; cursor:pointer">Refuser</button>
+            </div>
+          </div>
+          <div style="background:#FFFFFF; border:1px solid #EBEDF1; border-radius:16px; padding:20px; display:flex; flex-direction:column; gap:16px">
+            <div style="display:flex; align-items:center; gap:13px">
+              <span style="width:44px; height:44px; border-radius:999px; background:rgba(28,35,51,0.07); color:#1C2333; display:flex; align-items:center; justify-content:center; font-size:14px; font-weight:600">BI</span>
+              <div style="display:flex; flex-direction:column; gap:2px; min-width:0">
+                <span style="font-size:15px; font-weight:600; color:#1C2333">Boukhalfa Idir</span>
+                <span style="font-family:'Noto Sans Arabic', sans-serif; font-size:13px; color:#6B7280">إيدير بوخالفة</span>
+              </div>
+              <span style="flex:1"></span>
+              <span style="font-family:&#39;JetBrains Mono&#39;, monospace; font-size:12px; font-weight:500; padding:4px 9px; border-radius:8px; background:#F3F4F6; color:#1C2333; border:1px solid #E5E7EB">A1</span>
+            </div>
+            <div style="display:flex; flex-direction:column; gap:7px; border-top:1px solid #F3F4F6; padding-top:14px">
+              <span style="display:flex; align-items:center; gap:8px; font-size:13px; color:#374151"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#9CA3AF" stroke-width="1.9" stroke-linecap="round"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1 1 .3 1.9.6 2.8a2 2 0 0 1-.5 2.1L8.1 9.9a16 16 0 0 0 6 6l1.3-1.1a2 2 0 0 1 2.1-.5c.9.3 1.8.5 2.8.6a2 2 0 0 1 1.7 2z" /></svg><span dir="ltr" style="font-variant-numeric:tabular-nums">05 55 90 17 63</span></span>
+              <span style="font-size:13px; color:#6B7280">Demandé le 3 septembre 2026</span>
+            </div>
+            <div style="display:flex; gap:9px">
+              <button style="flex:1; border:none; background:#F5A623; color:#1C2333; font-size:14px; font-weight:600; padding:10px; border-radius:11px; cursor:pointer" style-hover="background:#E39A1D">Accepter</button>
+              <button style="flex:1; border:1px solid oklch(0.637 0.208 25.3); background:#FFFFFF; color:oklch(0.55 0.19 25.3); font-size:14px; font-weight:600; padding:10px; border-radius:11px; cursor:pointer">Refuser</button>
+            </div>
+          </div>
+          <div style="background:#FFFFFF; border:1px solid #EBEDF1; border-radius:16px; padding:20px; display:flex; flex-direction:column; gap:16px">
+            <div style="display:flex; align-items:center; gap:13px">
+              <span style="width:44px; height:44px; border-radius:999px; background:rgba(28,35,51,0.07); color:#1C2333; display:flex; align-items:center; justify-content:center; font-size:14px; font-weight:600">LM</span>
+              <div style="display:flex; flex-direction:column; gap:2px; min-width:0">
+                <span style="font-size:15px; font-weight:600; color:#1C2333">Larbi Meriem</span>
+                <span style="font-family:'Noto Sans Arabic', sans-serif; font-size:13px; color:#6B7280">مريم العربي</span>
+              </div>
+              <span style="flex:1"></span>
+              <span style="font-family:&#39;JetBrains Mono&#39;, monospace; font-size:12px; font-weight:500; padding:4px 9px; border-radius:8px; background:#1C2333; color:#F9FAFB">B</span>
+            </div>
+            <div style="display:flex; flex-direction:column; gap:7px; border-top:1px solid #F3F4F6; padding-top:14px">
+              <span style="display:flex; align-items:center; gap:8px; font-size:13px; color:#374151"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#9CA3AF" stroke-width="1.9" stroke-linecap="round"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1 1 .3 1.9.6 2.8a2 2 0 0 1-.5 2.1L8.1 9.9a16 16 0 0 0 6 6l1.3-1.1a2 2 0 0 1 2.1-.5c.9.3 1.8.5 2.8.6a2 2 0 0 1 1.7 2z" /></svg><span dir="ltr" style="font-variant-numeric:tabular-nums">05 55 03 74 51</span></span>
+              <span style="font-size:13px; color:#6B7280">Demandé le 2 septembre 2026</span>
+            </div>
+            <div style="display:flex; gap:9px">
+              <button style="flex:1; border:none; background:#F5A623; color:#1C2333; font-size:14px; font-weight:600; padding:10px; border-radius:11px; cursor:pointer" style-hover="background:#E39A1D">Accepter</button>
+              <button style="flex:1; border:1px solid oklch(0.637 0.208 25.3); background:#FFFFFF; color:oklch(0.55 0.19 25.3); font-size:14px; font-weight:600; padding:10px; border-radius:11px; cursor:pointer">Refuser</button>
+            </div>
+          </div>
+          <div style="background:#FFFFFF; border:1px solid #EBEDF1; border-radius:16px; padding:20px; display:flex; flex-direction:column; gap:16px">
+            <div style="display:flex; align-items:center; gap:13px">
+              <span style="width:44px; height:44px; border-radius:999px; background:rgba(28,35,51,0.07); color:#1C2333; display:flex; align-items:center; justify-content:center; font-size:14px; font-weight:600">TA</span>
+              <div style="display:flex; flex-direction:column; gap:2px; min-width:0">
+                <span style="font-size:15px; font-weight:600; color:#1C2333">Tounsi Anis</span>
+                <span style="font-family:'Noto Sans Arabic', sans-serif; font-size:13px; color:#6B7280">أنيس التونسي</span>
+              </div>
+              <span style="flex:1"></span>
+              <span style="font-family:&#39;JetBrains Mono&#39;, monospace; font-size:12px; font-weight:500; padding:4px 9px; border-radius:8px; background:#F3F4F6; color:#1C2333; border:1px solid #E5E7EB">C</span>
+            </div>
+            <div style="display:flex; flex-direction:column; gap:7px; border-top:1px solid #F3F4F6; padding-top:14px">
+              <span style="display:flex; align-items:center; gap:8px; font-size:13px; color:#374151"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#9CA3AF" stroke-width="1.9" stroke-linecap="round"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1 1 .3 1.9.6 2.8a2 2 0 0 1-.5 2.1L8.1 9.9a16 16 0 0 0 6 6l1.3-1.1a2 2 0 0 1 2.1-.5c.9.3 1.8.5 2.8.6a2 2 0 0 1 1.7 2z" /></svg><span dir="ltr" style="font-variant-numeric:tabular-nums">05 55 66 39 12</span></span>
+              <span style="font-size:13px; color:#6B7280">Demandé le 2 septembre 2026</span>
+            </div>
+            <div style="display:flex; gap:9px">
+              <button style="flex:1; border:none; background:#F5A623; color:#1C2333; font-size:14px; font-weight:600; padding:10px; border-radius:11px; cursor:pointer" style-hover="background:#E39A1D">Accepter</button>
+              <button style="flex:1; border:1px solid oklch(0.637 0.208 25.3); background:#FFFFFF; color:oklch(0.55 0.19 25.3); font-size:14px; font-weight:600; padding:10px; border-radius:11px; cursor:pointer">Refuser</button>
+            </div>
+          </div>
+          <div style="background:#FFFFFF; border:1px solid #EBEDF1; border-radius:16px; padding:20px; display:flex; flex-direction:column; gap:16px">
+            <div style="display:flex; align-items:center; gap:13px">
+              <span style="width:44px; height:44px; border-radius:999px; background:rgba(28,35,51,0.07); color:#1C2333; display:flex; align-items:center; justify-content:center; font-size:14px; font-weight:600">SH</span>
+              <div style="display:flex; flex-direction:column; gap:2px; min-width:0">
+                <span style="font-size:15px; font-weight:600; color:#1C2333">Saïdi Hind</span>
+                <span style="font-family:'Noto Sans Arabic', sans-serif; font-size:13px; color:#6B7280">هند سعيدي</span>
+              </div>
+              <span style="flex:1"></span>
+              <span style="font-family:&#39;JetBrains Mono&#39;, monospace; font-size:12px; font-weight:500; padding:4px 9px; border-radius:8px; background:#1C2333; color:#F9FAFB">B</span>
+            </div>
+            <div style="display:flex; flex-direction:column; gap:7px; border-top:1px solid #F3F4F6; padding-top:14px">
+              <span style="display:flex; align-items:center; gap:8px; font-size:13px; color:#374151"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#9CA3AF" stroke-width="1.9" stroke-linecap="round"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1 1 .3 1.9.6 2.8a2 2 0 0 1-.5 2.1L8.1 9.9a16 16 0 0 0 6 6l1.3-1.1a2 2 0 0 1 2.1-.5c.9.3 1.8.5 2.8.6a2 2 0 0 1 1.7 2z" /></svg><span dir="ltr" style="font-variant-numeric:tabular-nums">05 55 28 84 70</span></span>
+              <span style="font-size:13px; color:#6B7280">Demandé le 1er septembre 2026</span>
+            </div>
+            <div style="display:flex; gap:9px">
+              <button style="flex:1; border:none; background:#F5A623; color:#1C2333; font-size:14px; font-weight:600; padding:10px; border-radius:11px; cursor:pointer" style-hover="background:#E39A1D">Accepter</button>
+              <button style="flex:1; border:1px solid oklch(0.637 0.208 25.3); background:#FFFFFF; color:oklch(0.55 0.19 25.3); font-size:14px; font-weight:600; padding:10px; border-radius:11px; cursor:pointer">Refuser</button>
+            </div>
+          </div>
+          <div style="background:#FFFFFF; border:1px solid #EBEDF1; border-radius:16px; padding:20px; display:flex; flex-direction:column; gap:16px">
+            <div style="display:flex; align-items:center; gap:13px">
+              <span style="width:44px; height:44px; border-radius:999px; background:rgba(28,35,51,0.07); color:#1C2333; display:flex; align-items:center; justify-content:center; font-size:14px; font-weight:600">KB</span>
+              <div style="display:flex; flex-direction:column; gap:2px; min-width:0">
+                <span style="font-size:15px; font-weight:600; color:#1C2333">Kaci Brahim</span>
+                <span style="font-family:'Noto Sans Arabic', sans-serif; font-size:13px; color:#6B7280">إبراهيم قاسي</span>
+              </div>
+              <span style="flex:1"></span>
+              <span style="font-family:&#39;JetBrains Mono&#39;, monospace; font-size:12px; font-weight:500; padding:4px 9px; border-radius:8px; background:#F3F4F6; color:#1C2333; border:1px solid #E5E7EB">D</span>
+            </div>
+            <div style="display:flex; flex-direction:column; gap:7px; border-top:1px solid #F3F4F6; padding-top:14px">
+              <span style="display:flex; align-items:center; gap:8px; font-size:13px; color:#374151"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#9CA3AF" stroke-width="1.9" stroke-linecap="round"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1 1 .3 1.9.6 2.8a2 2 0 0 1-.5 2.1L8.1 9.9a16 16 0 0 0 6 6l1.3-1.1a2 2 0 0 1 2.1-.5c.9.3 1.8.5 2.8.6a2 2 0 0 1 1.7 2z" /></svg><span dir="ltr" style="font-variant-numeric:tabular-nums">05 55 71 55 46</span></span>
+              <span style="font-size:13px; color:#6B7280">Demandé le 31 août 2026</span>
+            </div>
+            <div style="display:flex; gap:9px">
+              <button style="flex:1; border:none; background:#F5A623; color:#1C2333; font-size:14px; font-weight:600; padding:10px; border-radius:11px; cursor:pointer" style-hover="background:#E39A1D">Accepter</button>
+              <button style="flex:1; border:1px solid oklch(0.637 0.208 25.3); background:#FFFFFF; color:oklch(0.55 0.19 25.3); font-size:14px; font-weight:600; padding:10px; border-radius:11px; cursor:pointer">Refuser</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="2d" style="display:flex; flex-direction:column; gap:14px">
+    <div style="display:flex; align-items:center; gap:12px">
+      <span style="font-family:&#39;JetBrains Mono&#39;, monospace; font-size:12px; font-weight:500; background:#1C2333; color:#F5A623; padding:4px 9px; border-radius:6px">2d</span>
+      <span style="font-family:Poppins, sans-serif; font-size:17px; font-weight:600; color:#1C2333">Confirmation de refus</span>
+      <span style="font-family:&#39;JetBrains Mono&#39;, monospace; font-size:12px; color:#6B7280">/ecole/requests · modale</span>
+    </div>
+    <div style="width:520px; background:rgba(28,35,51,0.45); border-radius:16px; padding:36px">
+      <div style="background:#FFFFFF; border-radius:16px; padding:24px; display:flex; flex-direction:column; gap:16px">
+        <span style="width:44px; height:44px; border-radius:999px; background:oklch(0.637 0.208 25.3 / 0.12); display:flex; align-items:center; justify-content:center">
+          <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="oklch(0.55 0.19 25.3)" stroke-width="2" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12" /></svg>
+        </span>
+        <div style="display:flex; flex-direction:column; gap:6px">
+          <span style="font-family:Poppins, sans-serif; font-size:20px; font-weight:600; color:#1C2333; letter-spacing:-0.02em">Refuser la demande de Kaci Brahim ?</span>
+          <span style="font-size:14px; color:#6B7280; line-height:1.6">Le candidat sera informé du refus. Vous pouvez indiquer un motif, il apparaîtra dans son historique.</span>
+        </div>
+        <label style="display:flex; flex-direction:column; gap:6px">
+          <span style="font-size:13px; font-weight:600; color:#374151">Motif (facultatif)</span>
+          <textarea readOnly="" rows="3" style="font-family:Inter, sans-serif; font-size:14px; color:#1C2333; padding:11px 13px; border:1px solid #D1D5DB; border-radius:12px; resize:none; outline:none">Catégorie D non proposée cette année.</textarea>
+        </label>
+        <div style="display:flex; justify-content:flex-end; gap:10px; border-top:1px solid #F3F4F6; padding-top:16px">
+          <button style="border:1px solid #D1D5DB; background:#FFFFFF; color:#1C2333; font-size:14px; font-weight:600; padding:11px 16px; border-radius:12px; cursor:pointer">Annuler</button>
+          <button style="border:none; background:oklch(0.637 0.208 25.3); color:#FFFFFF; font-size:14px; font-weight:600; padding:11px 16px; border-radius:12px; cursor:pointer">Refuser la demande</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="2e" style="display:flex; flex-direction:column; gap:14px">
+    <div style="display:flex; align-items:center; gap:12px">
+      <span style="font-family:&#39;JetBrains Mono&#39;, monospace; font-size:12px; font-weight:500; background:#1C2333; color:#F5A623; padding:4px 9px; border-radius:6px">2e</span>
+      <span style="font-family:Poppins, sans-serif; font-size:17px; font-weight:600; color:#1C2333">Candidats actifs</span>
+      <span style="font-family:&#39;JetBrains Mono&#39;, monospace; font-size:12px; color:#6B7280">/ecole/students · desktop 1440</span>
+    </div>
+    <div style="width:1440px; background:#F9FAFB; border:1px solid #D8DCE3; border-radius:16px; overflow:hidden">
+      <div style="background:#1C2333; display:flex; align-items:center; justify-content:space-between; padding:0 32px; height:64px">
+        <div style="display:flex; align-items:center; gap:10px">
+          <span style="width:28px; height:28px; border-radius:8px; background:#F5A623; display:flex; align-items:center; justify-content:center; font-family:Poppins, sans-serif; font-weight:800; font-size:15px; color:#1C2333">P</span>
+          <span style="font-family:Poppins, sans-serif; font-size:17px; font-weight:700; color:#F9FAFB; letter-spacing:-0.01em">Permix</span>
+        </div>
+        <div style="display:flex; align-items:center; gap:2px; background:rgba(255,255,255,0.05); padding:4px; border-radius:14px">
+          <span style="display:flex; align-items:center; gap:8px; font-size:14px; font-weight:500; color:#C9CFDB; background:transparent; padding:8px 14px; border-radius:10px"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#C9CFDB" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="9" rx="1" /><rect x="14" y="3" width="7" height="5" rx="1" /><rect x="14" y="12" width="7" height="9" rx="1" /><rect x="3" y="16" width="7" height="5" rx="1" /></svg>Tableau de bord</span>
+          <span style="display:flex; align-items:center; gap:8px; font-size:14px; font-weight:500; color:#C9CFDB; background:transparent; padding:8px 14px; border-radius:10px"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#C9CFDB" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-6l-2 3h-4l-2-3H2" /><path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z" /></svg>Demandes<span style="font-size:11px; font-weight:700; background:#F5A623; color:#1C2333; border-radius:999px; padding:1px 6px; font-variant-numeric:tabular-nums">12</span></span>
+          <span style="display:flex; align-items:center; gap:8px; font-size:14px; font-weight:600; color:#1C2333; background:#F5A623; padding:8px 14px; border-radius:10px"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#1C2333" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z" /><path d="M6 12v5c3 3 9 3 12 0v-5" /></svg>Candidats</span>
+          <span style="display:flex; align-items:center; gap:8px; font-size:14px; font-weight:500; color:#C9CFDB; background:transparent; padding:8px 14px; border-radius:10px"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#C9CFDB" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="6" /><path d="M15.477 12.89 17 22l-5-3-5 3 1.523-9.11" /></svg>Diplômés</span>
+          <span style="display:flex; align-items:center; gap:8px; font-size:14px; font-weight:500; color:#C9CFDB; background:transparent; padding:8px 14px; border-radius:10px"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#C9CFDB" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" /><path d="M16 2v4M8 2v4M3 10h18" /></svg>Planning</span>
+          <span style="display:flex; align-items:center; gap:8px; font-size:14px; font-weight:500; color:#C9CFDB; background:transparent; padding:8px 14px; border-radius:10px"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#C9CFDB" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="2" width="8" height="4" rx="1" /><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2" /><path d="m9 14 2 2 4-4" /></svg>Examens</span>
+        </div>
+        <div style="display:flex; align-items:center; gap:14px">
+          <span style="font-size:13px; font-weight:600; color:#C9CFDB; border:1px solid #33405C; border-radius:10px; padding:7px 10px">FR</span>
+          <span style="width:33px; height:33px; border:1px solid #33405C; border-radius:10px; display:flex; align-items:center; justify-content:center"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#C9CFDB" stroke-width="1.9" stroke-linecap="round"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9z" /></svg></span>
+          <div style="display:flex; align-items:center; gap:10px; padding-inline-start:6px; border-inline-start:1px solid #33405C">
+            <span style="width:34px; height:34px; border-radius:999px; background:#33405C; color:#F9FAFB; display:flex; align-items:center; justify-content:center; font-size:13px; font-weight:600">SA</span>
+            <div style="display:flex; flex-direction:column; line-height:1.3">
+              <span style="font-size:13px; font-weight:600; color:#F9FAFB">Samir Aït Ahmed</span>
+              <span style="font-size:11px; color:#9AA3B2">Auto-école</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div style="background:#1C2333; padding:8px 32px 56px; display:flex; align-items:flex-end; justify-content:space-between; gap:24px">
+        <div style="display:flex; flex-direction:column; gap:8px">
+          <span style="font-family:&#39;JetBrains Mono&#39;, monospace; font-size:11px; color:#F5A623; letter-spacing:0.12em; text-transform:uppercase">Auto-école El Amel · Alger</span>
+          <span style="font-family:Poppins, sans-serif; font-size:34px; font-weight:700; color:#F9FAFB; letter-spacing:-0.03em; line-height:1.1">Candidats</span>
+          <span style="font-size:14px; color:#9AA3B2">87 dossiers en cours de formation.</span>
+        </div>
+        <div style="display:flex; gap:10px; align-items:center"><div style="display:flex; align-items:center; gap:9px; border:1px solid #33405C; border-radius:12px; padding:10px 13px; min-width:260px"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#9AA3B2" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7" /><path d="m20 20-3.5-3.5" /></svg><span style="font-size:14px; color:#9AA3B2">Rechercher un candidat…</span></div><button style="border:none; background:#F5A623; color:#1C2333; font-size:14px; font-weight:600; padding:11px 17px; border-radius:12px; cursor:pointer" style-hover="background:#E39A1D">Ajouter un candidat</button></div>
+      </div>
+      <div style="padding:0 32px 48px; margin-top:-40px; display:flex; flex-direction:column; gap:20px">
+        <div style="background:#FFFFFF; border:1px solid #EBEDF1; border-radius:16px; overflow:hidden">
+          <div style="display:grid; grid-template-columns:1.5fr 1.1fr 0.6fr 1.2fr 1fr 1fr 36px; gap:16px; padding:14px 20px; background:#FBFCFD; font-size:11px; font-weight:600; color:#6B7280; text-transform:uppercase; letter-spacing:0.08em">
+            <span>Nom</span><span>Téléphone</span><span>Catégorie</span><span>Progression</span><span style="text-align:end">Payé</span><span style="text-align:end">Restant</span><span></span>
+          </div>
+            <div style="display:grid; grid-template-columns:1.5fr 1.1fr 0.6fr 1.2fr 1fr 1fr 36px; gap:16px; align-items:center; padding:14px 20px; border-top:1px solid #F4F5F7; cursor:pointer" style-hover="background:#F9FAFB">
+              <div style="display:flex; align-items:center; gap:11px">
+                <span style="width:36px; height:36px; border-radius:999px; background:rgba(28,35,51,0.07); color:#1C2333; display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:600">BK</span>
+                <div style="display:flex; flex-direction:column"><span style="font-size:14px; font-weight:600; color:#1C2333">Benali Karim</span><span style="font-family:'Noto Sans Arabic', sans-serif; font-size:13px; color:#6B7280">كريم بن علي</span></div>
+              </div>
+              <span dir="ltr" style="font-size:14px; color:#374151; font-variant-numeric:tabular-nums">05 55 21 84 09</span>
+              <span style="justify-self:start"><span style="font-family:&#39;JetBrains Mono&#39;, monospace; font-size:12px; font-weight:500; padding:4px 9px; border-radius:8px; background:#1C2333; color:#F9FAFB">B</span></span>
+              <div style="display:flex; align-items:center; gap:10px">
+                <div style="flex:1; height:6px; border-radius:999px; background:#EDEFF2; overflow:hidden"><div style="width:64%; height:100%; background:#1C2333"></div></div>
+                <span style="font-size:13px; font-weight:600; color:#374151; font-variant-numeric:tabular-nums">64 %</span>
+              </div>
+              <span style="font-size:14px; color:#374151; font-variant-numeric:tabular-nums; text-align:end">45 000,00 DA</span>
+              <span style="font-size:14px; font-weight:600; color:#15803D; font-variant-numeric:tabular-nums; text-align:end">Soldé</span>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#C4C9D2" stroke-width="2" stroke-linecap="round" style="justify-self:end"><path d="m9 18 6-6-6-6" /></svg>
+            </div>
+            <div style="display:grid; grid-template-columns:1.5fr 1.1fr 0.6fr 1.2fr 1fr 1fr 36px; gap:16px; align-items:center; padding:14px 20px; border-top:1px solid #F4F5F7; cursor:pointer" style-hover="background:#F9FAFB">
+              <div style="display:flex; align-items:center; gap:11px">
+                <span style="width:36px; height:36px; border-radius:999px; background:rgba(28,35,51,0.07); color:#1C2333; display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:600">HN</span>
+                <div style="display:flex; flex-direction:column"><span style="font-size:14px; font-weight:600; color:#1C2333">Hamdi Nour</span><span style="font-family:'Noto Sans Arabic', sans-serif; font-size:13px; color:#6B7280">نور حمدي</span></div>
+              </div>
+              <span dir="ltr" style="font-size:14px; color:#374151; font-variant-numeric:tabular-nums">05 55 74 02 61</span>
+              <span style="justify-self:start"><span style="font-family:&#39;JetBrains Mono&#39;, monospace; font-size:12px; font-weight:500; padding:4px 9px; border-radius:8px; background:#F3F4F6; color:#1C2333; border:1px solid #E5E7EB">A1</span></span>
+              <div style="display:flex; align-items:center; gap:10px">
+                <div style="flex:1; height:6px; border-radius:999px; background:#EDEFF2; overflow:hidden"><div style="width:28%; height:100%; background:#1C2333"></div></div>
+                <span style="font-size:13px; font-weight:600; color:#374151; font-variant-numeric:tabular-nums">28 %</span>
+              </div>
+              <span style="font-size:14px; color:#374151; font-variant-numeric:tabular-nums; text-align:end">14 000,00 DA</span>
+              <span style="font-size:14px; font-weight:600; color:#1C2333; font-variant-numeric:tabular-nums; text-align:end">18 000,00 DA</span>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#C4C9D2" stroke-width="2" stroke-linecap="round" style="justify-self:end"><path d="m9 18 6-6-6-6" /></svg>
+            </div>
+            <div style="display:grid; grid-template-columns:1.5fr 1.1fr 0.6fr 1.2fr 1fr 1fr 36px; gap:16px; align-items:center; padding:14px 20px; border-top:1px solid #F4F5F7; cursor:pointer" style-hover="background:#F9FAFB">
+              <div style="display:flex; align-items:center; gap:11px">
+                <span style="width:36px; height:36px; border-radius:999px; background:rgba(28,35,51,0.07); color:#1C2333; display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:600">MS</span>
+                <div style="display:flex; flex-direction:column"><span style="font-size:14px; font-weight:600; color:#1C2333">Meziane Sofiane</span><span style="font-family:'Noto Sans Arabic', sans-serif; font-size:13px; color:#6B7280">سفيان مزيان</span></div>
+              </div>
+              <span dir="ltr" style="font-size:14px; color:#374151; font-variant-numeric:tabular-nums">05 55 12 47 30</span>
+              <span style="justify-self:start"><span style="font-family:&#39;JetBrains Mono&#39;, monospace; font-size:12px; font-weight:500; padding:4px 9px; border-radius:8px; background:#1C2333; color:#F9FAFB">B</span></span>
+              <div style="display:flex; align-items:center; gap:10px">
+                <div style="flex:1; height:6px; border-radius:999px; background:#EDEFF2; overflow:hidden"><div style="width:82%; height:100%; background:#1C2333"></div></div>
+                <span style="font-size:13px; font-weight:600; color:#374151; font-variant-numeric:tabular-nums">82 %</span>
+              </div>
+              <span style="font-size:14px; color:#374151; font-variant-numeric:tabular-nums; text-align:end">45 000,00 DA</span>
+              <span style="font-size:14px; font-weight:600; color:#15803D; font-variant-numeric:tabular-nums; text-align:end">Soldé</span>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#C4C9D2" stroke-width="2" stroke-linecap="round" style="justify-self:end"><path d="m9 18 6-6-6-6" /></svg>
+            </div>
+            <div style="display:grid; grid-template-columns:1.5fr 1.1fr 0.6fr 1.2fr 1fr 1fr 36px; gap:16px; align-items:center; padding:14px 20px; border-top:1px solid #F4F5F7; cursor:pointer" style-hover="background:#F9FAFB">
+              <div style="display:flex; align-items:center; gap:11px">
+                <span style="width:36px; height:36px; border-radius:999px; background:rgba(28,35,51,0.07); color:#1C2333; display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:600">BA</span>
+                <div style="display:flex; flex-direction:column"><span style="font-size:14px; font-weight:600; color:#1C2333">Belkacem Amina</span><span style="font-family:'Noto Sans Arabic', sans-serif; font-size:13px; color:#6B7280">أمينة بلقاسم</span></div>
+              </div>
+              <span dir="ltr" style="font-size:14px; color:#374151; font-variant-numeric:tabular-nums">05 55 38 96 15</span>
+              <span style="justify-self:start"><span style="font-family:&#39;JetBrains Mono&#39;, monospace; font-size:12px; font-weight:500; padding:4px 9px; border-radius:8px; background:#1C2333; color:#F9FAFB">B</span></span>
+              <div style="display:flex; align-items:center; gap:10px">
+                <div style="flex:1; height:6px; border-radius:999px; background:#EDEFF2; overflow:hidden"><div style="width:45%; height:100%; background:#1C2333"></div></div>
+                <span style="font-size:13px; font-weight:600; color:#374151; font-variant-numeric:tabular-nums">45 %</span>
+              </div>
+              <span style="font-size:14px; color:#374151; font-variant-numeric:tabular-nums; text-align:end">25 000,00 DA</span>
+              <span style="font-size:14px; font-weight:600; color:#1C2333; font-variant-numeric:tabular-nums; text-align:end">20 000,00 DA</span>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#C4C9D2" stroke-width="2" stroke-linecap="round" style="justify-self:end"><path d="m9 18 6-6-6-6" /></svg>
+            </div>
+            <div style="display:grid; grid-template-columns:1.5fr 1.1fr 0.6fr 1.2fr 1fr 1fr 36px; gap:16px; align-items:center; padding:14px 20px; border-top:1px solid #F4F5F7; cursor:pointer" style-hover="background:#F9FAFB">
+              <div style="display:flex; align-items:center; gap:11px">
+                <span style="width:36px; height:36px; border-radius:999px; background:rgba(28,35,51,0.07); color:#1C2333; display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:600">YR</span>
+                <div style="display:flex; flex-direction:column"><span style="font-size:14px; font-weight:600; color:#1C2333">Yahiaoui Rachid</span><span style="font-family:'Noto Sans Arabic', sans-serif; font-size:13px; color:#6B7280">رشيد يحياوي</span></div>
+              </div>
+              <span dir="ltr" style="font-size:14px; color:#374151; font-variant-numeric:tabular-nums">05 55 60 11 84</span>
+              <span style="justify-self:start"><span style="font-family:&#39;JetBrains Mono&#39;, monospace; font-size:12px; font-weight:500; padding:4px 9px; border-radius:8px; background:#F3F4F6; color:#1C2333; border:1px solid #E5E7EB">C</span></span>
+              <div style="display:flex; align-items:center; gap:10px">
+                <div style="flex:1; height:6px; border-radius:999px; background:#EDEFF2; overflow:hidden"><div style="width:71%; height:100%; background:#1C2333"></div></div>
+                <span style="font-size:13px; font-weight:600; color:#374151; font-variant-numeric:tabular-nums">71 %</span>
+              </div>
+              <span style="font-size:14px; color:#374151; font-variant-numeric:tabular-nums; text-align:end">52 000,00 DA</span>
+              <span style="font-size:14px; font-weight:600; color:#1C2333; font-variant-numeric:tabular-nums; text-align:end">8 000,00 DA</span>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#C4C9D2" stroke-width="2" stroke-linecap="round" style="justify-self:end"><path d="m9 18 6-6-6-6" /></svg>
+            </div>
+            <div style="display:grid; grid-template-columns:1.5fr 1.1fr 0.6fr 1.2fr 1fr 1fr 36px; gap:16px; align-items:center; padding:14px 20px; border-top:1px solid #F4F5F7; cursor:pointer" style-hover="background:#F9FAFB">
+              <div style="display:flex; align-items:center; gap:11px">
+                <span style="width:36px; height:36px; border-radius:999px; background:rgba(28,35,51,0.07); color:#1C2333; display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:600">ZL</span>
+                <div style="display:flex; flex-direction:column"><span style="font-size:14px; font-weight:600; color:#1C2333">Zeroual Lina</span><span style="font-family:'Noto Sans Arabic', sans-serif; font-size:13px; color:#6B7280">لينا زروال</span></div>
+              </div>
+              <span dir="ltr" style="font-size:14px; color:#374151; font-variant-numeric:tabular-nums">05 55 45 73 22</span>
+              <span style="justify-self:start"><span style="font-family:&#39;JetBrains Mono&#39;, monospace; font-size:12px; font-weight:500; padding:4px 9px; border-radius:8px; background:#1C2333; color:#F9FAFB">B</span></span>
+              <div style="display:flex; align-items:center; gap:10px">
+                <div style="flex:1; height:6px; border-radius:999px; background:#EDEFF2; overflow:hidden"><div style="width:19%; height:100%; background:#1C2333"></div></div>
+                <span style="font-size:13px; font-weight:600; color:#374151; font-variant-numeric:tabular-nums">19 %</span>
+              </div>
+              <span style="font-size:14px; color:#374151; font-variant-numeric:tabular-nums; text-align:end">10 000,00 DA</span>
+              <span style="font-size:14px; font-weight:600; color:#1C2333; font-variant-numeric:tabular-nums; text-align:end">35 000,00 DA</span>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#C4C9D2" stroke-width="2" stroke-linecap="round" style="justify-self:end"><path d="m9 18 6-6-6-6" /></svg>
+            </div>
+            <div style="display:grid; grid-template-columns:1.5fr 1.1fr 0.6fr 1.2fr 1fr 1fr 36px; gap:16px; align-items:center; padding:14px 20px; border-top:1px solid #F4F5F7; cursor:pointer" style-hover="background:#F9FAFB">
+              <div style="display:flex; align-items:center; gap:11px">
+                <span style="width:36px; height:36px; border-radius:999px; background:rgba(28,35,51,0.07); color:#1C2333; display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:600">CY</span>
+                <div style="display:flex; flex-direction:column"><span style="font-size:14px; font-weight:600; color:#1C2333">Cherif Yacine</span><span style="font-family:'Noto Sans Arabic', sans-serif; font-size:13px; color:#6B7280">ياسين شريف</span></div>
+              </div>
+              <span dir="ltr" style="font-size:14px; color:#374151; font-variant-numeric:tabular-nums">05 55 82 06 57</span>
+              <span style="justify-self:start"><span style="font-family:&#39;JetBrains Mono&#39;, monospace; font-size:12px; font-weight:500; padding:4px 9px; border-radius:8px; background:#1C2333; color:#F9FAFB">B</span></span>
+              <div style="display:flex; align-items:center; gap:10px">
+                <div style="flex:1; height:6px; border-radius:999px; background:#EDEFF2; overflow:hidden"><div style="width:93%; height:100%; background:#1C2333"></div></div>
+                <span style="font-size:13px; font-weight:600; color:#374151; font-variant-numeric:tabular-nums">93 %</span>
+              </div>
+              <span style="font-size:14px; color:#374151; font-variant-numeric:tabular-nums; text-align:end">45 000,00 DA</span>
+              <span style="font-size:14px; font-weight:600; color:#15803D; font-variant-numeric:tabular-nums; text-align:end">Soldé</span>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#C4C9D2" stroke-width="2" stroke-linecap="round" style="justify-self:end"><path d="m9 18 6-6-6-6" /></svg>
+            </div>
+            <div style="display:grid; grid-template-columns:1.5fr 1.1fr 0.6fr 1.2fr 1fr 1fr 36px; gap:16px; align-items:center; padding:14px 20px; border-top:1px solid #F4F5F7; cursor:pointer" style-hover="background:#F9FAFB">
+              <div style="display:flex; align-items:center; gap:11px">
+                <span style="width:36px; height:36px; border-radius:999px; background:rgba(28,35,51,0.07); color:#1C2333; display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:600">FN</span>
+                <div style="display:flex; flex-direction:column"><span style="font-size:14px; font-weight:600; color:#1C2333">Ferhat Nadia</span><span style="font-family:'Noto Sans Arabic', sans-serif; font-size:13px; color:#6B7280">نادية فرحات</span></div>
+              </div>
+              <span dir="ltr" style="font-size:14px; color:#374151; font-variant-numeric:tabular-nums">05 55 07 62 39</span>
+              <span style="justify-self:start"><span style="font-family:&#39;JetBrains Mono&#39;, monospace; font-size:12px; font-weight:500; padding:4px 9px; border-radius:8px; background:#F3F4F6; color:#1C2333; border:1px solid #E5E7EB">A</span></span>
+              <div style="display:flex; align-items:center; gap:10px">
+                <div style="flex:1; height:6px; border-radius:999px; background:#EDEFF2; overflow:hidden"><div style="width:36%; height:100%; background:#1C2333"></div></div>
+                <span style="font-size:13px; font-weight:600; color:#374151; font-variant-numeric:tabular-nums">36 %</span>
+              </div>
+              <span style="font-size:14px; color:#374151; font-variant-numeric:tabular-nums; text-align:end">16 000,00 DA</span>
+              <span style="font-size:14px; font-weight:600; color:#1C2333; font-variant-numeric:tabular-nums; text-align:end">12 000,00 DA</span>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#C4C9D2" stroke-width="2" stroke-linecap="round" style="justify-self:end"><path d="m9 18 6-6-6-6" /></svg>
+            </div>
+        </div>
+        <div style="display:flex; align-items:center; justify-content:space-between; gap:20px">
+          <span style="font-size:13px; color:#6B7280; font-variant-numeric:tabular-nums">1 – 8 sur 87 candidats</span>
+          <div style="display:flex; align-items:center; gap:6px">
+            <span style="width:34px; height:34px; border:1px solid #D1D5DB; border-radius:10px; display:flex; align-items:center; justify-content:center; cursor:pointer"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#9CA3AF" stroke-width="2" stroke-linecap="round"><path d="m15 18-6-6 6-6" /></svg></span>
+            <span style="min-width:34px; height:34px; border-radius:10px; background:#1C2333; color:#F9FAFB; display:flex; align-items:center; justify-content:center; font-size:13px; font-weight:600; font-variant-numeric:tabular-nums">1</span>
+            <span style="min-width:34px; height:34px; border:1px solid #D1D5DB; border-radius:10px; display:flex; align-items:center; justify-content:center; font-size:13px; color:#374151; font-variant-numeric:tabular-nums; cursor:pointer">2</span>
+            <span style="min-width:34px; height:34px; border:1px solid #D1D5DB; border-radius:10px; display:flex; align-items:center; justify-content:center; font-size:13px; color:#374151; font-variant-numeric:tabular-nums; cursor:pointer">3</span>
+            <span style="font-size:13px; color:#9CA3AF; padding:0 4px">…</span>
+            <span style="min-width:34px; height:34px; border:1px solid #D1D5DB; border-radius:10px; display:flex; align-items:center; justify-content:center; font-size:13px; color:#374151; font-variant-numeric:tabular-nums; cursor:pointer">11</span>
+            <span style="width:34px; height:34px; border:1px solid #D1D5DB; border-radius:10px; display:flex; align-items:center; justify-content:center; cursor:pointer"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#374151" stroke-width="2" stroke-linecap="round"><path d="m9 18 6-6-6-6" /></svg></span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="2f" style="display:flex; flex-direction:column; gap:14px">
+    <div style="display:flex; align-items:center; gap:12px">
+      <span style="font-family:&#39;JetBrains Mono&#39;, monospace; font-size:12px; font-weight:500; background:#1C2333; color:#F5A623; padding:4px 9px; border-radius:6px">2f</span>
+      <span style="font-family:Poppins, sans-serif; font-size:17px; font-weight:600; color:#1C2333">Ajouter un candidat + identifiants</span>
+      <span style="font-family:&#39;JetBrains Mono&#39;, monospace; font-size:12px; color:#6B7280">/ecole/students · modales</span>
+    </div>
+    <div style="display:flex; gap:32px; align-items:flex-start; flex-wrap:wrap">
+      <div style="width:760px; background:rgba(28,35,51,0.45); border-radius:16px; padding:36px">
+        <div style="background:#FFFFFF; border-radius:16px; padding:26px; display:flex; flex-direction:column; gap:20px">
+          <div style="display:flex; align-items:flex-start; justify-content:space-between; gap:16px">
+            <div style="display:flex; flex-direction:column; gap:5px">
+              <span style="font-family:Poppins, sans-serif; font-size:22px; font-weight:600; color:#1C2333; letter-spacing:-0.02em">Ajouter un candidat</span>
+              <span style="font-size:13px; color:#6B7280">Vous saisissez le dossier : le candidat n’a rien à faire de son côté.</span>
+            </div>
+            <span style="width:30px; height:30px; border-radius:9px; border:1px solid #E5E7EB; display:flex; align-items:center; justify-content:center; cursor:pointer"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2.2" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12" /></svg></span>
+          </div>
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px">
+            <label style="display:flex; flex-direction:column; gap:6px">
+              <span style="font-size:13px; font-weight:600; color:#374151">Nom complet (arabe)</span>
+              <input type="text" value="سليمة بوزيد" readOnly="" dir="rtl" style="font-family:'Noto Sans Arabic', sans-serif; font-size:15px; color:#1C2333; padding:11px 13px; border:1px solid #D1D5DB; border-radius:12px; outline:none" />
+            </label>
+            <label style="display:flex; flex-direction:column; gap:6px">
+              <span style="font-size:13px; font-weight:600; color:#374151">Nom en latin</span>
+              <input type="text" value="Bouzid Salima" readOnly="" style="font-family:Inter, sans-serif; font-size:14px; color:#1C2333; padding:11px 13px; border:1px solid #D1D5DB; border-radius:12px; background:#FFFFFF; outline:none" />
+              
+            </label>
+            <label style="display:flex; flex-direction:column; gap:6px">
+              <span style="font-size:13px; font-weight:600; color:#374151">Téléphone</span>
+              <input type="text" value="05 55 41 22 08" readOnly="" style="font-family:Inter, sans-serif; font-size:14px; color:#1C2333; padding:11px 13px; border:1px solid #D1D5DB; border-radius:12px; background:#FFFFFF; outline:none" />
+              
+            </label>
+            <label style="display:flex; flex-direction:column; gap:6px">
+              <span style="font-size:13px; font-weight:600; color:#374151">Catégorie</span>
+              <div style="display:flex; align-items:center; justify-content:space-between; font-size:14px; color:#1C2333; padding:11px 13px; border:1px solid #F5A623; border-radius:12px; box-shadow:0 0 0 3px rgba(245,166,35,0.28)">B — véhicule léger<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2" stroke-linecap="round"><path d="m6 9 6 6 6-6" /></svg></div>
+            </label>
+            <label style="display:flex; flex-direction:column; gap:6px">
+              <span style="font-size:13px; font-weight:600; color:#374151">Date de naissance</span>
+              <input type="text" value="14/03/2004" readOnly="" style="font-family:Inter, sans-serif; font-size:14px; color:#1C2333; padding:11px 13px; border:1px solid #D1D5DB; border-radius:12px; background:#FFFFFF; outline:none" />
+              
+            </label>
+            <label style="display:flex; flex-direction:column; gap:6px">
+              <span style="font-size:13px; font-weight:600; color:#374151">Lieu de naissance</span>
+              <input type="text" value="Alger" readOnly="" style="font-family:Inter, sans-serif; font-size:14px; color:#1C2333; padding:11px 13px; border:1px solid #D1D5DB; border-radius:12px; background:#FFFFFF; outline:none" />
+              
+            </label>
+            <label style="display:flex; flex-direction:column; gap:6px">
+              <span style="font-size:13px; font-weight:600; color:#374151">Nationalité</span>
+              <input type="text" value="Algérienne" readOnly="" style="font-family:Inter, sans-serif; font-size:14px; color:#1C2333; padding:11px 13px; border:1px solid #D1D5DB; border-radius:12px; background:#FFFFFF; outline:none" />
+              
+            </label>
+            <label style="display:flex; flex-direction:column; gap:6px">
+              <span style="font-size:13px; font-weight:600; color:#374151">Groupe sanguin</span>
+              <div style="display:flex; align-items:center; justify-content:space-between; font-size:14px; color:#1C2333; padding:11px 13px; border:1px solid #D1D5DB; border-radius:12px">O+<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2" stroke-linecap="round"><path d="m6 9 6 6 6-6" /></svg></div>
+            </label>
+          </div>
+            <label style="display:flex; flex-direction:column; gap:6px">
+              <span style="font-size:13px; font-weight:600; color:#374151">Adresse</span>
+              <input type="text" value="Cité des Asphodèles, bât. C, Bab Ezzouar, Alger" readOnly="" style="font-family:Inter, sans-serif; font-size:14px; color:#1C2333; padding:11px 13px; border:1px solid #D1D5DB; border-radius:12px; background:#FFFFFF; outline:none" />
+              
+            </label>
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px">
+            <label style="display:flex; flex-direction:column; gap:6px">
+              <span style="font-size:13px; font-weight:600; color:#374151">E-mail</span>
+              <input type="text" value="" readOnly="" style="font-family:Inter, sans-serif; font-size:14px; color:#1C2333; padding:11px 13px; border:1px solid #D1D5DB; border-radius:12px; background:#FFFFFF; outline:none" />
+              <span style="font-size:11px; color:#9CA3AF">Laissez vide : un identifiant sera créé à partir du téléphone.</span>
+            </label>
+            <label style="display:flex; flex-direction:column; gap:6px">
+              <span style="font-size:13px; font-weight:600; color:#374151">Mot de passe</span>
+              <input type="text" value="" readOnly="" style="font-family:Inter, sans-serif; font-size:14px; color:#1C2333; padding:11px 13px; border:1px solid #D1D5DB; border-radius:12px; background:#FFFFFF; outline:none" />
+              <span style="font-size:11px; color:#9CA3AF">Laissez vide pour en générer un.</span>
+            </label>
+          </div>
+          <div style="display:flex; align-items:center; gap:16px; border:1px dashed #D1D5DB; border-radius:12px; padding:16px; background:#FBFCFD">
+            <span style="width:52px; height:52px; border-radius:12px; background:rgba(28,35,51,0.06); display:flex; align-items:center; justify-content:center"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" /><circle cx="9" cy="9" r="2" /><path d="m21 15-4.6-4.6a2 2 0 0 0-2.8 0L3 21" /></svg></span>
+            <div style="display:flex; flex-direction:column; gap:3px; flex:1">
+              <span style="font-size:14px; font-weight:600; color:#1C2333">Photo du candidat</span>
+              <span style="font-size:12px; color:#6B7280">Glissez une image ici · JPG, PNG ou WebP — 5 Mo maximum</span>
+            </div>
+            <button style="border:1px solid #D1D5DB; background:#FFFFFF; color:#1C2333; font-size:13px; font-weight:600; padding:9px 14px; border-radius:11px; cursor:pointer">Parcourir</button>
+          </div>
+          <div style="display:flex; justify-content:flex-end; gap:10px; border-top:1px solid #F3F4F6; padding-top:18px">
+            <button style="border:1px solid #D1D5DB; background:#FFFFFF; color:#1C2333; font-size:14px; font-weight:600; padding:11px 16px; border-radius:12px; cursor:pointer">Annuler</button>
+            <button style="border:none; background:#F5A623; color:#1C2333; font-size:14px; font-weight:600; padding:11px 16px; border-radius:12px; cursor:pointer">Créer le dossier</button>
+          </div>
+        </div>
+      </div>
+
+      <div style="width:520px; background:rgba(28,35,51,0.45); border-radius:16px; padding:36px">
+        <div style="background:#FFFFFF; border-radius:16px; padding:24px; display:flex; flex-direction:column; gap:18px">
+          <span style="width:44px; height:44px; border-radius:999px; background:rgba(22,163,74,0.13); display:flex; align-items:center; justify-content:center"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="#15803D" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m20 6-11 11-5-5" /></svg></span>
+          <div style="display:flex; flex-direction:column; gap:6px">
+            <span style="font-family:Poppins, sans-serif; font-size:20px; font-weight:600; color:#1C2333; letter-spacing:-0.02em">Identifiants de l’application</span>
+            <span style="font-size:14px; color:#6B7280; line-height:1.6">Dossier de Bouzid Salima créé. Voici ses accès à l’application mobile.</span>
+          </div>
+          <div style="display:flex; flex-direction:column; gap:10px">
+            <div style="display:flex; align-items:center; justify-content:space-between; gap:12px; background:#F9FAFB; border:1px solid #EBEDF1; border-radius:12px; padding:13px 14px">
+              <div style="display:flex; flex-direction:column; gap:3px"><span style="font-size:11px; font-weight:600; color:#6B7280; text-transform:uppercase; letter-spacing:0.08em">Identifiant</span><span style="font-family:'JetBrains Mono', monospace; font-size:15px; color:#1C2333">0555412208</span></div>
+              <button style="display:flex; align-items:center; gap:7px; border:1px solid #D1D5DB; background:#FFFFFF; color:#1C2333; font-size:13px; font-weight:600; padding:8px 12px; border-radius:10px; cursor:pointer"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#374151" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="12" height="12" rx="2" /><path d="M5 15V5a2 2 0 0 1 2-2h10" /></svg>Copier</button>
+            </div>
+            <div style="display:flex; align-items:center; justify-content:space-between; gap:12px; background:#F9FAFB; border:1px solid #EBEDF1; border-radius:12px; padding:13px 14px">
+              <div style="display:flex; flex-direction:column; gap:3px"><span style="font-size:11px; font-weight:600; color:#6B7280; text-transform:uppercase; letter-spacing:0.08em">Mot de passe</span><span style="font-family:'JetBrains Mono', monospace; font-size:15px; color:#1C2333">Kw7d-Rz2m</span></div>
+              <button style="display:flex; align-items:center; gap:7px; border:1px solid #D1D5DB; background:#FFFFFF; color:#1C2333; font-size:13px; font-weight:600; padding:8px 12px; border-radius:10px; cursor:pointer"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#374151" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="12" height="12" rx="2" /><path d="M5 15V5a2 2 0 0 1 2-2h10" /></svg>Copier</button>
+            </div>
+          </div>
+          <div style="display:flex; gap:10px; padding:12px 13px; border-radius:12px; background:rgba(245,166,35,0.12); border:1px solid rgba(245,166,35,0.4)">
+            <span style="font-size:13px; color:#8A5A06; line-height:1.6">Remettez-les au candidat : il s’en servira dans l’application mobile. <span style="font-weight:700">Le mot de passe n’est affiché qu’une fois.</span></span>
+          </div>
+          <div style="display:flex; justify-content:flex-end; border-top:1px solid #F3F4F6; padding-top:16px">
+            <button style="border:none; background:#F5A623; color:#1C2333; font-size:14px; font-weight:600; padding:11px 18px; border-radius:12px; cursor:pointer">J’ai noté, fermer</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div style="display:flex; gap:40px; flex-wrap:wrap">
+
+    <div id="2g" style="display:flex; flex-direction:column; gap:14px">
+    <div style="display:flex; align-items:center; gap:12px">
+      <span style="font-family:&#39;JetBrains Mono&#39;, monospace; font-size:12px; font-weight:500; background:#1C2333; color:#F5A623; padding:4px 9px; border-radius:6px">2g</span>
+      <span style="font-family:Poppins, sans-serif; font-size:17px; font-weight:600; color:#1C2333">Planning mobile — un jour</span>
+      <span style="font-family:&#39;JetBrains Mono&#39;, monospace; font-size:12px; color:#6B7280">/ecole/planning · 390</span>
+    </div>
+      <div style="width:390px; background:#F9FAFB; border:1px solid #D8DCE3; border-radius:28px; overflow:hidden; display:flex; flex-direction:column">
+        <div style="background:#1C2333; padding:12px 18px 18px; display:flex; flex-direction:column; gap:14px">
+          <div style="display:flex; align-items:center; justify-content:space-between; font-family:'JetBrains Mono', monospace; font-size:11px; color:#9AA3B2">
+            <span style="font-variant-numeric:tabular-nums">09:24</span>
+            <span style="display:flex; gap:5px; align-items:center">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#9AA3B2" stroke-width="2.4" stroke-linecap="round"><path d="M2 20h.01M7 20v-4M12 20v-8M17 20V8" /></svg>
+              <span style="width:18px; height:9px; border:1.4px solid #9AA3B2; border-radius:3px; display:inline-block; position:relative"><span style="position:absolute; inset:1.5px; inset-inline-end:6px; background:#9AA3B2; border-radius:1px; display:block"></span></span>
+            </span>
+          </div>
+          <div style="display:flex; align-items:center; gap:12px">
+            <span style="width:30px; height:30px; border-radius:9px; background:#F5A623; display:flex; align-items:center; justify-content:center; font-family:Poppins, sans-serif; font-weight:800; font-size:15px; color:#1C2333">P</span>
+            <div style="display:flex; flex-direction:column; line-height:1.3; flex:1; min-width:0">
+              <span style="font-family:Poppins, sans-serif; font-size:19px; font-weight:700; color:#F9FAFB; letter-spacing:-0.02em">Planning</span>
+              <span style="font-size:12px; color:#9AA3B2">Conduite · semaine du 5 sept.</span>
+            </div>
+            <span style="width:31px; height:31px; border-radius:999px; background:#33405C; color:#F9FAFB; display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:600">SA</span>
+          </div>
+        </div>
+        <div style="padding:14px 16px 18px; display:flex; flex-direction:column; gap:12px; margin-top:-10px; background:#F9FAFB; border-radius:20px 20px 0 0">
+          <div style="display:flex; gap:2px; background:#F3F4F6; padding:4px; border-radius:12px">
+            <span style="flex:1; text-align:center; font-size:13px; font-weight:600; color:#1C2333; background:#FFFFFF; border:1px solid #E5E7EB; padding:8px 0; border-radius:9px">Conduite</span>
+            <span style="flex:1; text-align:center; font-size:13px; font-weight:500; color:#6B7280; padding:8px 0; border-radius:9px">Code</span>
+          </div>
+          <div style="display:flex; gap:7px; overflow:hidden">
+            <span style="display:flex; flex-direction:column; align-items:center; gap:2px; padding:8px 0; flex:1; border-radius:11px; background:#FFFFFF; border:1px solid #EBEDF1"><span style="font-size:10px; color:#9CA3AF">sam</span><span style="font-size:14px; font-weight:600; color:#1C2333; font-variant-numeric:tabular-nums">5</span></span>
+            <span style="display:flex; flex-direction:column; align-items:center; gap:2px; padding:8px 0; flex:1; border-radius:11px; background:#FFFFFF; border:1px solid #EBEDF1"><span style="font-size:10px; color:#9CA3AF">dim</span><span style="font-size:14px; font-weight:600; color:#1C2333; font-variant-numeric:tabular-nums">6</span></span>
+            <span style="display:flex; flex-direction:column; align-items:center; gap:2px; padding:8px 0; flex:1; border-radius:11px; background:#1C2333"><span style="font-size:10px; color:#F5A623">lun</span><span style="font-size:14px; font-weight:700; color:#F9FAFB; font-variant-numeric:tabular-nums">7</span></span>
+            <span style="display:flex; flex-direction:column; align-items:center; gap:2px; padding:8px 0; flex:1; border-radius:11px; background:#FFFFFF; border:1px solid #EBEDF1"><span style="font-size:10px; color:#9CA3AF">mar</span><span style="font-size:14px; font-weight:600; color:#1C2333; font-variant-numeric:tabular-nums">8</span></span>
+            <span style="display:flex; flex-direction:column; align-items:center; gap:2px; padding:8px 0; flex:1; border-radius:11px; background:#FFFFFF; border:1px solid #EBEDF1"><span style="font-size:10px; color:#9CA3AF">mer</span><span style="font-size:14px; font-weight:600; color:#1C2333; font-variant-numeric:tabular-nums">9</span></span>
+            <span style="display:flex; flex-direction:column; align-items:center; gap:2px; padding:8px 0; flex:1; border-radius:11px; background:#FFFFFF; border:1px solid #EBEDF1"><span style="font-size:10px; color:#9CA3AF">jeu</span><span style="font-size:14px; font-weight:600; color:#1C2333; font-variant-numeric:tabular-nums">10</span></span>
+          </div>
+          <div style="background:#FFFFFF; border:1px solid #EBEDF1; border-radius:16px; overflow:hidden">
+            <div style="display:grid; grid-template-columns:58px 1fr; align-items:stretch">
+              <span style="font-family:'JetBrains Mono', monospace; font-size:11px; color:#9CA3AF; padding:9px 8px; font-variant-numeric:tabular-nums">08:00</span>
+              <div style="border-inline-start:1px solid #F1F3F6; padding:4px 6px; min-height:38px"><div style="background:rgba(28,35,51,0.15); border-radius:9px; padding:5px 9px; display:flex; flex-direction:column"><span style="font-size:11px; font-weight:700; color:#1C2333">Conduite</span><span style="font-size:11px; color:#374151">Yahiaoui R.</span></div></div>
+              <span style="font-family:'JetBrains Mono', monospace; font-size:11px; color:#9CA3AF; padding:9px 8px; border-top:1px solid #F4F5F7; font-variant-numeric:tabular-nums">08:30</span>
+              <div style="border-inline-start:1px solid #F1F3F6; border-top:1px solid #F4F5F7; min-height:38px"></div>
+              <span style="font-family:'JetBrains Mono', monospace; font-size:11px; color:#9CA3AF; padding:9px 8px; border-top:1px solid #F4F5F7; font-variant-numeric:tabular-nums">09:00</span>
+              <div style="border-inline-start:1px solid #F1F3F6; border-top:1px solid #F4F5F7; min-height:38px"></div>
+              <span style="font-family:'JetBrains Mono', monospace; font-size:11px; color:#9CA3AF; padding:9px 8px; border-top:1px solid #F4F5F7; font-variant-numeric:tabular-nums">09:30</span>
+              <div style="border-inline-start:1px solid #F1F3F6; border-top:1px solid #F4F5F7; padding:4px 6px; min-height:38px"><div style="background:rgba(245,166,35,0.20); border-radius:9px; padding:5px 9px; display:flex; flex-direction:column"><span style="font-size:11px; font-weight:700; color:#6B4405">Créneau</span><span style="font-size:11px; color:#374151">Bouzid S.</span></div></div>
+              <span style="font-family:'JetBrains Mono', monospace; font-size:11px; color:#9CA3AF; padding:9px 8px; border-top:1px solid #F4F5F7; font-variant-numeric:tabular-nums">10:00</span>
+              <div style="border-inline-start:1px solid #F1F3F6; border-top:1px solid #F4F5F7; min-height:38px"></div>
+              <span style="font-family:'JetBrains Mono', monospace; font-size:11px; color:#9CA3AF; padding:9px 8px; border-top:1px solid #F4F5F7; font-variant-numeric:tabular-nums">10:30</span>
+              <div style="border-inline-start:1px solid #F1F3F6; border-top:1px solid #F4F5F7; padding:4px 6px; min-height:38px"><div style="background:rgba(245,166,35,0.20); border-radius:9px; padding:5px 9px; display:flex; flex-direction:column"><span style="font-size:11px; font-weight:700; color:#6B4405">Créneau</span><span style="font-size:11px; color:#374151">Benali K.</span></div></div>
+              <span style="font-family:'JetBrains Mono', monospace; font-size:11px; color:#9CA3AF; padding:9px 8px; border-top:1px solid #F4F5F7; font-variant-numeric:tabular-nums">11:00</span>
+              <div style="border-inline-start:1px solid #F1F3F6; border-top:1px solid #F4F5F7; padding:4px 6px; min-height:76px; display:flex"><div style="flex:1; background:rgba(22,163,74,0.20); border-radius:9px; padding:5px 9px; display:flex; flex-direction:column; justify-content:center"><span style="font-size:11px; font-weight:700; color:#145F32">Perf. · 1 h</span><span style="font-size:11px; color:#374151">Amrani D.</span></div></div>
+              <span style="font-family:'JetBrains Mono', monospace; font-size:11px; color:#9CA3AF; padding:9px 8px; border-top:1px solid #F4F5F7; font-variant-numeric:tabular-nums">11:30</span>
+              <div style="border-inline-start:1px solid #F1F3F6; border-top:1px solid #F4F5F7"></div>
+              <span style="font-family:'JetBrains Mono', monospace; font-size:11px; color:#9CA3AF; padding:9px 8px; border-top:1px solid #F4F5F7; font-variant-numeric:tabular-nums">12:00</span>
+              <div style="border-inline-start:1px solid #F1F3F6; border-top:1px solid #F4F5F7; background:repeating-linear-gradient(45deg, oklch(0.637 0.208 25.3 / 0.10) 0 4px, transparent 4px 9px); display:flex; align-items:center; padding-inline-start:9px; min-height:38px"><span style="font-size:10px; font-weight:600; color:oklch(0.5 0.19 25.3)">Fermé</span></div>
+              <span style="font-family:'JetBrains Mono', monospace; font-size:11px; color:#9CA3AF; padding:9px 8px; border-top:1px solid #F4F5F7; font-variant-numeric:tabular-nums">12:30</span>
+              <div style="border-inline-start:1px solid #F1F3F6; border-top:1px solid #F4F5F7; min-height:38px"></div>
+            </div>
+          </div>
+          <span style="font-size:12px; color:#6B7280">Touchez une case vide pour créer une séance ou fermer la demi-heure.</span>
+        </div>
+        <div style="background:#1C2333; padding:10px 8px 14px; display:grid; grid-template-columns:repeat(5, 1fr); gap:2px; border-radius:20px 20px 0 0">
+          <span style="display:flex; flex-direction:column; align-items:center; gap:5px; padding:8px 0; border-radius:12px; min-height:48px; position:relative;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#9AA3B2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="9" rx="1" /><rect x="14" y="3" width="7" height="5" rx="1" /><rect x="14" y="12" width="7" height="9" rx="1" /><rect x="3" y="16" width="7" height="5" rx="1" /></svg><span style="font-size:10px; font-weight:500; color:#9AA3B2">Bord</span></span>
+          <span style="display:flex; flex-direction:column; align-items:center; gap:5px; padding:8px 0; border-radius:12px; min-height:48px; position:relative;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#9AA3B2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-6l-2 3h-4l-2-3H2" /><path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z" /></svg><span style="font-size:10px; font-weight:500; color:#9AA3B2">Demandes</span><span style="position:absolute; top:5px; inset-inline-end:16px; min-width:16px; height:16px; border-radius:999px; background:#F5A623; color:#1C2333; font-size:10px; font-weight:700; display:flex; align-items:center; justify-content:center; font-variant-numeric:tabular-nums">12</span></span>
+          <span style="display:flex; flex-direction:column; align-items:center; gap:5px; padding:8px 0; border-radius:12px; min-height:48px; position:relative;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#9AA3B2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z" /><path d="M6 12v5c3 3 9 3 12 0v-5" /></svg><span style="font-size:10px; font-weight:500; color:#9AA3B2">Candidats</span></span>
+          <span style="display:flex; flex-direction:column; align-items:center; gap:5px; padding:8px 0; border-radius:12px; min-height:48px; position:relative; background:rgba(245,166,35,0.14)"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#F5A623" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" /><path d="M16 2v4M8 2v4M3 10h18" /></svg><span style="font-size:10px; font-weight:600; color:#F5A623">Planning</span></span>
+          <span style="display:flex; flex-direction:column; align-items:center; gap:5px; padding:8px 0; border-radius:12px; min-height:48px; position:relative;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#9AA3B2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="2" width="8" height="4" rx="1" /><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2" /><path d="m9 14 2 2 4-4" /></svg><span style="font-size:10px; font-weight:500; color:#9AA3B2">Examens</span></span>
+        </div>
+      </div>
+    </div>
+
+    <div id="2h" style="display:flex; flex-direction:column; gap:14px">
+    <div style="display:flex; align-items:center; gap:12px">
+      <span style="font-family:&#39;JetBrains Mono&#39;, monospace; font-size:12px; font-weight:500; background:#1C2333; color:#F5A623; padding:4px 9px; border-radius:6px">2h</span>
+      <span style="font-family:Poppins, sans-serif; font-size:17px; font-weight:600; color:#1C2333">Candidats mobile — cartes</span>
+      <span style="font-family:&#39;JetBrains Mono&#39;, monospace; font-size:12px; color:#6B7280">/ecole/students · 390</span>
+    </div>
+      <div style="width:390px; background:#F9FAFB; border:1px solid #D8DCE3; border-radius:28px; overflow:hidden; display:flex; flex-direction:column">
+        <div style="background:#1C2333; padding:12px 18px 18px; display:flex; flex-direction:column; gap:14px">
+          <div style="display:flex; align-items:center; justify-content:space-between; font-family:'JetBrains Mono', monospace; font-size:11px; color:#9AA3B2">
+            <span style="font-variant-numeric:tabular-nums">09:24</span>
+            <span style="display:flex; gap:5px; align-items:center">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#9AA3B2" stroke-width="2.4" stroke-linecap="round"><path d="M2 20h.01M7 20v-4M12 20v-8M17 20V8" /></svg>
+              <span style="width:18px; height:9px; border:1.4px solid #9AA3B2; border-radius:3px; display:inline-block; position:relative"><span style="position:absolute; inset:1.5px; inset-inline-end:6px; background:#9AA3B2; border-radius:1px; display:block"></span></span>
+            </span>
+          </div>
+          <div style="display:flex; align-items:center; gap:12px">
+            <span style="width:30px; height:30px; border-radius:9px; background:#F5A623; display:flex; align-items:center; justify-content:center; font-family:Poppins, sans-serif; font-weight:800; font-size:15px; color:#1C2333">P</span>
+            <div style="display:flex; flex-direction:column; line-height:1.3; flex:1; min-width:0">
+              <span style="font-family:Poppins, sans-serif; font-size:19px; font-weight:700; color:#F9FAFB; letter-spacing:-0.02em">Candidats</span>
+              <span style="font-size:12px; color:#9AA3B2">87 dossiers actifs</span>
+            </div>
+            <span style="width:31px; height:31px; border-radius:999px; background:#33405C; color:#F9FAFB; display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:600">SA</span>
+          </div>
+        </div>
+        <div style="padding:14px 16px 18px; display:flex; flex-direction:column; gap:12px; margin-top:-10px; background:#F9FAFB; border-radius:20px 20px 0 0">
+          <div style="display:flex; align-items:center; gap:9px; background:#FFFFFF; border:1px solid #EBEDF1; border-radius:12px; padding:11px 13px">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#9CA3AF" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7" /><path d="m20 20-3.5-3.5" /></svg>
+            <span style="font-size:14px; color:#9CA3AF">Rechercher…</span>
+          </div>
+          <div style="background:#FFFFFF; border:1px solid #EBEDF1; border-radius:16px; padding:14px; display:flex; align-items:center; gap:12px">
+            <div style="display:flex; flex-direction:column; gap:5px; flex:1; min-width:0">
+              <div style="display:flex; align-items:center; gap:8px"><span style="font-size:15px; font-weight:600; color:#1C2333">Benali Karim</span><span style="font-family:'JetBrains Mono', monospace; font-size:11px; padding:3px 7px; border-radius:7px; background:#1C2333; color:#F9FAFB">B</span></div>
+              <span style="font-family:'Noto Sans Arabic', sans-serif; font-size:13px; color:#6B7280">كريم بن علي</span>
+              <div style="display:flex; align-items:center; gap:8px"><div style="flex:1; height:5px; border-radius:999px; background:#EDEFF2; overflow:hidden"><div style="width:64%; height:100%; background:#1C2333"></div></div><span style="font-size:11px; color:#6B7280; font-variant-numeric:tabular-nums">64 %</span></div>
+            </div>
+            <div style="display:flex; flex-direction:column; align-items:flex-end; gap:2px">
+              <span style="font-size:10px; color:#9CA3AF; text-transform:uppercase; letter-spacing:0.06em">Restant</span>
+              <span style="font-size:15px; font-weight:700; color:#15803D">Soldé</span>
+            </div>
+          </div>
+          <div style="background:#FFFFFF; border:1px solid #EBEDF1; border-radius:16px; padding:14px; display:flex; align-items:center; gap:12px">
+            <div style="display:flex; flex-direction:column; gap:5px; flex:1; min-width:0">
+              <div style="display:flex; align-items:center; gap:8px"><span style="font-size:15px; font-weight:600; color:#1C2333">Hamdi Nour</span><span style="font-family:'JetBrains Mono', monospace; font-size:11px; padding:3px 7px; border-radius:7px; background:#F3F4F6; color:#1C2333; border:1px solid #E5E7EB">A1</span></div>
+              <span style="font-family:'Noto Sans Arabic', sans-serif; font-size:13px; color:#6B7280">نور حمدي</span>
+              <div style="display:flex; align-items:center; gap:8px"><div style="flex:1; height:5px; border-radius:999px; background:#EDEFF2; overflow:hidden"><div style="width:28%; height:100%; background:#1C2333"></div></div><span style="font-size:11px; color:#6B7280; font-variant-numeric:tabular-nums">28 %</span></div>
+            </div>
+            <div style="display:flex; flex-direction:column; align-items:flex-end; gap:2px">
+              <span style="font-size:10px; color:#9CA3AF; text-transform:uppercase; letter-spacing:0.06em">Restant</span>
+              <span style="font-size:15px; font-weight:700; color:#1C2333; font-variant-numeric:tabular-nums">18 000,00 DA</span>
+            </div>
+          </div>
+          <div style="background:#FFFFFF; border:1px solid #EBEDF1; border-radius:16px; padding:14px; display:flex; align-items:center; gap:12px">
+            <div style="display:flex; flex-direction:column; gap:5px; flex:1; min-width:0">
+              <div style="display:flex; align-items:center; gap:8px"><span style="font-size:15px; font-weight:600; color:#1C2333">Belkacem Amina</span><span style="font-family:'JetBrains Mono', monospace; font-size:11px; padding:3px 7px; border-radius:7px; background:#1C2333; color:#F9FAFB">B</span></div>
+              <span style="font-family:'Noto Sans Arabic', sans-serif; font-size:13px; color:#6B7280">أمينة بلقاسم</span>
+              <div style="display:flex; align-items:center; gap:8px"><div style="flex:1; height:5px; border-radius:999px; background:#EDEFF2; overflow:hidden"><div style="width:45%; height:100%; background:#1C2333"></div></div><span style="font-size:11px; color:#6B7280; font-variant-numeric:tabular-nums">45 %</span></div>
+            </div>
+            <div style="display:flex; flex-direction:column; align-items:flex-end; gap:2px">
+              <span style="font-size:10px; color:#9CA3AF; text-transform:uppercase; letter-spacing:0.06em">Restant</span>
+              <span style="font-size:15px; font-weight:700; color:#1C2333; font-variant-numeric:tabular-nums">20 000,00 DA</span>
+            </div>
+          </div>
+          <button style="border:none; background:#F5A623; color:#1C2333; font-size:15px; font-weight:600; padding:13px; border-radius:12px; cursor:pointer">Ajouter un candidat</button>
+        </div>
+        <div style="background:#1C2333; padding:10px 8px 14px; display:grid; grid-template-columns:repeat(5, 1fr); gap:2px; border-radius:20px 20px 0 0">
+          <span style="display:flex; flex-direction:column; align-items:center; gap:5px; padding:8px 0; border-radius:12px; min-height:48px; position:relative;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#9AA3B2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="9" rx="1" /><rect x="14" y="3" width="7" height="5" rx="1" /><rect x="14" y="12" width="7" height="9" rx="1" /><rect x="3" y="16" width="7" height="5" rx="1" /></svg><span style="font-size:10px; font-weight:500; color:#9AA3B2">Bord</span></span>
+          <span style="display:flex; flex-direction:column; align-items:center; gap:5px; padding:8px 0; border-radius:12px; min-height:48px; position:relative;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#9AA3B2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-6l-2 3h-4l-2-3H2" /><path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z" /></svg><span style="font-size:10px; font-weight:500; color:#9AA3B2">Demandes</span><span style="position:absolute; top:5px; inset-inline-end:16px; min-width:16px; height:16px; border-radius:999px; background:#F5A623; color:#1C2333; font-size:10px; font-weight:700; display:flex; align-items:center; justify-content:center; font-variant-numeric:tabular-nums">12</span></span>
+          <span style="display:flex; flex-direction:column; align-items:center; gap:5px; padding:8px 0; border-radius:12px; min-height:48px; position:relative; background:rgba(245,166,35,0.14)"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#F5A623" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z" /><path d="M6 12v5c3 3 9 3 12 0v-5" /></svg><span style="font-size:10px; font-weight:600; color:#F5A623">Candidats</span></span>
+          <span style="display:flex; flex-direction:column; align-items:center; gap:5px; padding:8px 0; border-radius:12px; min-height:48px; position:relative;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#9AA3B2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" /><path d="M16 2v4M8 2v4M3 10h18" /></svg><span style="font-size:10px; font-weight:500; color:#9AA3B2">Planning</span></span>
+          <span style="display:flex; flex-direction:column; align-items:center; gap:5px; padding:8px 0; border-radius:12px; min-height:48px; position:relative;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#9AA3B2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="2" width="8" height="4" rx="1" /><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2" /><path d="m9 14 2 2 4-4" /></svg><span style="font-size:10px; font-weight:500; color:#9AA3B2">Examens</span></span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+</section>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  renderVals() {
+    const times = [];
+    for (let i = 0; i < 20; i++) {
+      const m = 8 * 60 + i * 30;
+      times.push({
+        label: String(Math.floor(m / 60)).padStart(2, '0') + ':' + String(m % 60).padStart(2, '0'),
+        gridRow: String(i + 1),
+        strong: m % 60 === 0
+      });
+    }
+    const tint = {
+      'Créneau': { bg: 'rgba(245,166,35,0.20)', fg: '#6B4405' },
+      'Conduite': { bg: 'rgba(28,35,51,0.15)', fg: '#1C2333' },
+      'Code': { bg: 'rgba(28,35,51,0.15)', fg: '#1C2333' },
+      'Perfectionnement': { bg: 'rgba(22,163,74,0.20)', fg: '#145F32' }
+    };
+    const raw = [
+      { name: 'samedi', date: '5 sept.', s: [[1,1,'Créneau','Benali K.'],[3,1,'Conduite','Meziane S.'],[7,2,'Perfectionnement','Belkacem A.'],[13,1,'Conduite','Cherif Y.']], c: [] },
+      { name: 'dimanche', date: '6 sept.', s: [[2,1,'Conduite','Hamdi N.'],[5,1,'Créneau','Zeroual L.'],[11,2,'Perfectionnement','Amrani D.'],[16,1,'Conduite','Ferhat N.']], c: [] },
+      { name: 'lundi', date: '7 sept.', today: true, s: [[1,1,'Conduite','Yahiaoui R.'],[4,1,'Créneau','Bouzid S.'],[6,1,'Créneau','Benali K.'],[15,1,'Conduite','Zeroual L.']], c: [20] },
+      { name: 'mardi', date: '8 sept.', s: [[3,2,'Perfectionnement','Cherif Y.'],[8,1,'Conduite','Meziane S.'],[12,1,'Créneau','Ferhat N.']], c: [] },
+      { name: 'mercredi', date: '9 sept.', s: [[9,1,'Conduite','Hamdi N.'],[14,1,'Créneau','Amrani D.']], c: [1,2,3,4,5,6] },
+      { name: 'jeudi', date: '10 sept.', s: [[2,1,'Créneau','Belkacem A.'],[6,1,'Conduite','Bouzid S.'],[10,2,'Perfectionnement','Yahiaoui R.'],[17,1,'Conduite','Benali K.']], c: [20] }
+    ];
+    const days = raw.map(d => ({
+      name: d.name,
+      date: d.date,
+      today: !!d.today,
+      cells: times.map(t => ({ gridRow: t.gridRow })),
+      closed: d.c.map(r => ({ gridRow: String(r) })),
+      sessions: d.s.map(x => ({
+        gridRow: x[0] + ' / span ' + x[1],
+        bg: tint[x[2]].bg,
+        fg: tint[x[2]].fg,
+        type: x[2] === 'Perfectionnement' ? 'Perf.' : x[2],
+        name: x[3],
+        dur: x[1] === 2 ? '1 h' : '30 min'
+      }))
+    }));
+    return { times, days, dayNames: days };
+  }
+}
+</script>
+</body>
+</html>

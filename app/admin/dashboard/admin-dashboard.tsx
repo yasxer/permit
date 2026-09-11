@@ -1,10 +1,9 @@
 "use client";
 
 import { BadgeCheck, Building2, GraduationCap, Wallet } from "lucide-react";
+import dynamic from "next/dynamic";
 import { useLocale, useTranslations } from "next-intl";
 
-import { CategoryBarChart } from "@/components/charts/category-bar-chart";
-import { MonthlyAreaChart } from "@/components/charts/monthly-area-chart";
 import { EmptyState } from "@/components/shared/empty-state";
 import { Notice } from "@/components/shared/notice";
 import { StatsCard } from "@/components/shared/stats-card";
@@ -14,6 +13,28 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { useAdminStats } from "@/hooks/use-stats";
 import { formatCurrency, formatNumber } from "@/lib/format";
 import type { Locale } from "@/i18n/config";
+
+/**
+ * recharts pèse lourd et n'a rien à dessiner tant que les chiffres ne sont pas
+ * arrivés : chargé à part, il ne retarde plus l'affichage du tableau de bord.
+ */
+const chartFallback = () => <Skeleton className="h-64 w-full rounded-xl" />;
+
+const MonthlyAreaChart = dynamic(
+  () =>
+    import("@/components/charts/monthly-area-chart").then(
+      (module) => module.MonthlyAreaChart,
+    ),
+  { ssr: false, loading: chartFallback },
+);
+
+const CategoryBarChart = dynamic(
+  () =>
+    import("@/components/charts/category-bar-chart").then(
+      (module) => module.CategoryBarChart,
+    ),
+  { ssr: false, loading: chartFallback },
+);
 
 /** Wilaya name in the reader's language. */
 function wilayaName(

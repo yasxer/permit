@@ -16,24 +16,17 @@ export type SchoolIdentity = {
 
 /**
  * Le nom de l'auto-école et sa wilaya, tels que le bandeau de chaque page les
- * affiche. Mis en cache par requête : la mise en page et la page elle-même le
- * demandent toutes les deux, une seule lecture part.
+ * affiche. La wilaya arrive jointe à la ligne de l'école : aucune lecture de
+ * plus, et le cache de requête sert la mise en page comme la page.
  */
 export const getSchoolIdentity = cache(async (): Promise<SchoolIdentity | null> => {
   const school = await getOwnedSchool();
   if (!school) return null;
 
-  let wilaya: string | null = null;
-  if (school.wilaya_code) {
-    const locale = (await getLocale()) as Locale;
-    const supabase = await createClient();
-    const { data } = await supabase
-      .from("wilayas")
-      .select("name_ar, name_fr, name_en")
-      .eq("code", school.wilaya_code)
-      .single();
-    wilaya = data ? (data[`name_${locale}`] ?? data.name_fr) : null;
-  }
+  const locale = (await getLocale()) as Locale;
+  const wilaya = school.wilaya
+    ? (school.wilaya[`name_${locale}`] ?? school.wilaya.name_fr)
+    : null;
 
   return {
     name: school.name,
