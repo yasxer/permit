@@ -1,8 +1,9 @@
 "use client";
 
-import { ChevronDown, LogOut, User as UserIcon } from "lucide-react";
+import { Check, ChevronDown, Globe, LogOut, Moon, User as UserIcon } from "lucide-react";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
+import { useTheme } from "next-themes";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
@@ -12,9 +13,16 @@ import {
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
+  DropdownMenuSub,
+  DropdownMenuSubContent,
+  DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { useLocaleSwitch } from "@/components/shared/lang-switcher";
 import type { NavItem } from "@/components/shared/nav-config";
+import { THEME_OPTIONS } from "@/components/shared/theme-toggle";
+import { useMounted } from "@/hooks/use-mounted";
+import { locales, localeLabels } from "@/i18n/config";
 import { cn } from "@/lib/utils";
 import type { UserRole } from "@/types/database";
 
@@ -36,6 +44,11 @@ export function UserMenu({
    * bas — « Diplômés » — se retrouvent ici plutôt que nulle part.
    */
   overflowItems = [],
+  /**
+   * La langue et le thème, repliés dans le menu : l'en-tête mobile compact n'a
+   * de place que pour le titre de la page et l'avatar.
+   */
+  withPreferences = false,
 }: {
   name: string | null;
   email: string;
@@ -43,9 +56,13 @@ export function UserMenu({
   role: UserRole;
   variant?: "plain" | "nav" | "compact";
   overflowItems?: NavItem[];
+  withPreferences?: boolean;
 }) {
   const t = useTranslations("nav");
   const tRoles = useTranslations("roles");
+  const { current: locale, choose: chooseLocale } = useLocaleSwitch();
+  const { theme, setTheme } = useTheme();
+  const mounted = useMounted();
 
   const fallback = (className?: string) => (
     <AvatarFallback
@@ -139,6 +156,51 @@ export function UserMenu({
                 </Link>
               </DropdownMenuItem>
             ))}
+            <DropdownMenuSeparator />
+          </>
+        )}
+
+        {withPreferences && (
+          <>
+            <DropdownMenuSub>
+              <DropdownMenuSubTrigger className="gap-2">
+                <Globe className="size-4" />
+                {t("changeLanguage")}
+              </DropdownMenuSubTrigger>
+              <DropdownMenuSubContent className="min-w-40">
+                {locales.map((value) => (
+                  <DropdownMenuItem
+                    key={value}
+                    onSelect={() => chooseLocale(value)}
+                    className="justify-between gap-3"
+                  >
+                    <span lang={value}>{localeLabels[value]}</span>
+                    {value === locale && <Check className="size-4 text-brand-ink" />}
+                  </DropdownMenuItem>
+                ))}
+              </DropdownMenuSubContent>
+            </DropdownMenuSub>
+
+            <DropdownMenuSub>
+              <DropdownMenuSubTrigger className="gap-2">
+                <Moon className="size-4" />
+                {t("toggleTheme")}
+              </DropdownMenuSubTrigger>
+              <DropdownMenuSubContent className="min-w-36">
+                {THEME_OPTIONS.map(({ value, icon: Icon, labelKey }) => (
+                  <DropdownMenuItem
+                    key={value}
+                    onSelect={() => setTheme(value)}
+                    data-active={mounted && theme === value}
+                    className="gap-2 data-[active=true]:font-medium data-[active=true]:text-brand-ink"
+                  >
+                    <Icon className="size-4" />
+                    {t(labelKey)}
+                  </DropdownMenuItem>
+                ))}
+              </DropdownMenuSubContent>
+            </DropdownMenuSub>
+
             <DropdownMenuSeparator />
           </>
         )}

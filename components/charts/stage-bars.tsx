@@ -33,18 +33,24 @@ export function StageBars({
 
   return (
     <div className={cn("flex flex-col gap-4", className)}>
-      {/* Sous sm : barres horizontales, valeur en fin de barre. */}
-      <ul className="flex flex-col gap-3 sm:hidden">
+      {/* Sous sm : barres horizontales, sans piste — la plus longue prend
+          toute la largeur, les autres en proportion. Le chiffre est écrit au
+          bout, en encre sur les deux teintes claires et en blanc sur la plus
+          foncée, où l'encre ne tiendrait pas. */}
+      <ul className="flex flex-col gap-[11px] sm:hidden">
         {data.map((datum, index) => (
-          <li key={datum.key} className="flex items-center gap-3">
-            <span className="w-20 shrink-0 text-[0.8125rem] font-semibold text-secondary-foreground">
+          <li key={datum.key} className="flex items-center gap-2.5">
+            <span className="w-16 shrink-0 text-[0.8125rem] text-secondary-foreground">
               {datum.label}
             </span>
-            <span className="h-7 flex-1 overflow-hidden rounded-md bg-muted">
+            <span className="flex-1">
               <span
-                className="flex h-full items-center justify-end rounded-md px-2 text-[0.6875rem] font-bold tabular-nums text-white"
+                className={cn(
+                  "flex h-6 items-center justify-end rounded-[7px] pe-2 text-xs font-bold tabular-nums",
+                  index === RAMP.length - 1 ? "text-white" : "text-[#1C2333]",
+                )}
                 style={{
-                  inlineSize: `${Math.max(12, (datum.value / max) * 100)}%`,
+                  inlineSize: `${Math.max(14, (datum.value / max) * 100)}%`,
                   background: RAMP[index % RAMP.length],
                 }}
               >

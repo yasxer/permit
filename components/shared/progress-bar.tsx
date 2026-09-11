@@ -12,24 +12,29 @@ export function ProgressBar({
   value,
   label,
   showValue = true,
+  size = "default",
   className,
 }: {
   value: number;
   label?: string;
   showValue?: boolean;
+  size?: "default" | "sm";
   className?: string;
 }) {
   const clamped = Math.min(100, Math.max(0, Math.round(value)));
 
   return (
-    <div className={cn("flex items-center gap-2.5", className)}>
+    <div className={cn("flex items-center", size === "sm" ? "gap-2" : "gap-2.5", className)}>
       <div
         role="progressbar"
         aria-valuenow={clamped}
         aria-valuemin={0}
         aria-valuemax={100}
         aria-label={label}
-        className="h-1.5 min-w-14 flex-1 overflow-hidden rounded-full bg-border"
+        className={cn(
+          "min-w-14 flex-1 overflow-hidden rounded-full bg-border",
+          size === "sm" ? "h-[5px]" : "h-1.5",
+        )}
       >
         <div
           className={cn(
@@ -40,7 +45,14 @@ export function ProgressBar({
         />
       </div>
       {showValue && (
-        <span className="w-10 shrink-0 text-end text-[0.8125rem] font-semibold tabular-nums text-secondary-foreground">
+        <span
+          className={cn(
+            "shrink-0 text-end tabular-nums",
+            size === "sm"
+              ? "text-[0.6875rem] text-muted-foreground"
+              : "w-10 text-[0.8125rem] font-semibold text-secondary-foreground",
+          )}
+        >
           {clamped}%
         </span>
       )}

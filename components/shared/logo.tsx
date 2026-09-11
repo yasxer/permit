@@ -21,7 +21,8 @@ export function Logo({
   showName?: boolean;
   /** Ajoute « AUTO ÉCOLE » sous le nom, en capitales espacées. */
   showTagline?: boolean;
-  size?: "default" | "lg";
+  /** `md` : le carré de 30 px de l'en-tête mobile. */
+  size?: "default" | "md" | "lg";
 }) {
   const t = useTranslations("app");
 
@@ -31,7 +32,11 @@ export function Logo({
         aria-hidden
         className={cn(
           "grid shrink-0 place-items-center rounded-lg bg-[#F5A623] font-heading font-extrabold leading-none text-[#1C2333]",
-          size === "lg" ? "size-10 text-xl" : "size-7 text-[0.9375rem]",
+          size === "lg"
+            ? "size-10 text-xl"
+            : size === "md"
+              ? "size-[1.875rem] rounded-[9px] text-[0.9375rem]"
+              : "size-7 text-[0.9375rem]",
         )}
       >
         P

@@ -113,7 +113,7 @@ export function StudentDetail({ enrollmentId }: { enrollmentId: string }) {
   // sauter d'un en-tête à l'autre entre le squelette et la fiche.
   if (isPending) {
     return (
-      <PageShell kicker={tNav("students")} title={<span className="block h-8 w-64 max-w-full animate-pulse rounded-md bg-white/12" />}>
+      <PageShell kicker={tNav("students")} back="/ecole/students" title={<span className="block h-8 w-64 max-w-full animate-pulse rounded-md bg-white/12" />}>
         <div className="grid gap-5 lg:grid-cols-3">
           <Skeleton className="h-72 lg:col-span-2" />
           <Skeleton className="h-72" />
@@ -126,7 +126,7 @@ export function StudentDetail({ enrollmentId }: { enrollmentId: string }) {
     // The file we just deleted is gone from under its own page — that is the
     // redirect arriving, not a file that was never there.
     return (
-      <PageShell kicker={tNav("students")} title={tNav("students")}>
+      <PageShell kicker={tNav("students")} back="/ecole/students" title={tNav("students")}>
         {deleteEnrollment.isSuccess ? (
           <Skeleton className="h-72" />
         ) : (
@@ -138,7 +138,7 @@ export function StudentDetail({ enrollmentId }: { enrollmentId: string }) {
 
   return (
     <PageShell
-      kicker={tNav("students")}
+      kicker={tNav("students")} back="/ecole/students"
       title={file.candidate_name_fr ?? file.candidate_name ?? "—"}
       description={
         <span className="flex flex-wrap items-center gap-2">
@@ -154,6 +154,12 @@ export function StudentDetail({ enrollmentId }: { enrollmentId: string }) {
           </Badge>
           <StatusBadge status={file.status} />
         </span>
+      }
+      mobileFooter={
+        <Button variant="destructive" className="w-full" onClick={() => setDeleteOpen(true)}>
+          <Trash2 className="size-4" />
+          {t("deleteCandidate")}
+        </Button>
       }
       actions={
         <>

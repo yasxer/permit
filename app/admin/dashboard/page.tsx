@@ -14,7 +14,7 @@ export default async function AdminDashboardPage() {
   const t = await getTranslations("admin.dashboard");
 
   return (
-    <PageShell title={t("title")} description={t("subtitle")}>
+    <PageShell mobile="hero" title={t("title")} description={t("subtitle")}>
       <AdminDashboard />
     </PageShell>
   );

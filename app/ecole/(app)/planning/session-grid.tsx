@@ -1,6 +1,6 @@
 "use client";
 
-import { Plus } from "lucide-react";
+import { ChevronLeft, ChevronRight, Plus } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 import { useState } from "react";
 
@@ -16,15 +16,15 @@ import {
 } from "@/hooks/use-planning";
 import { DAY_KEYS, formatDate, formatTime } from "@/lib/format";
 import { cn } from "@/lib/utils";
-import { fromISODate, workWeekDates } from "@/lib/week";
+import { fromISODate, toISODate, workWeekDates } from "@/lib/week";
 
 import { SessionDialog } from "./session-dialog";
 
 /**
  * Les pastilles de la charte. Le code et la conduite partagent l'encre, le
  * créneau prend l'ambre, le perfectionnement le vert : trois teintes pour
- * quatre types, parce que c'est la durée et le prix qui séparent réellement
- * les deux premiers, et qu'on les distingue de toute façon par la ressource.
+ * quatre types, parce que c'est la ressource qui sépare les deux premiers, et
+ * qu'on ne les voit jamais sur la même grille.
  */
 const TYPE_STYLE: Record<string, string> = {
   code: "bg-primary/15 text-primary",
@@ -36,14 +36,25 @@ const TYPE_STYLE: Record<string, string> = {
 
 const cellKey = (date: string, time: string) => `${date}|${time}`;
 
+/**
+ * Une demi-heure fait 42 px sur desktop — la hauteur qu'il faut pour que la
+ * pastille de 30 min affiche ses deux lignes sans rognage — et 40 px sur
+ * mobile, où la colonne unique rend la place en largeur.
+ */
+const ROWS = "[--planning-row:40px] md:[--planning-row:42px]";
+const ROW_TEMPLATE = { gridTemplateRows: `repeat(${SLOT_TIMES.length}, var(--planning-row))` };
+
 export function SessionGrid({
   schoolId,
   resource,
   weekStart,
+  onShiftWeek,
 }: {
   schoolId: string;
   resource: Resource;
   weekStart: string;
+  /** Tourne la semaine depuis la rangée des jours, sur mobile. */
+  onShiftWeek: (weeks: number) => void;
 }) {
   const t = useTranslations("ecole.planning");
   const tDays = useTranslations("days");
@@ -54,10 +65,12 @@ export function SessionGrid({
     time: string;
     slot: SlotWithStudent | null;
   } | null>(null);
-
   const days = workWeekDates(weekStart);
-  const [activeDay, setActiveDay] = useState(0);
-
+  // Sur mobile, la grille s'ouvre sur aujourd'hui quand il tombe dans la
+  // semaine affichée — c'est le jour qu'on vient remplir. Vendredi, samedi.
+  const [activeDay, setActiveDay] = useState(() =>
+    Math.max(0, days.indexOf(toISODate(new Date()))),
+  );
   const { data: slots = [], isPending } = useSlots(schoolId, weekStart);
 
   // The week the browser lands on depends on its clock, so the grid only
@@ -86,6 +99,9 @@ export function SessionGrid({
   }
 
   const dayName = (date: string) => tDays(DAY_KEYS[fromISODate(date).getDay()]);
+  // « sam », pas « sam. » : la puce fait 42 px de large.
+  const shortDay = (date: string) =>
+    formatDate(date, locale, { weekday: "short" }).replace(/\.$/, "");
 
   function renderDay(date: string) {
     return SLOT_TIMES.map((time, index) => {
@@ -93,6 +109,7 @@ export function SessionGrid({
 
       const slot = startsAt.get(cellKey(date, time));
       const row = index + 1;
+      const rule = index > 0 && "border-t border-separator";
 
       if (!slot) {
         return (
@@ -102,7 +119,10 @@ export function SessionGrid({
             style={{ gridRow: row, gridColumn: 1 }}
             onClick={() => setOpenCell({ date, time, slot: null })}
             aria-label={`${dayName(date)} ${formatTime(time)} — ${t("newSession")}`}
-            className="group border-t border-separator transition-colors hover:bg-brand/10 focus-visible:bg-brand/10 focus-visible:outline-none"
+            className={cn(
+              "group transition-colors hover:bg-brand/10 focus-visible:bg-brand/10 focus-visible:outline-none",
+              rule,
+            )}
           >
             <Plus
               className="mx-auto size-3.5 text-brand-ink opacity-0 transition-opacity group-hover:opacity-100 group-focus-visible:opacity-100"
@@ -122,7 +142,10 @@ export function SessionGrid({
             type="button"
             style={{ gridRow: `${row} / span ${span}`, gridColumn: 1 }}
             onClick={() => setOpenCell({ date, time, slot })}
-            className="slot-closed flex items-center border-t border-separator ps-2 text-start text-[0.625rem] font-semibold text-destructive focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-ring/35"
+            className={cn(
+              "slot-closed flex items-center ps-2 text-start text-[0.625rem] font-semibold text-destructive focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-ring/35",
+              rule,
+            )}
           >
             {t("closed")}
           </button>
@@ -136,7 +159,9 @@ export function SessionGrid({
           style={{ gridRow: `${row} / span ${span}`, gridColumn: 1 }}
           onClick={() => setOpenCell({ date, time, slot })}
           className={cn(
-            "my-[2px] mx-[3px] flex flex-col justify-center gap-px overflow-hidden rounded-[9px] px-2 py-1 text-start transition-opacity hover:opacity-85 focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-ring/35",
+            // La pastille s'étire sur sa ou ses demi-heures : la hauteur vient
+            // de la grille, jamais d'un calcul en pixels qui s'en écarterait.
+            "mx-1.5 my-[2px] flex flex-col justify-center gap-px self-stretch overflow-hidden rounded-[9px] px-2 py-1 text-start transition-opacity hover:opacity-85 focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-ring/35 md:mx-[3px]",
             TYPE_STYLE[slot.lesson_type],
           )}
         >
@@ -151,42 +176,76 @@ export function SessionGrid({
     });
   }
 
+  const chevron =
+    "grid w-7 shrink-0 place-items-center rounded-[11px] border border-border bg-card text-muted-foreground transition-colors hover:bg-muted focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-ring/35";
+
   return (
-    <div className="flex flex-col gap-5">
-      {/* Sous md : un jour à la fois. Six colonnes sur 390 px ne se cliquent
-          pas — le sélecteur de jour remplace la largeur manquante. */}
-      <div className="flex gap-2 overflow-x-auto pb-1 md:hidden">
-        {days.map((date, index) => (
-          <button
-            key={date}
-            type="button"
-            onClick={() => setActiveDay(index)}
-            aria-current={index === activeDay ? "true" : undefined}
-            className={cn(
-              "flex min-w-14 shrink-0 flex-col items-center gap-0.5 rounded-xl border px-3 py-2 transition-colors",
-              index === activeDay
-                ? "border-transparent bg-primary text-primary-foreground"
-                : "border-border bg-card",
-            )}
-          >
-            <span
+    <div className="flex flex-col gap-3 md:gap-5">
+      {/* Sous md : un jour à la fois (2g). Six colonnes sur 390 px ne se
+          cliquent pas — la rangée des jours remplace la largeur manquante, et
+          ses deux bouts tournent la semaine. */}
+      <div className="flex items-stretch gap-[7px] md:hidden">
+        <button
+          type="button"
+          className={chevron}
+          aria-label={t("previousWeek")}
+          onClick={() => onShiftWeek(-1)}
+        >
+          <ChevronLeft className="size-4 rtl-flip" aria-hidden />
+        </button>
+
+        {days.map((date, index) => {
+          const active = index === activeDay;
+          return (
+            <button
+              key={date}
+              type="button"
+              onClick={() => setActiveDay(index)}
+              aria-pressed={active}
+              aria-label={dayName(date)}
               className={cn(
-                "text-[0.6875rem] font-semibold capitalize",
-                index === activeDay ? "text-brand" : "text-muted-foreground",
+                "flex min-w-0 flex-1 flex-col items-center gap-0.5 rounded-[11px] py-2 transition-colors focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-ring/35",
+                // Le jour actif reste bleu nuit dans les deux thèmes, comme la
+                // barre : c'est un repère, pas une surface. En sombre, le nuit
+                // se confond avec les cartes — un filet ambre le détache.
+                active
+                  ? "bg-sidebar text-white dark:ring-1 dark:ring-inset dark:ring-brand/60"
+                  : "border border-border bg-card",
               )}
             >
-              {dayName(date)}
-            </span>
-            <span className="text-sm font-semibold tabular-nums">
-              {formatDate(date, locale, { day: "2-digit" })}
-            </span>
-          </button>
-        ))}
+              <span
+                className={cn(
+                  "text-[0.625rem] leading-none",
+                  active ? "text-brand" : "text-muted-foreground/80",
+                )}
+              >
+                {shortDay(date)}
+              </span>
+              <span
+                className={cn(
+                  "text-sm leading-tight tabular-nums",
+                  active ? "font-bold" : "font-semibold",
+                )}
+              >
+                {formatDate(date, locale, { day: "numeric" })}
+              </span>
+            </button>
+          );
+        })}
+
+        <button
+          type="button"
+          className={chevron}
+          aria-label={t("nextWeek")}
+          onClick={() => onShiftWeek(1)}
+        >
+          <ChevronRight className="size-4 rtl-flip" aria-hidden />
+        </button>
       </div>
 
       <div className="overflow-hidden rounded-xl border border-border bg-card">
-        {/* En-tête des jours — desktop seulement : sur mobile le jour actif est
-            déjà nommé par le sélecteur. */}
+        {/* En-tête des jours — desktop seulement : sur mobile, la rangée de
+            puces nomme déjà le jour affiché. */}
         <div className="hidden grid-cols-[76px_repeat(6,1fr)] border-b border-border md:grid">
           <span className="p-3 text-center font-mono text-[0.6875rem] text-muted-foreground/80">
             {t("hour")}
@@ -196,27 +255,25 @@ export function SessionGrid({
               key={date}
               className="flex flex-col items-center gap-0.5 border-s border-border p-3"
             >
-              <span className="text-[0.8125rem] font-semibold capitalize">
-                {dayName(date)}
-              </span>
-              <span dir="ltr" className="text-xs tabular-nums text-muted-foreground/80">
+              <span className="text-[0.8125rem] font-semibold capitalize">{dayName(date)}</span>
+              <span className="text-xs tabular-nums text-muted-foreground/80">
                 {formatDate(date, locale, { day: "2-digit", month: "2-digit" })}
               </span>
             </div>
           ))}
         </div>
 
-        <div className="planning-grid grid grid-cols-[58px_1fr] md:grid-cols-[76px_repeat(6,1fr)]">
-          {/* La colonne des heures, en mono : ce sont des repères, pas du texte. */}
-          <div
-            className="grid"
-            style={{ gridTemplateRows: `repeat(20, var(--planning-row))` }}
-          >
-            {SLOT_TIMES.map((time) => (
+        <div className={cn("grid grid-cols-[58px_1fr] md:grid-cols-[76px_repeat(6,1fr)]", ROWS)}>
+          {/* La colonne des heures, en mono : ce sont des repères, pas du
+              texte. Calée au début sur mobile, centrée sur desktop. */}
+          <div className="grid" style={ROW_TEMPLATE}>
+            {SLOT_TIMES.map((time, index) => (
               <span
                 key={time}
-                dir="ltr"
-                className="flex justify-center border-t border-separator pt-1 font-mono text-[0.6875rem] tabular-nums text-muted-foreground/80"
+                className={cn(
+                  "flex justify-start ps-2 pt-[9px] font-mono text-[0.6875rem] tabular-nums text-muted-foreground/80 md:justify-center md:ps-0 md:pt-1",
+                  index > 0 && "border-t border-separator",
+                )}
               >
                 {formatTime(time)}
               </span>
@@ -227,10 +284,10 @@ export function SessionGrid({
             <div
               key={date}
               className={cn(
-                "grid border-s border-border",
+                "border-s border-separator md:border-border",
                 index === activeDay ? "grid" : "hidden md:grid",
               )}
-              style={{ gridTemplateRows: `repeat(20, var(--planning-row))` }}
+              style={ROW_TEMPLATE}
             >
               {renderDay(date)}
             </div>
@@ -238,7 +295,9 @@ export function SessionGrid({
         </div>
       </div>
 
-      <div className="flex flex-wrap items-center justify-between gap-x-6 gap-y-3">
+      <p className="text-xs text-muted-foreground md:hidden">{t("gridLegendHintTouch")}</p>
+
+      <div className="hidden flex-wrap items-center justify-between gap-x-6 gap-y-3 md:flex">
         <ul className="flex flex-wrap items-center gap-x-[18px] gap-y-2">
           <span className="sr-only">{t("legend")}</span>
           <LegendItem swatch="bg-primary/15" label={t("legendCodeConduite")} />

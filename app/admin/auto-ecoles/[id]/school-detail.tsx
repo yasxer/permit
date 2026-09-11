@@ -87,7 +87,7 @@ export function SchoolDetail({ schoolId }: { schoolId: string }) {
 
   if (isPending) {
     return (
-      <PageShell kicker={tNav("autoEcoles")} title={<span className="block h-8 w-64 max-w-full animate-pulse rounded-md bg-white/12" />}>
+      <PageShell kicker={tNav("autoEcoles")} back="/admin/auto-ecoles" title={<span className="block h-8 w-64 max-w-full animate-pulse rounded-md bg-white/12" />}>
         <div className="grid gap-5 lg:grid-cols-3">
           <Skeleton className="h-64 lg:col-span-2" />
           <Skeleton className="h-64" />
@@ -98,7 +98,7 @@ export function SchoolDetail({ schoolId }: { schoolId: string }) {
 
   if (isError || !school) {
     return (
-      <PageShell kicker={tNav("autoEcoles")} title={tNav("autoEcoles")}>
+      <PageShell kicker={tNav("autoEcoles")} back="/admin/auto-ecoles" title={tNav("autoEcoles")}>
         <EmptyState icon={Building2} title={tErrors("notFound")} />
       </PageShell>
     );
@@ -127,9 +127,27 @@ export function SchoolDetail({ schoolId }: { schoolId: string }) {
 
   return (
     <PageShell
-      kicker={tNav("autoEcoles")}
+      kicker={tNav("autoEcoles")} back="/admin/auto-ecoles"
       title={school.name ?? t("detailsTitle")}
       description={<StatusBadge status={school.status} />}
+      // Un statut est toujours l'un des trois : au moins un des deux gestes
+      // reste possible, la rangée n'est jamais vide.
+      mobileActions={
+        <>
+          {school.status !== "approved" && (
+            <Button className="flex-1" onClick={() => setAction("approve")}>
+              <Check className="size-4" />
+              {t("approve")}
+            </Button>
+          )}
+          {school.status !== "rejected" && (
+            <Button variant="outline" className="flex-1" onClick={() => setAction("reject")}>
+              <X className="size-4" />
+              {t("reject")}
+            </Button>
+          )}
+        </>
+      }
       actions={
         <>
           <Button asChild variant="outline" className="border-sidebar-border text-sidebar-foreground hover:bg-white/8">

@@ -22,9 +22,7 @@ const PAGE_SIZE = 12;
 
 /**
  * Les sept colonnes de la charte. Sous `lg`, le téléphone et le montant payé
- * sortent — ce sont les deux qu'on peut lire sur la fiche ; sous `md`, la
- * table cède la place à une liste de cartes, parce qu'une ligne de sept
- * colonnes sur 390 px n'est plus une ligne.
+ * sortent — ce sont les deux qu'on peut lire sur la fiche.
  */
 const ROW_GRID =
   "grid grid-cols-[1.6fr_0.7fr_1.3fr_1fr_1.75rem] items-center gap-4 px-5 lg:grid-cols-[1.5fr_1.1fr_0.6fr_1.2fr_1fr_1fr_2.25rem]";
@@ -38,7 +36,7 @@ export function StudentsTable({
   schoolId: string;
   status?: EnrollmentStatus;
   emptyTitle: string;
-  /** Fournie quand la recherche vit dans le bandeau nuit de la page. */
+  /** Fournie quand la recherche vit ailleurs — dans le bandeau, par exemple. */
   search?: string;
 }) {
   const t = useTranslations("ecole.students");
@@ -70,8 +68,8 @@ export function StudentsTable({
   return (
     <>
       {controlledSearch === undefined && (
-        <div className="rounded-xl border border-border bg-card p-4 sm:px-5">
-          <div className="relative sm:max-w-xs">
+        <div className="relative md:rounded-xl md:border md:border-border md:bg-card md:p-4 md:px-5">
+          <div className="relative md:max-w-xs">
             <Search
               className="pointer-events-none absolute inset-y-0 start-3 my-auto size-4 text-muted-foreground"
               aria-hidden
@@ -84,58 +82,81 @@ export function StudentsTable({
               }}
               placeholder={t("searchPlaceholder")}
               aria-label={tc("search")}
-              className="ps-9"
+              className="h-11 border-border ps-9 md:h-10 md:border-input"
             />
           </div>
         </div>
       )}
 
-      <div className="overflow-hidden rounded-xl border border-border bg-card">
-        {/* En-tête de table — micro-libellés, réservé aux vraies colonnes. */}
-        <div
-          className={cn(
-            ROW_GRID,
-            "hidden bg-surface-head py-3.5 text-[0.6875rem] font-semibold uppercase tracking-[0.08em] text-muted-foreground md:grid",
-          )}
-        >
-          <span>{t("name")}</span>
-          <span className="hidden lg:block">{t("phone")}</span>
-          <span>{t("category")}</span>
-          <span>{t("progress")}</span>
-          <span className="hidden text-end lg:block">{t("amountPaid")}</span>
-          <span className="text-end">{t("amountRemaining")}</span>
-          <span />
-        </div>
-
-        {isPending ? (
-          <ul>
-            {Array.from({ length: 6 }, (_, index) => (
-              <li
-                key={index}
-                className="flex items-center gap-3 border-t border-separator px-5 py-4 first:border-t-0 md:first:border-t"
-              >
-                <Skeleton className="size-9 shrink-0 rounded-full" />
+      {isPending ? (
+        <ul className="flex flex-col gap-3 md:gap-0 md:overflow-hidden md:rounded-xl md:border md:border-border md:bg-card">
+          {Array.from({ length: 6 }, (_, index) => (
+            <li
+              key={index}
+              className="flex items-center gap-3 rounded-xl border border-border bg-card p-3.5 md:rounded-none md:border-0 md:border-t md:border-separator md:px-5 md:py-4 md:first:border-t-0"
+            >
+              <Skeleton className="hidden size-9 shrink-0 rounded-full md:block" />
+              <div className="flex flex-1 flex-col gap-2">
                 <Skeleton className="h-4 w-40" />
-                <Skeleton className="ms-auto h-4 w-24" />
-              </li>
-            ))}
-          </ul>
-        ) : pageRows.length === 0 ? (
+                <Skeleton className="h-1.5 w-full md:hidden" />
+              </div>
+              <Skeleton className="h-4 w-20" />
+            </li>
+          ))}
+        </ul>
+      ) : pageRows.length === 0 ? (
+        <div className="rounded-xl border border-border bg-card">
           <EmptyState
             icon={GraduationCap}
             title={needle ? tc("noResults") : emptyTitle}
             description={needle ? tc("noResultsHint") : undefined}
           />
-        ) : (
-          <ul>
+        </div>
+      ) : (
+        <>
+          {/* Sous md (2h) : des cartes séparées, sans avatar — le nom, la
+              catégorie, la barre, et le restant en gros au coin de fin, parce
+              que c'est la seule colonne qu'on vient vérifier. */}
+          <ul className="flex flex-col gap-3 md:hidden">
             {pageRows.map((file) => (
-              <li key={file.id} className="border-t border-separator first:border-t-0 md:first:border-t">
-                <StudentRow file={file} locale={locale} paidInFull={t("paidInFull")} />
+              <li key={file.id}>
+                <StudentCard
+                  file={file}
+                  locale={locale}
+                  remainingLabel={t("amountRemaining")}
+                  paidInFull={t("paidInFull")}
+                />
               </li>
             ))}
           </ul>
-        )}
-      </div>
+
+          {/* md et au-delà (2e) : la table. */}
+          <div className="hidden overflow-hidden rounded-xl border border-border bg-card md:block">
+            <div
+              className={cn(
+                ROW_GRID,
+                "bg-surface-head py-3.5 text-[0.6875rem] font-semibold uppercase tracking-[0.08em] text-muted-foreground",
+              )}
+            >
+              <span>{t("name")}</span>
+              <span className="hidden lg:block">{t("phone")}</span>
+              <span>{t("category")}</span>
+              <span>{t("progress")}</span>
+              <span className="hidden text-end lg:block">{t("amountPaid")}</span>
+              <span className="text-end">{t("amountRemaining")}</span>
+              <span />
+            </div>
+
+            <ul>
+              {pageRows.map((file) => (
+                <li key={file.id} className="border-t border-separator">
+                  <StudentRow file={file} locale={locale} paidInFull={t("paidInFull")} />
+                </li>
+              ))}
+            </ul>
+          </div>
+        </>
+      )}
 
       {!isPending && rows.length > 0 && (
         <Pager
@@ -163,68 +184,100 @@ function StudentRow({
   return (
     <Link
       href={`/ecole/students/${file.id}`}
-      className="block transition-colors hover:bg-background focus-visible:bg-background focus-visible:outline-none"
+      className={cn(
+        ROW_GRID,
+        "py-3.5 transition-colors hover:bg-background focus-visible:bg-background focus-visible:outline-none",
+      )}
     >
-      {/* md et au-delà : la ligne de table. */}
-      <div className={cn(ROW_GRID, "hidden py-3.5 md:grid")}>
-        <CandidateIdentity
-          nameFr={file.candidate_name_fr}
-          nameAr={file.candidate_name}
-          photoUrl={file.candidate_photo_url}
-        />
+      <CandidateIdentity
+        nameFr={file.candidate_name_fr}
+        nameAr={file.candidate_name}
+        photoUrl={file.candidate_photo_url}
+      />
 
-        <span
-          dir="ltr"
-          className="hidden truncate text-sm tabular-nums text-secondary-foreground lg:block"
-        >
-          {file.candidate_phone ?? "—"}
+      <span
+        dir="ltr"
+        className="hidden truncate text-sm tabular-nums text-secondary-foreground lg:block"
+      >
+        {file.candidate_phone ?? "—"}
+      </span>
+
+      <span className="justify-self-start">
+        <CategoryBadge code={file.category_code} />
+      </span>
+
+      <ProgressBar value={file.code_progress} />
+
+      <span className="hidden text-end text-sm tabular-nums text-secondary-foreground lg:block">
+        {formatCurrency(file.amount_paid, locale)}
+      </span>
+
+      <span
+        className={cn(
+          "text-end text-sm font-semibold tabular-nums",
+          settled ? "text-success" : "text-foreground",
+        )}
+      >
+        {settled ? paidInFull : formatCurrency(file.amount_remaining, locale)}
+      </span>
+
+      <ChevronRight className="size-4 justify-self-end text-muted-foreground/60 rtl-flip" aria-hidden />
+    </Link>
+  );
+}
+
+function StudentCard({
+  file,
+  locale,
+  remainingLabel,
+  paidInFull,
+}: {
+  file: StudentFileRow;
+  locale: string;
+  remainingLabel: string;
+  paidInFull: string;
+}) {
+  const settled = file.amount_remaining === 0;
+  const primary = file.candidate_name_fr ?? file.candidate_name ?? "—";
+  const secondary =
+    file.candidate_name_fr && file.candidate_name && file.candidate_name !== file.candidate_name_fr
+      ? file.candidate_name
+      : null;
+
+  return (
+    <Link
+      href={`/ecole/students/${file.id}`}
+      className="flex items-center gap-3 rounded-xl border border-border bg-card p-3.5 transition-colors active:bg-background focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-ring/35"
+    >
+      <div className="flex min-w-0 flex-1 flex-col gap-[5px]">
+        <div className="flex min-w-0 items-center gap-2">
+          <span className="truncate text-[0.9375rem] font-semibold">{primary}</span>
+          <CategoryBadge code={file.category_code} size="sm" />
+        </div>
+        {secondary && (
+          <span
+            lang="ar"
+            dir="rtl"
+            className="max-w-full self-start truncate text-[0.8125rem] text-muted-foreground"
+          >
+            {secondary}
+          </span>
+        )}
+        <ProgressBar value={file.code_progress} size="sm" />
+      </div>
+
+      <div className="flex shrink-0 flex-col items-end gap-0.5">
+        <span className="text-[0.625rem] uppercase tracking-[0.06em] text-muted-foreground/80">
+          {remainingLabel}
         </span>
-
-        <span className="justify-self-start">
-          <CategoryBadge code={file.category_code} />
-        </span>
-
-        <ProgressBar value={file.code_progress} />
-
-        <span className="hidden text-end text-sm tabular-nums text-secondary-foreground lg:block">
-          {formatCurrency(file.amount_paid, locale)}
-        </span>
-
         <span
           className={cn(
-            "text-end text-sm font-semibold tabular-nums",
+            "text-[0.9375rem] font-bold tabular-nums",
             settled ? "text-success" : "text-foreground",
           )}
         >
           {settled ? paidInFull : formatCurrency(file.amount_remaining, locale)}
         </span>
-
-        <ChevronRight className="size-4 justify-self-end text-muted-foreground/60 rtl-flip" aria-hidden />
-      </div>
-
-      {/* Sous md : la carte de la maquette mobile — le restant en gros au coin
-          de fin, parce que c'est la seule colonne qu'on vient vérifier. */}
-      <div className="flex flex-col gap-3 p-4 md:hidden">
-        <div className="flex items-start justify-between gap-3">
-          <CandidateIdentity
-            nameFr={file.candidate_name_fr}
-            nameAr={file.candidate_name}
-            photoUrl={file.candidate_photo_url}
-          />
-          <CategoryBadge code={file.category_code} />
-        </div>
-
-        <div className="flex items-center gap-4">
-          <ProgressBar value={file.code_progress} className="flex-1" />
-          <span
-            className={cn(
-              "shrink-0 font-heading text-[0.9375rem] font-bold tabular-nums",
-              settled ? "text-success" : "text-foreground",
-            )}
-          >
-            {settled ? paidInFull : formatCurrency(file.amount_remaining, locale)}
-          </span>
-        </div>
       </div>
     </Link>
   );

@@ -10,9 +10,11 @@ import { cn } from "@/lib/utils";
  */
 export function CategoryBadge({
   code,
+  size = "default",
   className,
 }: {
   code: string;
+  size?: "default" | "sm";
   className?: string;
 }) {
   const filled = code === "B";
@@ -20,7 +22,10 @@ export function CategoryBadge({
   return (
     <span
       className={cn(
-        "inline-flex shrink-0 items-center rounded-lg px-2 py-1 font-mono text-xs font-medium leading-none",
+        "inline-flex shrink-0 items-center font-mono font-medium leading-none",
+        size === "sm"
+          ? "rounded-[7px] px-[7px] py-[3px] text-[0.6875rem]"
+          : "rounded-lg px-2 py-1 text-xs",
         filled
           ? "bg-primary text-primary-foreground"
           : "border border-border bg-muted text-foreground",

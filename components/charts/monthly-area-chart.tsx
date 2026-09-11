@@ -30,11 +30,18 @@ export function MonthlyAreaChart({
   data,
   label,
   formatValue,
+  compact = false,
 }: {
   data: MonthlyPoint[];
   /** Series name, shown in the tooltip. */
   label: string;
   formatValue?: (value: number) => string;
+  /**
+   * La version de la carte mobile : 110 px, ni axes ni repère — la forme de
+   * l'année et le point du mois courant, rien d'autre. Sur 320 px, douze
+   * libellés de mois se marcheraient dessus.
+   */
+  compact?: boolean;
 }) {
   const locale = useLocale();
   // Deux graphes sur une page partagent le DOM : l'identifiant du dégradé doit
@@ -46,8 +53,15 @@ export function MonthlyAreaChart({
   } satisfies ChartConfig;
 
   return (
-    <ChartContainer config={config} className="h-64 w-full">
-      <AreaChart data={data} margin={{ top: 8, right: 12, bottom: 0, left: 4 }}>
+    <ChartContainer config={config} className={compact ? "h-[110px] w-full" : "h-64 w-full"}>
+      <AreaChart
+        data={data}
+        margin={
+          compact
+            ? { top: 8, right: 8, bottom: 2, left: 8 }
+            : { top: 8, right: 12, bottom: 0, left: 4 }
+        }
+      >
         <defs>
           <linearGradient id={fillId} x1="0" y1="0" x2="0" y2="1">
             <stop offset="0%" stopColor="var(--color-value)" stopOpacity={0.2} />
@@ -60,6 +74,7 @@ export function MonthlyAreaChart({
         <CartesianGrid vertical={false} stroke="var(--separator)" />
         <XAxis
           dataKey="month"
+          hide={compact}
           tickLine={false}
           axisLine={{ stroke: "var(--border)" }}
           tickMargin={12}
@@ -89,6 +104,7 @@ export function MonthlyAreaChart({
           }}
         />
         <YAxis
+          hide={compact}
           tickLine={false}
           axisLine={false}
           width={48}
@@ -115,7 +131,7 @@ export function MonthlyAreaChart({
           }
         />
         {/* Le repère du mois courant : c'est la valeur qu'on vient lire. */}
-        {data.length > 0 && (
+        {!compact && data.length > 0 && (
           <ReferenceLine
             x={data[data.length - 1].month}
             stroke="var(--color-value)"
@@ -127,7 +143,10 @@ export function MonthlyAreaChart({
           dataKey="value"
           type="monotone"
           stroke="var(--color-value)"
-          strokeWidth={2.2}
+          strokeWidth={compact ? 2 : 2.2}
+          // Sur 110 px, l'entrée animée n'apporte rien et retarde la seule
+          // lecture que la carte propose.
+          isAnimationActive={!compact}
           strokeLinecap="round"
           strokeLinejoin="round"
           fill={`url(#${fillId})`}
@@ -143,7 +162,11 @@ export function MonthlyAreaChart({
             if (index !== data.length - 1 || cx === undefined || cy === undefined) {
               return <g key={key} />;
             }
-            return (
+            // En compact, une pastille pleine : le point cerclé de blanc se
+            // perd à cette taille.
+            return compact ? (
+              <circle key={key} cx={cx} cy={cy} r={3.5} fill="var(--color-value)" />
+            ) : (
               <circle
                 key={key}
                 cx={cx}

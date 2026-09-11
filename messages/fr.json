@@ -286,7 +286,13 @@
       "examBreakdown": "{code} code · {creneau} créneau · {conduite} conduite",
       "graduates": "Candidats diplômés",
       "newFilesThisMonth": "{count, plural, =0 {Aucun dossier ce mois} one {+# dossier ce mois} other {+# dossiers ce mois}}",
-      "quarterGraduates": "{count, plural, =0 {Aucun ce trimestre} one {+# ce trimestre} other {+# ce trimestre}}"
+      "quarterGraduates": "{count, plural, =0 {Aucun ce trimestre} one {+# ce trimestre} other {+# ce trimestre}}",
+      "activeShort": "Actifs",
+      "pendingShort": "En attente",
+      "revenueShort": "Encaissé",
+      "graduatesShort": "Diplômés",
+      "weekActivity": "Activité de la semaine du {date}.",
+      "weekOf": "Semaine du {date}"
     },
     "requests": {
       "title": "Demandes d'inscription",
@@ -304,7 +310,8 @@
       "rejected": "Demande refusée",
       "empty": "Aucune demande pour le moment",
       "searchPlaceholder": "Nom ou téléphone…",
-      "subtitleHint": "Chaque geste ouvre une confirmation avant d'être appliqué."
+      "subtitleHint": "Chaque geste ouvre une confirmation avant d'être appliqué.",
+      "pendingCount": "{count, plural, =0 {Aucune demande en attente} one {# demande en attente} other {# demandes en attente}}"
     },
     "students": {
       "title": "Candidats",
@@ -379,7 +386,8 @@
       "deleteCandidateMessage": "Le dossier de {name}, ses versements et son historique d'examens seront définitivement supprimés. Cette action est irréversible.",
       "candidateDeleted": "Candidat supprimé",
       "searchPlaceholder": "Rechercher un candidat…",
-      "filesInTraining": "{count, plural, =0 {Aucun dossier en cours} one {# dossier en cours de formation} other {# dossiers en cours de formation}}"
+      "filesInTraining": "{count, plural, =0 {Aucun dossier en cours} one {# dossier en cours de formation} other {# dossiers en cours de formation}}",
+      "activeFilesCount": "{count, plural, =0 {Aucun dossier actif} one {# dossier actif} other {# dossiers actifs}}"
     },
     "completed": {
       "title": "Candidats diplômés",
@@ -435,7 +443,9 @@
       "legendClosed": "Demi-heure fermée",
       "planningHint": "Une case libre se remplit en un clic. Rien n'est réservé d'avance.",
       "resource": "Ressource",
-      "day": "Jour"
+      "day": "Jour",
+      "weekOf": "semaine du {date}",
+      "gridLegendHintTouch": "Touchez une case vide pour créer une séance ou fermer la demi-heure."
     },
     "exams": {
       "title": "Examens",

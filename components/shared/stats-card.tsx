@@ -23,6 +23,7 @@ const HINT_TONE = {
 export function StatsCard({
   icon: Icon,
   label,
+  shortLabel,
   value,
   hint,
   hintTone = "muted",
@@ -32,6 +33,8 @@ export function StatsCard({
 }: {
   icon: LucideIcon;
   label: ReactNode;
+  /** « Actifs » plutôt que « Candidats actifs » — la carte mobile fait 150 px. */
+  shortLabel?: ReactNode;
   value: ReactNode;
   hint?: ReactNode;
   hintTone?: keyof typeof HINT_TONE;
@@ -41,17 +44,18 @@ export function StatsCard({
   return (
     <div
       className={cn(
-        "flex flex-col gap-3.5 rounded-xl border border-border bg-card p-3.5 sm:gap-4 sm:p-5",
+        "flex flex-col gap-2 rounded-xl border border-border bg-card p-3.5 sm:gap-4 sm:p-5",
         className,
       )}
     >
       <div className="flex items-start justify-between gap-3">
         <div className="flex min-w-0 flex-col gap-2 sm:gap-2.5">
-          <span className="flex items-center gap-1.5 text-[0.6875rem] font-semibold uppercase tracking-[0.09em] text-muted-foreground">
+          <span className="flex items-center gap-[7px] text-[0.6875rem] font-semibold uppercase tracking-[0.05em] text-muted-foreground sm:tracking-[0.09em]">
             {/* Sur 390 px, l'icône se met en tête de l'étiquette : le coin de
                 fin est déjà pris par le chiffre. */}
             <Icon className="size-3.5 shrink-0 sm:hidden" strokeWidth={1.9} aria-hidden />
-            <span className="sm:truncate">{label}</span>
+            <span className="truncate sm:hidden">{shortLabel ?? label}</span>
+            <span className="hidden truncate sm:inline">{label}</span>
           </span>
 
           <span

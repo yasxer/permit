@@ -82,7 +82,7 @@ export function ExamDetail({
   // sauter d'un en-tête à l'autre entre le squelette et la séance.
   if (isPending) {
     return (
-      <PageShell kicker={tNav("exams")} title={<span className="block h-8 w-72 max-w-full animate-pulse rounded-md bg-white/12" />}>
+      <PageShell kicker={tNav("exams")} back="/ecole/exams" title={<span className="block h-8 w-72 max-w-full animate-pulse rounded-md bg-white/12" />}>
         <Skeleton className="h-96" />
       </PageShell>
     );
@@ -92,7 +92,7 @@ export function ExamDetail({
     // The session we just deleted is gone from under its own page — that is the
     // redirect arriving, not a session that was never there.
     return (
-      <PageShell kicker={tNav("exams")} title={tNav("exams")}>
+      <PageShell kicker={tNav("exams")} back="/ecole/exams" title={tNav("exams")}>
         {deleteExam.isSuccess ? (
           <Skeleton className="h-96" />
         ) : (
@@ -106,7 +106,7 @@ export function ExamDetail({
 
   return (
     <PageShell
-      kicker={tNav("exams")}
+      kicker={tNav("exams")} back="/ecole/exams"
       title={formatDate(exam.exam_date, locale, { dateStyle: "full" })}
       description={
         <span className="flex flex-wrap items-center gap-2">
@@ -116,6 +116,12 @@ export function ExamDetail({
           </span>
           <StatusBadge status={exam.status} />
         </span>
+      }
+      mobileFooter={
+        <Button variant="destructive" className="w-full" onClick={() => setDeleteOpen(true)}>
+          <Trash2 className="size-4" />
+          {t("deleteExam")}
+        </Button>
       }
       actions={
         <>

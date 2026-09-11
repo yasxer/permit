@@ -93,10 +93,13 @@ export function RequestsList({ schoolId }: { schoolId: string }) {
 
   return (
     <>
-      <div className="flex flex-col gap-4 rounded-xl border border-border bg-card p-4 lg:flex-row lg:items-center lg:justify-between lg:gap-5 lg:px-5">
+      {/* Sur mobile, les contrôles se posent sur le fond de page, pleine
+          largeur, comme le planning : quatre segments ne tiennent sur 390 px
+          qu'en se partageant la rangée à parts égales. */}
+      <div className="flex flex-col gap-3 md:gap-4 md:rounded-xl md:border md:border-border md:bg-card md:p-4 lg:flex-row lg:items-center lg:justify-between lg:gap-5 lg:px-5">
         {/* Le compteur vit dans le segment : le filtre dit alors ce qu'il
             cache autant que ce qu'il montre. */}
-        <div className="flex gap-0.5 overflow-x-auto rounded-xl bg-muted p-1">
+        <div className="grid grid-cols-4 gap-0.5 rounded-xl bg-muted p-1 md:flex md:overflow-x-auto">
           {FILTERS.map((value) => {
             const selected = value === status;
             return (
@@ -106,7 +109,7 @@ export function RequestsList({ schoolId }: { schoolId: string }) {
                 aria-pressed={selected}
                 onClick={() => setStatus(value)}
                 className={cn(
-                  "flex shrink-0 items-center gap-[7px] rounded-[9px] px-3.5 py-[7px] text-sm transition-colors",
+                  "flex min-w-0 shrink-0 items-center justify-center gap-[5px] rounded-[9px] px-1 py-[7px] text-[0.8125rem] transition-colors md:gap-[7px] md:px-3.5 md:text-sm",
                   "focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-ring/35",
                   selected
                     ? "border border-border bg-card font-semibold text-foreground"
@@ -139,7 +142,7 @@ export function RequestsList({ schoolId }: { schoolId: string }) {
             onChange={(event) => setSearch(event.target.value)}
             placeholder={t("searchPlaceholder")}
             aria-label={tc("search")}
-            className="ps-9"
+            className="h-11 border-border bg-card ps-9 md:h-10 md:border-input"
           />
         </div>
       </div>

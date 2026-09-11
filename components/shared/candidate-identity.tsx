@@ -49,7 +49,7 @@ export function CandidateIdentity({
           <span
             lang="ar"
             dir="rtl"
-            className="truncate text-[0.8125rem] text-muted-foreground"
+            className="max-w-full self-start truncate text-[0.8125rem] text-muted-foreground"
           >
             {secondary}
           </span>

@@ -286,7 +286,13 @@
       "examBreakdown": "{code} قانون · {creneau} مناورة · {conduite} سياقة",
       "graduates": "المترشحون المتخرجون",
       "newFilesThisMonth": "{count, plural, =0 {لا ملفات هذا الشهر} one {+# ملف هذا الشهر} other {+# ملفات هذا الشهر}}",
-      "quarterGraduates": "{count, plural, =0 {لا أحد هذا الفصل} one {+# هذا الفصل} other {+# هذا الفصل}}"
+      "quarterGraduates": "{count, plural, =0 {لا أحد هذا الفصل} one {+# هذا الفصل} other {+# هذا الفصل}}",
+      "activeShort": "النشطون",
+      "pendingShort": "قيد الانتظار",
+      "revenueShort": "المحصَّل",
+      "graduatesShort": "المتخرجون",
+      "weekActivity": "نشاط أسبوع {date}.",
+      "weekOf": "أسبوع {date}"
     },
     "requests": {
       "title": "طلبات التسجيل",
@@ -304,7 +310,8 @@
       "rejected": "تم رفض الطلب",
       "empty": "لا توجد طلبات حاليًا",
       "searchPlaceholder": "الاسم أو الهاتف…",
-      "subtitleHint": "كل إجراء يفتح نافذة تأكيد قبل تطبيقه."
+      "subtitleHint": "كل إجراء يفتح نافذة تأكيد قبل تطبيقه.",
+      "pendingCount": "{count, plural, =0 {لا طلبات قيد الانتظار} one {طلب واحد قيد الانتظار} other {# طلبات قيد الانتظار}}"
     },
     "students": {
       "title": "المترشحون",
@@ -379,7 +386,8 @@
       "deleteCandidateMessage": "سيتم حذف ملف {name} ودفعاته وسجل امتحاناته نهائيًا. لا يمكن التراجع عن هذا الإجراء.",
       "candidateDeleted": "تم حذف المترشح",
       "searchPlaceholder": "البحث عن مترشح…",
-      "filesInTraining": "{count, plural, =0 {لا ملفات جارية} one {ملف واحد قيد التكوين} other {# ملفات قيد التكوين}}"
+      "filesInTraining": "{count, plural, =0 {لا ملفات جارية} one {ملف واحد قيد التكوين} other {# ملفات قيد التكوين}}",
+      "activeFilesCount": "{count, plural, =0 {لا ملفات نشطة} one {ملف نشط واحد} other {# ملفات نشطة}}"
     },
     "completed": {
       "title": "المترشحون الناجحون",
@@ -435,7 +443,9 @@
       "legendClosed": "نصف ساعة مغلقة",
       "planningHint": "الخانة الفارغة تُملأ بنقرة واحدة. لا شيء محجوز مسبقًا.",
       "resource": "المورد",
-      "day": "اليوم"
+      "day": "اليوم",
+      "weekOf": "أسبوع {date}",
+      "gridLegendHintTouch": "المس خانة فارغة لإنشاء حصة أو لإغلاق نصف الساعة."
     },
     "exams": {
       "title": "الامتحانات",

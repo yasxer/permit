@@ -14,14 +14,23 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { cn } from "@/lib/utils";
 
-const OPTIONS = [
+export const THEME_OPTIONS = [
   { value: "light", icon: Sun, labelKey: "lightMode" },
   { value: "dark", icon: Moon, labelKey: "darkMode" },
   { value: "system", icon: Monitor, labelKey: "systemMode" },
 ] as const;
 
-/** `variant="nav"` : le carré bordé de 33 px de la barre nuit. */
-export function ThemeToggle({ variant = "plain" }: { variant?: "plain" | "nav" }) {
+/**
+ * `variant="nav"` : le carré bordé de la barre nuit — 33 px en haut de page,
+ * 31 px (`size="sm"`) dans l'en-tête mobile.
+ */
+export function ThemeToggle({
+  variant = "plain",
+  size = "default",
+}: {
+  variant?: "plain" | "nav";
+  size?: "default" | "sm";
+}) {
   const t = useTranslations("nav");
   const { theme, setTheme, resolvedTheme } = useTheme();
   // The server has no idea which theme the browser resolved, so render a
@@ -37,13 +46,15 @@ export function ThemeToggle({ variant = "plain" }: { variant?: "plain" | "nav" }
             type="button"
             aria-label={t("toggleTheme")}
             className={cn(
-              "grid size-[2.0625rem] shrink-0 place-items-center rounded-[10px]",
-              "border border-sidebar-border text-sidebar-muted transition-colors",
+              "grid shrink-0 place-items-center border border-sidebar-border text-sidebar-muted transition-colors",
+              size === "sm"
+                ? "size-[1.9375rem] rounded-[9px]"
+                : "size-[2.0625rem] rounded-[10px]",
               "hover:bg-white/5 hover:text-sidebar-foreground",
               "focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-brand/35",
             )}
           >
-            <Icon className="size-4" aria-hidden />
+            <Icon className={size === "sm" ? "size-[0.9375rem]" : "size-4"} aria-hidden />
           </button>
         ) : (
           <Button
@@ -57,7 +68,7 @@ export function ThemeToggle({ variant = "plain" }: { variant?: "plain" | "nav" }
         )}
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="min-w-36">
-        {OPTIONS.map(({ value, icon: OptionIcon, labelKey }) => (
+        {THEME_OPTIONS.map(({ value, icon: OptionIcon, labelKey }) => (
           <DropdownMenuItem
             key={value}
             onSelect={() => setTheme(value)}

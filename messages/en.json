@@ -286,7 +286,13 @@
       "examBreakdown": "{code} code · {creneau} manoeuvre · {conduite} driving",
       "graduates": "Licensed candidates",
       "newFilesThisMonth": "{count, plural, =0 {No new files this month} one {+# file this month} other {+# files this month}}",
-      "quarterGraduates": "{count, plural, =0 {None this quarter} one {+# this quarter} other {+# this quarter}}"
+      "quarterGraduates": "{count, plural, =0 {None this quarter} one {+# this quarter} other {+# this quarter}}",
+      "activeShort": "Active",
+      "pendingShort": "Pending",
+      "revenueShort": "Collected",
+      "graduatesShort": "Licensed",
+      "weekActivity": "Activity for the week of {date}.",
+      "weekOf": "Week of {date}"
     },
     "requests": {
       "title": "Enrollment requests",
@@ -304,7 +310,8 @@
       "rejected": "Request rejected",
       "empty": "No requests right now",
       "searchPlaceholder": "Name or phone…",
-      "subtitleHint": "Every action opens a confirmation before it is applied."
+      "subtitleHint": "Every action opens a confirmation before it is applied.",
+      "pendingCount": "{count, plural, =0 {No pending requests} one {# pending request} other {# pending requests}}"
     },
     "students": {
       "title": "Students",
@@ -379,7 +386,8 @@
       "deleteCandidateMessage": "{name}'s file, their payments and their exam history will be permanently deleted. This cannot be undone.",
       "candidateDeleted": "Candidate deleted",
       "searchPlaceholder": "Search for a candidate…",
-      "filesInTraining": "{count, plural, =0 {No open files} one {# file in training} other {# files in training}}"
+      "filesInTraining": "{count, plural, =0 {No open files} one {# file in training} other {# files in training}}",
+      "activeFilesCount": "{count, plural, =0 {No active files} one {# active file} other {# active files}}"
     },
     "completed": {
       "title": "Graduates",
@@ -435,7 +443,9 @@
       "legendClosed": "Closed half hour",
       "planningHint": "A free cell is filled in one click. Nothing is booked in advance.",
       "resource": "Resource",
-      "day": "Day"
+      "day": "Day",
+      "weekOf": "week of {date}",
+      "gridLegendHintTouch": "Tap an empty cell to create a session or close the half hour."
     },
     "exams": {
       "title": "Exams",
