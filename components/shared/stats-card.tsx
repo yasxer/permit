@@ -51,7 +51,7 @@ export function StatsCard({
             {/* Sur 390 px, l'icône se met en tête de l'étiquette : le coin de
                 fin est déjà pris par le chiffre. */}
             <Icon className="size-3.5 shrink-0 sm:hidden" strokeWidth={1.9} aria-hidden />
-            <span className="truncate">{label}</span>
+            <span className="sm:truncate">{label}</span>
           </span>
 
           <span
@@ -74,7 +74,7 @@ export function StatsCard({
       {hint && (
         <p
           className={cn(
-            "border-t border-separator pt-3 text-xs tabular-nums",
+            "hidden border-t border-separator pt-3 text-xs tabular-nums sm:block",
             HINT_TONE[hintTone],
           )}
         >

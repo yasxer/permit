@@ -203,7 +203,7 @@ export function SchoolDetail({ schoolId }: { schoolId: string }) {
             </dl>
 
             {school.status === "rejected" && school.rejection_reason && (
-              <p className="mt-4 rounded-lg border border-destructive/20 bg-destructive/5 px-3.5 py-2.5 text-sm">
+              <p className="mt-4 rounded-xl border border-destructive/30 bg-destructive/9 px-3.5 py-3 text-[0.8125rem]">
                 {school.rejection_reason}
               </p>
             )}

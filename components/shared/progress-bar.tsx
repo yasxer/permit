@@ -29,7 +29,7 @@ export function ProgressBar({
         aria-valuemin={0}
         aria-valuemax={100}
         aria-label={label}
-        className="h-1.5 min-w-14 flex-1 overflow-hidden rounded-full bg-muted"
+        className="h-1.5 min-w-14 flex-1 overflow-hidden rounded-full bg-border"
       >
         <div
           className={cn(

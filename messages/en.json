@@ -273,7 +273,6 @@
       "progressOverview": "Students by stage",
       "noExamHint": "Schedule a session from the Exams page.",
       "openExams": "Open the session",
-      "completedHint": "{count, plural, =0 {No graduates} one {# graduate} other {# graduates}}",
       "lastMonths": "Last 12 months",
       "progressHint": "Active candidates by stage",
       "viewPlanning": "View schedule",
@@ -284,7 +283,10 @@
       "rampHint": "The ramp follows the order of the course: the further along, the darker the shade.",
       "activeFilesHint": "{count, plural, =0 {No active candidates} one {# active candidate} other {# active candidates}}",
       "monthlyHint": "Last 12 months · dinars collected",
-      "examBreakdown": "{code} code · {creneau} manoeuvre · {conduite} driving"
+      "examBreakdown": "{code} code · {creneau} manoeuvre · {conduite} driving",
+      "graduates": "Licensed candidates",
+      "newFilesThisMonth": "{count, plural, =0 {No new files this month} one {+# file this month} other {+# files this month}}",
+      "quarterGraduates": "{count, plural, =0 {None this quarter} one {+# this quarter} other {+# this quarter}}"
     },
     "requests": {
       "title": "Enrollment requests",

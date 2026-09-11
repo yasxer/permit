@@ -6,6 +6,7 @@ import { useState } from "react";
 import { toast } from "sonner";
 
 import { CategoryBadge } from "@/components/shared/category-badge";
+import { Notice } from "@/components/shared/notice";
 import { Button } from "@/components/ui/button";
 import {
   Command,
@@ -211,9 +212,7 @@ function NewSession({
         )}
 
         {rateMissing ? (
-          <p className="rounded-lg bg-destructive/10 p-3 text-sm text-destructive">
-            {t("perfRateMissing")}
-          </p>
+          <Notice>{t("perfRateMissing")}</Notice>
         ) : (
           <div className="space-y-2">
             <p className="text-[0.8125rem] font-semibold text-secondary-foreground">

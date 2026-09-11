@@ -273,7 +273,6 @@
       "progressOverview": "التوزيع حسب المرحلة",
       "noExamHint": "برمج حصة من صفحة الامتحانات.",
       "openExams": "فتح الحصة",
-      "completedHint": "{count, plural, =0 {لا يوجد متخرجون} one {متخرج واحد} two {متخرجان} few {# متخرجين} many {# متخرجًا} other {# متخرج}}",
       "lastMonths": "آخر 12 شهرًا",
       "progressHint": "المترشحون النشطون حسب المرحلة",
       "viewPlanning": "عرض البرنامج",
@@ -284,7 +283,10 @@
       "rampHint": "يتبع التدرّج ترتيب المسار: كلما تقدّم المترشح، اشتدّ لون العمود.",
       "activeFilesHint": "{count, plural, =0 {لا مترشحين نشطين} one {مترشح نشط واحد} other {# مترشحين نشطين}}",
       "monthlyHint": "آخر 12 شهرًا · الدينار المحصَّل",
-      "examBreakdown": "{code} قانون · {creneau} مناورة · {conduite} سياقة"
+      "examBreakdown": "{code} قانون · {creneau} مناورة · {conduite} سياقة",
+      "graduates": "المترشحون المتخرجون",
+      "newFilesThisMonth": "{count, plural, =0 {لا ملفات هذا الشهر} one {+# ملف هذا الشهر} other {+# ملفات هذا الشهر}}",
+      "quarterGraduates": "{count, plural, =0 {لا أحد هذا الفصل} one {+# هذا الفصل} other {+# هذا الفصل}}"
     },
     "requests": {
       "title": "طلبات التسجيل",

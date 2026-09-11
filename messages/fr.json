@@ -273,7 +273,6 @@
       "progressOverview": "Répartition par étape",
       "noExamHint": "Programmez une séance depuis la page Examens.",
       "openExams": "Ouvrir la séance",
-      "completedHint": "{count, plural, =0 {Aucun diplômé} one {# diplômé} other {# diplômés}}",
       "lastMonths": "12 derniers mois",
       "progressHint": "Candidats actifs par étape",
       "viewPlanning": "Voir le planning",
@@ -284,7 +283,10 @@
       "rampHint": "La rampe suit l'ordre du parcours : plus le candidat avance, plus la teinte est foncée.",
       "activeFilesHint": "{count, plural, =0 {Aucun candidat actif} one {# candidat actif} other {# candidats actifs}}",
       "monthlyHint": "12 derniers mois · dinars encaissés",
-      "examBreakdown": "{code} code · {creneau} créneau · {conduite} conduite"
+      "examBreakdown": "{code} code · {creneau} créneau · {conduite} conduite",
+      "graduates": "Candidats diplômés",
+      "newFilesThisMonth": "{count, plural, =0 {Aucun dossier ce mois} one {+# dossier ce mois} other {+# dossiers ce mois}}",
+      "quarterGraduates": "{count, plural, =0 {Aucun ce trimestre} one {+# ce trimestre} other {+# ce trimestre}}"
     },
     "requests": {
       "title": "Demandes d'inscription",

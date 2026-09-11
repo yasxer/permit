@@ -13,8 +13,8 @@ const TONES = {
   positive: "border-transparent bg-success/13 text-success",
   warning: "border-transparent bg-brand/12 text-warning",
   negative: "border-transparent bg-destructive/13 text-destructive",
-  /** « Terminé » : un fait acquis, donc l'encre pleine plutôt qu'une teinte. */
-  ink: "border-transparent bg-primary text-primary-foreground",
+  /** « Terminé » : l'encre, mais en teinte — c'est un état, pas une alerte. */
+  ink: "border-transparent bg-primary/10 text-primary",
 } as const;
 
 const STATUS_TONE: Record<string, keyof typeof TONES> = {

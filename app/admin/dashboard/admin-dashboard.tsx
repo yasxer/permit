@@ -6,7 +6,9 @@ import { useLocale, useTranslations } from "next-intl";
 import { CategoryBarChart } from "@/components/charts/category-bar-chart";
 import { MonthlyAreaChart } from "@/components/charts/monthly-area-chart";
 import { EmptyState } from "@/components/shared/empty-state";
+import { Notice } from "@/components/shared/notice";
 import { StatsCard } from "@/components/shared/stats-card";
+import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useAdminStats } from "@/hooks/use-stats";
@@ -31,7 +33,7 @@ export function AdminDashboard() {
   const tc = useTranslations("common");
   const locale = useLocale();
 
-  const { data, isPending, isError } = useAdminStats();
+  const { data, isPending, isError, refetch, isFetching } = useAdminStats();
 
   if (isPending) {
     return (
@@ -49,8 +51,26 @@ export function AdminDashboard() {
     );
   }
 
+  // Un bandeau plutôt qu'une page d'erreur : le tableau de bord est une
+  // lecture, et la relancer doit coûter un clic, pas une navigation.
   if (isError || !data) {
-    return <EmptyState title={tc("error")} description={tc("noResultsHint")} />;
+    return (
+      <Notice
+        action={
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => void refetch()}
+            disabled={isFetching}
+            className="border-destructive/50 text-destructive hover:bg-destructive/10"
+          >
+            {tc("retry")}
+          </Button>
+        }
+      >
+        {tc("error")}
+      </Notice>
+    );
   }
 
   // Top wilayas only: past ~10 bars the chart stops being readable and the

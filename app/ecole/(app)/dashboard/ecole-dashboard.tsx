@@ -4,9 +4,9 @@ import {
   ArrowRight,
   Award,
   CalendarPlus,
+  CreditCard,
   GraduationCap,
   Inbox,
-  Wallet,
 } from "lucide-react";
 import Link from "next/link";
 import { useLocale, useTranslations } from "next-intl";
@@ -14,6 +14,7 @@ import { useLocale, useTranslations } from "next-intl";
 import { MonthlyAreaChart } from "@/components/charts/monthly-area-chart";
 import { StageBars } from "@/components/charts/stage-bars";
 import { EmptyState } from "@/components/shared/empty-state";
+import { Notice } from "@/components/shared/notice";
 import { StatsCard } from "@/components/shared/stats-card";
 import { Button } from "@/components/ui/button";
 import {
@@ -50,7 +51,7 @@ export function EcoleDashboard({ schoolId }: { schoolId: string }) {
   const tc = useTranslations("common");
   const locale = useLocale();
 
-  const { data, isPending, isError } = useSchoolStats(schoolId);
+  const { data, isPending, isError, refetch, isFetching } = useSchoolStats(schoolId);
 
   if (isPending) {
     return (
@@ -69,8 +70,26 @@ export function EcoleDashboard({ schoolId }: { schoolId: string }) {
     );
   }
 
+  // Un bandeau plutôt qu'une page d'erreur : le tableau de bord est une
+  // lecture, et la relancer doit coûter un clic, pas une navigation.
   if (isError || !data) {
-    return <EmptyState title={tc("error")} description={tc("noResultsHint")} />;
+    return (
+      <Notice
+        action={
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => void refetch()}
+            disabled={isFetching}
+            className="border-destructive/50 text-destructive hover:bg-destructive/10"
+          >
+            {tc("retry")}
+          </Button>
+        }
+      >
+        {tc("error")}
+      </Notice>
+    );
   }
 
   const stages = [
@@ -80,6 +99,10 @@ export function EcoleDashboard({ schoolId }: { schoolId: string }) {
   ];
 
   const lastMonth = data.payments_by_month.at(-1);
+  // Deux chemins vers le même chiffre : l'agrégat le calcule, mais une base
+  // restée en arrière ne l'envoie pas — la dernière colonne du graphe dit
+  // alors la même chose.
+  const revenueThisMonth = data.revenue_this_month ?? lastMonth?.value ?? null;
 
   return (
     <>
@@ -90,33 +113,48 @@ export function EcoleDashboard({ schoolId }: { schoolId: string }) {
           icon={GraduationCap}
           label={t("activeStudents")}
           value={formatNumber(data.students_active, locale)}
+          hint={
+            data.students_active_this_month === undefined
+              ? undefined
+              : t("newFilesThisMonth", { count: data.students_active_this_month })
+          }
         />
         <StatsCard
           icon={Inbox}
           label={t("pendingRequests")}
           value={formatNumber(data.requests_pending, locale)}
-          // La maquette met « 3 arrivées aujourd'hui » ici ; l'agrégat ne
-          // remonte pas cette coupe, alors la ligne reste vide plutôt que de
-          // répéter le chiffre au-dessus.
+          hint={
+            data.requests_today
+              ? t("arrivedToday", { count: data.requests_today })
+              : undefined
+          }
+          hintTone="warning"
         />
         <StatsCard
-          icon={Wallet}
+          icon={CreditCard}
           label={t("revenue")}
           value={formatCurrency(data.revenue_total, locale)}
           compact
           hint={
-            lastMonth
-              ? t("revenueThisMonth", {
-                  amount: formatCurrency(lastMonth.value, locale),
+            revenueThisMonth === null
+              ? undefined
+              : t("revenueThisMonth", {
+                  amount: formatCurrency(revenueThisMonth, locale),
                 })
-              : undefined
           }
           hintTone="success"
         />
         <StatsCard
           icon={Award}
-          label={t("completedHint", { count: data.students_completed })}
+          label={t("graduates")}
           value={formatNumber(data.students_completed, locale)}
+          hint={
+            data.students_completed_this_quarter === undefined
+              ? undefined
+              : t("quarterGraduates", {
+                  count: data.students_completed_this_quarter,
+                })
+          }
         />
       </div>
 
@@ -149,9 +187,23 @@ export function EcoleDashboard({ schoolId }: { schoolId: string }) {
                 : t("noExam")}
             </span>
             <span className="text-[0.8125rem] tabular-nums text-muted-foreground">
-              {data.next_exam
-                ? tExams("candidatesAssigned", { count: data.next_exam.candidates })
-                : t("noExamHint")}
+              {data.next_exam ? (
+                <>
+                  {tExams("candidatesAssigned", {
+                    count: data.next_exam.candidates,
+                  })}
+                  {/* La coupe par stade dit combien de salles et de véhicules
+                      il faut ouvrir ce matin-là. */}
+                  {data.next_exam.stages && (
+                    <>
+                      {" · "}
+                      {t("examBreakdown", data.next_exam.stages)}
+                    </>
+                  )}
+                </>
+              ) : (
+                t("noExamHint")
+              )}
             </span>
           </div>
         </div>
